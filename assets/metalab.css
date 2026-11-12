@@ -312,32 +312,14 @@ html.vt-leaving .cs-hero .cs-plate, html.vt-leaving .cs-hero .cs-title { view-tr
   .ws-pill:active, .m-pill:active, .chip:active, .btn:active, .plan__btn:active, .bio__close:active, .person__open:active img { transform: none; }
 }
 
-/* ==== Mac-style scroll motion: things settle into place as you scroll, tied to the scrollbar (not a timer) ==== */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    [data-rise] { opacity: 1; transform: none; transition: none; animation: mac-rise linear both; animation-timeline: view(); animation-range: entry 0% entry 70%; }
-    .cs-hero [data-rise], dialog [data-rise] { animation: none; }
-    .svc__stage .stage, .cs-grid .cs-plate, .team__globe, .cs-next__media { animation: mac-settle linear both; animation-timeline: view(); animation-range: entry 0% entry 90%; }
-    .head__title, .ap-title, .statement__text, .close__title { animation: mac-title linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
-  }
-}
-@keyframes mac-rise { from { opacity: 0; transform: translateY(28px); } }
-@keyframes mac-settle { from { opacity: .2; transform: scale(.9); } }
-@keyframes mac-title { from { opacity: 0; transform: translateY(40px) scale(.96); } }
-
-/* ==== Mac "switch spaces" scroll: each section is a window. Leaving, it recedes (shrinks, rounds, dims) and the
-        next one slides up over it. Tied to the scrollbar, transform/opacity only. ==== */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    main > section, main > .ws { position: relative; background: var(--black); transform-origin: 50% 0;
-      animation: space-in linear both, space-out linear both; animation-timeline: view(), view();
-      animation-range: entry 0% entry 60%, exit 15% exit 100%; }
-    main > .client { background: var(--paper, #f4f4f1); }
-    main > section:first-child, main > .ws { animation: space-out linear both; animation-timeline: view(); animation-range: exit 15% exit 100%; }
-  }
-}
-@keyframes space-in { from { transform: translateY(80px) scale(.96); border-radius: 32px; box-shadow: 0 0 0 1px rgb(255 255 255 / .14), 0 -40px 90px rgb(0 0 0 / .7); } to { border-radius: 0; box-shadow: 0 0 0 1px rgb(255 255 255 / 0); } }
-@keyframes space-out { to { transform: scale(.88); border-radius: 32px; opacity: .45; background: #111114; box-shadow: 0 0 0 1px rgb(255 255 255 / .16); } }
+/* ==== Scroll motion lives in assets/motion.js (Lenis smooth scroll + GSAP ScrollTrigger). These are its base styles. ==== */
+html.lenis, html.lenis body { height: auto; }
+html.lenis { scroll-behavior: auto; }
+.lenis.lenis-stopped { overflow: clip; }
+html.has-gsap [data-rise] { transition: none; }
+html.has-gsap .cs-hero [data-rise], html.has-gsap dialog [data-rise] { opacity: 1; transform: none; }
+html.has-gsap main > section, html.has-gsap main > .ws { position: relative; background: var(--black); transform-origin: 50% 0; will-change: transform; }
+html.has-gsap main > .client { background: var(--paper, #f4f4f1); }
 
 /* services light up in COET amber, as on coetsystems.com: the original drawings read --draw (0 → 1) */
 @property --draw { syntax: "<number>"; inherits: true; initial-value: 0; }
