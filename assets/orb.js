@@ -1,6 +1,7 @@
 /* COET — the orb. This is <ThinkingOrb state="searching" size={64} /> from Libraries.dev's thinking-orbs (MIT,
    © Jakub Antalik): a scan meridian sweeping a dotted globe, straight
-   from the package: its own preset, its own frame maths and its own painter, with nothing re-tuned. The package's
+   from the package: its own preset, its own frame maths and its own painter, with more and smaller dots set
+   through the package's own `dots` and `dotSize` controls. The package's
    engine is framework-free, so no React is needed here. Two things differ from the 64px original, both things the
    package itself allows: it is enlarged (the 64px drawing is scaled as a vector, never redrawn) and tinted COET amber.
    Around it: light/dark mode picks the ink (theme.js), and a few of its particles carry a small label that does
@@ -15,16 +16,21 @@
   var root = document.documentElement;
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var ENGINE = new URL('vendor/thinking-orbs-0.3.2/engine.es.js', document.currentScript.src).href;
+  var KIT = new URL('vendor/thinking-orbs-0.3.2/index-B8WsUNf5.js', document.currentScript.src).href;
   var TINT = { r: 245, g: 158, b: 11 };                // COET amber (#f59e0b)
   var STATE = 'searching', DESIGN = 64, ORB_R = 26.24;                      // the library's design size, and the orb's radius inside it
 
-  import(ENGINE).then(function (lib) {
+  Promise.all([import(ENGINE), import(KIT)]).then(function (mods) {
+    var lib = mods[0], kit = mods[1];                    // kit.s = scaleCounts, kit.a = scaleRadii
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
     if (spare) spare.style.display = 'none';
     canvas.style.opacity = 1;
-    var preset = lib.resolvePreset(STATE, DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed, opts = preset.opts;   // the stock preset, untouched
-    var PARTICLE_R = .8;                                 // a label rides one of the larger, nearer dots
+    var preset = lib.resolvePreset(STATE, DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed;
+    // more dots, much smaller: the package's own `dots` and `dotSize` controls (the same ones <ThinkingOrb> exposes)
+    var DOTS = 3.8, DOT_SIZE = .2;
+    var opts = Object.assign({}, kit.a(kit.s(preset.opts, DOTS), DOT_SIZE), { rMin: .05 });
+    var PARTICLE_R = .8 * DOT_SIZE;                                // a label rides one of the larger, nearer dots
 
     // ── labelled particles: a very small label rides on an ordinary particle. Add an entry here for each new one. ──
     var LABELS = [
