@@ -209,3 +209,13 @@ ul { list-style: none; }
 .quote figcaption { display: grid; gap: 6px; }
 .quote .client__name { font-size: clamp(20px, 1.8vw, 26px); letter-spacing: -.01em; }
 .quote__draft { margin-top: 10px; justify-self: start; border: 1px dashed #8a7a55; color: #6b5a2e; padding: 4px 8px; border-radius: 2px; }
+
+/* case study tiles: the screenshot clean on top, a caption under it */
+.tile--case { aspect-ratio: auto; display: flex; flex-direction: column; background: var(--band); }
+.tile--case::after { content: none; }
+.tile--case img { aspect-ratio: 16 / 10; height: auto; object-position: top; filter: none; }
+.tile--case:hover img { filter: none; transform: scale(1.02); }
+.tile--case .tile__body { position: static; display: grid; gap: 8px; padding: 20px 20px 22px; max-width: none; }
+.tile--case .tile__name { position: static; }
+.tile--case .tile__tags { position: static; order: 3; padding: 0 20px 22px; }
+.tile__desc { font-size: 15px; line-height: 1.5; color: var(--ink-2); max-width: 52ch; }
