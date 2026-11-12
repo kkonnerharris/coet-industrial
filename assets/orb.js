@@ -1,5 +1,5 @@
-/* COET — the orb: an "AI brain" sphere of small dots joined like a network, in the C's white glass, with a few
-   COET-amber signals running along the links. Canvas (hundreds of moving points), with a second blurred canvas on
+/* COET — the orb: an "AI brain" sphere of small dots joined like a network, in the C's white glass, with COET-amber
+   traffic driving across it along the links and loose dots floating free around it. Canvas (hundreds of moving points), with a second blurred canvas on
    top for the glow. Points sit on a Fibonacci sphere; each is wired to its nearest neighbours once. Each frame
    the sphere turns, breathes slightly and leans toward the pointer. Depth sets size and brightness. It pauses
    off screen and in hidden tabs; under reduced motion it draws one still frame. */
@@ -33,13 +33,8 @@
   // sparks: tiny particles a node throws off when it jumps (polar spread, controlled randomness, always cleaned up)
   var sparks = [], MAX_SPARKS = 260;
   function burst(n, count, amber) {
-    var p = pts[n]; p.pop = 1;
+    pts[n].pop = 1;
     var q = proj[n]; if (!q) return;
-    p.vx += (Math.random() - .5) * 120; p.vy -= 60 + Math.random() * 60;          // a sideways kick from the spring
-    if (window.gsap) window.gsap.to(p, { overwrite: true, keyframes: [                 // the jump: up fast, bounce back down
-      { jy: -(16 + Math.random() * 30) * (.6 + q.d * .8), duration: .16, ease: 'power2.out' },
-      { jy: 0, duration: .6, ease: 'bounce.out' }] });
-    else p.vy -= 60;
     for (var i = 0; i < count && sparks.length < MAX_SPARKS; i++) {
       var ang = (i / count) * Math.PI * 2 + (Math.random() - .5) * .9, sp = 40 + Math.random() * 110;
       sparks.push({ x: q.x, y: q.y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 30, life: 0, max: .5 + Math.random() * .6, r: .6 + Math.random() * 1.2, amber: amber && Math.random() < .7 });
@@ -47,8 +42,33 @@
   }
   var mx = -1e4, my = -1e4;
   // amber signals travel along links
-  var pulses = [];
-  function spawn() { var l = links[Math.floor(Math.random() * links.length)]; pulses.push({ a: l[0], b: l[1], t: 0, v: .7 + Math.random() * .9 }); }
+  var pulses = [], adj = [];
+  for (var ai = 0; ai < N; ai++) adj.push([]);
+  links.forEach(function (l) { if (!l[2]) { adj[l[0]].push(l[1]); adj[l[1]].push(l[0]); } });
+  function dist(a, b) { var A = pts[a], B = pts[b], dx = A.x - B.x, dy = A.y - B.y, dz = A.z - B.z; return Math.sqrt(dx * dx + dy * dy + dz * dz) || .01; }
+  // one car: it drives from node a to node b at a steady road speed (sp, in sphere radii per second)
+  function car(a, b, sp, trips) { return { a: a, b: b, p: -1, t: 0, sp: sp, v: sp / dist(a, b), trips: trips }; }
+  function spawn(from) {
+    var a = from == null ? Math.floor(Math.random() * N) : from, nb = adj[a];
+    if (!nb.length) return;
+    pulses.push(car(a, nb[Math.floor(Math.random() * nb.length)], .42 + Math.random() * .5, 14 + Math.floor(Math.random() * 30)));
+  }
+  // at a junction, keep heading the way it was going (so it crosses the globe instead of circling one block)
+  function onward(u) {
+    var A = pts[u.a], B = pts[u.b], hx = B.x - A.x, hy = B.y - A.y, hz = B.z - A.z, nb = adj[u.b], best = -1, bs = -1e9;
+    for (var i = 0; i < nb.length; i++) {
+      if (nb[i] === u.a) continue;
+      var C = pts[nb[i]], sc = (C.x - B.x) * hx + (C.y - B.y) * hy + (C.z - B.z) * hz + Math.random() * .012;
+      if (sc > bs) { bs = sc; best = nb[i]; }
+    }
+    if (best < 0 || --u.trips <= 0) return false;                       // dead end or journey over
+    u.p = u.a; u.a = u.b; u.b = best; u.t -= 1; u.v = u.sp / dist(u.a, u.b);
+    return true;
+  }
+  // free floaters: loose dots drifting around the globe on their own slow orbits, wired to nothing
+  var floaters = [], FN = innerWidth < 700 ? 34 : 60;
+  for (var fi = 0; fi < FN; fi++) floaters.push({ r: 1.08 + Math.random() * .55, th: Math.random() * 6.2832, y: (Math.random() - .5) * 1.7, w: (Math.random() < .5 ? -1 : 1) * (.04 + Math.random() * .12),
+    bob: .05 + Math.random() * .14, bs: .25 + Math.random() * .5, ph: Math.random() * 6.2832, s: .5 + Math.random() * 1.1 });
 
   // ── canvas setup (CSS pixels × devicePixelRatio) ──
   var W = 0, H = 0, ctxM, ctxG;
@@ -67,7 +87,7 @@
     aimY = (e.clientX / innerWidth - .5) * .9; aimX = (e.clientY / innerHeight - .5) * .6;
     var b = host.getBoundingClientRect(); mx = e.clientX - b.left; my = e.clientY - b.top;
   });
-  // a click or tap on the stage: the nearest front node jumps and bursts
+  // a click or tap on the stage: the nearest front node sparks and sends traffic out along every road it has
   var stage = host.closest('[data-ws-root]') || host.parentNode;
   stage.addEventListener('pointerdown', function (e) {
     if (reduce || e.target.closest('a, button')) return;
@@ -75,7 +95,7 @@
     for (var i = 0; i < N; i++) { var q = proj[i]; if (!q || q.d < .45) continue; var d = (q.x - x) * (q.x - x) + (q.y - y) * (q.y - y); if (d < bd) { bd = d; best = i; } }
     if (best >= 0 && bd < 140 * 140) {
       burst(best, 14, true);
-      links.forEach(function (l) { if (l[0] === best || l[1] === best) pulses.push({ a: best, b: l[0] === best ? l[1] : l[0], t: 0, v: 1.4, hop: 1 }); });
+      adj[best].forEach(function (b) { pulses.push(car(best, b, .9, 22)); });
     }
   });
 
@@ -120,19 +140,11 @@
     }
     // signals (COET amber), drawn on both canvases so they glow
     if (!reduce) {
-      if (pulses.length < 34 && Math.random() < dt * 22) spawn();
-      if (Math.random() < dt * 5) { var rn = Math.floor(Math.random() * N); if (proj[rn].d > .4) burst(rn, 4, true); }   // neurons firing on their own
+      var want = N < 300 ? 60 : 110;
+      if (pulses.length < want && Math.random() < dt * 60) spawn();
       pulses = pulses.filter(function (u) {
         u.t += dt * u.v;
-        if (u.t >= 1) { var e = proj[u.b]; if (e && e.d > .3) {
-            burst(u.b, u.hop ? 3 : 5, true);
-            if (!u.hop && pulses.length < 44 && Math.random() < .45) {                 // the jump passes the signal to a neighbour
-              var nb = links[Math.floor(Math.random() * links.length)];
-              for (var li = 0; li < links.length; li++) { var L = links[(li * 7 + u.b) % links.length]; if (L[0] === u.b || L[1] === u.b) { nb = L; break; } }
-              pulses.push({ a: u.b, b: nb[0] === u.b ? nb[1] : nb[0], t: 0, v: 1.1 + Math.random() * .6, hop: Math.random() < .5 ? 0 : 1 });
-            }
-          }
-          return false; }
+        while (u.t >= 1) { if (!onward(u)) return false; }
         return true;
       });
       // sparks: drift, a touch of gravity, fade, then dropped
@@ -143,14 +155,28 @@
         ctxG.fillStyle = 'rgba(' + col + ',' + (a * .8).toFixed(3) + ')'; ctxG.beginPath(); ctxG.arc(k.x, k.y, k.r * 2.4, 0, 6.2832); ctxG.fill();
       });
     }
+    // free floaters (same turn and tilt as the globe, plus their own drift)
+    for (var f = 0; f < floaters.length; f++) {
+      var fl = floaters[f], fy = Math.max(-.98, Math.min(.98, fl.y + Math.sin(clock * fl.bs + fl.ph) * fl.bob)), fr = Math.sqrt(1 - fy * fy) * fl.r, fa = fl.th + clock * fl.w;
+      var fx = Math.cos(fa) * fr, fz = Math.sin(fa) * fr, fyy = fy * fl.r;
+      var gx = fx * cy + fz * sy, gz = -fx * sy + fz * cy, gy = fyy * cx - gz * sx, gz2 = fyy * sx + gz * cx, fk = F / (F - gz2);
+      var fd = Math.max(0, Math.min(1, (gz2 / fl.r + 1) / 2)), fpx = ox + gx * R * fk, fpy = oy + gy * R * fk, frad = (.7 + fd * 1.6) * fl.s;
+      ctxM.fillStyle = 'rgba(255,214,140,' + (.16 + fd * .6).toFixed(3) + ')'; ctxM.beginPath(); ctxM.arc(fpx, fpy, frad, 0, 6.2832); ctxM.fill();
+      if (fd > .5) { ctxG.fillStyle = 'rgba(245,158,11,' + ((fd - .5) * .9).toFixed(3) + ')'; ctxG.beginPath(); ctxG.arc(fpx, fpy, frad * 2.6, 0, 6.2832); ctxG.fill(); }
+    }
+    // traffic
+    var TAIL = .7;
     pulses.forEach(function (u) {
       var A = proj[u.a], B = proj[u.b], t = u.t, x = A.x + (B.x - A.x) * t, y = A.y + (B.y - A.y) * t;
-      var t0 = Math.max(0, t - .18), x0 = A.x + (B.x - A.x) * t0, y0 = A.y + (B.y - A.y) * t0;
-      var a = Math.sin(t * Math.PI) * (.35 + ((A.d + B.d) / 2) * .65);
+      var a = .3 + ((A.d + B.d) / 2) * .7, t0 = t - TAIL;
       [ctxM, ctxG].forEach(function (c, gi) {
-        c.strokeStyle = 'rgba(' + (gi ? '245,158,11' : '255,226,170') + ',' + (a * (gi ? 1 : .95)).toFixed(3) + ')'; c.lineWidth = gi ? 4 : 1.6;
-        c.beginPath(); c.moveTo(x0, y0); c.lineTo(x, y); c.stroke();
+        c.strokeStyle = 'rgba(' + (gi ? '245,158,11' : '255,226,170') + ',' + (a * (gi ? .9 : .95)).toFixed(3) + ')'; c.lineWidth = gi ? 3.5 : 1.5;
+        c.beginPath();
+        if (t0 >= 0 || u.p < 0) { var s0 = Math.max(0, t0); c.moveTo(A.x + (B.x - A.x) * s0, A.y + (B.y - A.y) * s0); }
+        else { var P = proj[u.p], s1 = 1 + t0; c.moveTo(P.x + (A.x - P.x) * s1, P.y + (A.y - P.y) * s1); c.lineTo(A.x, A.y); }
+        c.lineTo(x, y); c.stroke();
       });
+      ctxM.fillStyle = 'rgba(255,240,210,' + a.toFixed(3) + ')'; ctxM.beginPath(); ctxM.arc(x, y, 1.3 + a * .9, 0, 6.2832); ctxM.fill();   // the headlight
     });
   }
 
@@ -162,7 +188,7 @@
   }
   var raf = 0, live = true;
   setup();
-  if (reduce) { for (var w = 0; w < 6; w++) spawn(); pulses.forEach(function (u) { u.t = .5; }); frame(0); }
+  if (reduce) { for (var w = 0; w < 40; w++) spawn(); pulses.forEach(function (u) { u.t = .5; }); frame(0); }
   else {
     raf = requestAnimationFrame(loop);
     var wake = function () { if (live && !raf && !document.hidden) { last = 0; raf = requestAnimationFrame(loop); } };
