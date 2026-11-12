@@ -1,9 +1,10 @@
-/* COET — the orb. This is the "working" orb from Libraries.dev's thinking-orbs (MIT, © Jakub Antalik): particles
-   on tilted orbits, drawn by that library's own engine, so it is the same animation dot for dot. The only changes
-   are scale (the 64px design is enlarged as a vector, never redrawn) and an orange tint, which the library
-   supports. The engine is framework-free, so no React is needed here.
-   Around it: the opening film hands off to it (intro.js), light/dark mode picks the ink (theme.js), and a few of
-   its particles carry a small label that does something when pressed (the first starts the voice agent).
+/* COET — the orb. Built on the "working" orb from Libraries.dev's thinking-orbs (MIT, © Jakub Antalik): particles
+   on tilted orbits with faint dotted trails, computed and painted by that library's own engine (framework-free,
+   so no React is needed here). At its real size (56px) that orb reads as fine points of light, so at this size
+   the same design is given more orbits and much smaller dots, using the library's own knobs, instead of being
+   blown up into large discs. It is tinted COET amber.
+   Around it: light/dark mode picks the ink (theme.js), and a few of its particles carry a small label that does
+   something when pressed (the first starts the voice agent).
    Like the original it draws on a plain 2D canvas, pauses off screen and in hidden tabs, and shows one still
    frame under reduced motion. */
 (function () {
@@ -22,7 +23,10 @@
     if (!ctx) return;
     if (spare) spare.style.display = 'none';
     canvas.style.opacity = 1;
-    var preset = lib.resolvePreset('working', DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed, opts = preset.opts;
+    var preset = lib.resolvePreset('working', DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed;
+    // the library's "working" recipe, re-proportioned for a large orb: more orbits, more trail dots, far smaller dots
+    var opts = Object.assign({}, preset.opts, { orbitN: 22, ghostN: 64, ghostR: .27, ghostA: .8, particles: 5, partR: .42, partRDepth: .56, rMin: .05 });
+    var PARTICLE_R = .3;                                 // dots at least this big are particles, the rest are trail dots
 
     // ── labelled particles: a very small label rides on an ordinary particle. Add an entry here for each new one. ──
     var LABELS = [
@@ -43,13 +47,6 @@
       });
     });
 
-    // the opening film (intro.js): the particles wait at the centre, unseen, and fly out when the film bursts
-    var burst = { v: 1 }, intro = window.COETIntro;
-    if (intro && intro.pending) {
-      burst.v = 0;
-      intro.onBurst(function (instant) { if (instant || !window.gsap) burst.v = 1; else window.gsap.to(burst, { v: 1, duration: 1.7, ease: 'power3.out' }); });
-    }
-
     // ── size and place: radius 42% of the stage's short side; up and to the left on wide screens ──
     var W = 0, H = 0, dpr = 1, scale = 1, cx = 0, cy = 0;
     function setup() {
@@ -63,15 +60,13 @@
     }
 
     function draw(t) {
-      var dark = root.dataset.theme !== 'light', g = burst.v, half = DESIGN / 2;
+      var dark = root.dataset.theme !== 'light', half = DESIGN / 2;
       ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.clearRect(0, 0, canvas.width, canvas.height);
-      if (g <= 0) { place(null); return; }
       var frame = frameFn(DESIGN, t, opts);
-      if (g < 1) for (var i = 0; i < frame.dots.length; i++) { var d = frame.dots[i]; d.x = half + (d.x - half) * g; d.y = half + (d.y - half) * g; }
       // the library's painter, at the library's design size; only the canvas transform enlarges it
       ctx.setTransform(dpr * scale, 0, 0, dpr * scale, dpr * (cx - half * scale), dpr * (cy - half * scale));
       lib.paintFrame(ctx, frame, dark, TINT);
-      place(g > .92 ? frame.dots : null);
+      place(frame.dots);
     }
 
     // each label follows one particle: the nearest one to where it was a frame ago
@@ -82,7 +77,7 @@
         var best = null, bd = 1e9;
         for (var i = 0; i < dots.length; i++) {
           var d = dots[i];
-          if (d.r < .75) continue;                                              // particles only, not the faint orbit trails
+          if (d.r < PARTICLE_R) continue;                                              // particles only, not the faint orbit trails
           var dist = l.at ? (d.x - l.at.x) * (d.x - l.at.x) + (d.y - l.at.y) * (d.y - l.at.y) + (d.z - l.at.z) * (d.z - l.at.z) : Math.abs(d.x - 20 - j * 9) + Math.abs(d.y - 22) - d.z;
           if (dist < bd) { bd = dist; best = d; }
         }
