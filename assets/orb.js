@@ -30,6 +30,8 @@
     // more dots, much smaller: the package's own `dots` and `dotSize` controls (the same ones <ThinkingOrb> exposes)
     var DOTS = 1.9, DOT_SIZE = .28;
     var opts = Object.assign({}, kit.a(kit.s(preset.opts, DOTS), DOT_SIZE), { rMin: .05 });
+    // read as a sphere: more orbit rings, and trails bright enough that the rings draw the ball's surface
+    if (STATE === 'working') Object.assign(opts, { orbitN: 34, ghostN: 46, ghostR: .36, ghostA: 1 });
     var PARTICLE_R = .75 * DOT_SIZE;                                // a label rides one of the larger, nearer dots
 
     // ── labelled particles: a very small label rides on an ordinary particle. Add an entry here for each new one. ──
