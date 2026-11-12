@@ -67,6 +67,26 @@
       });
     });
 
+    /* ── section titles: each line rises out of a mask, once, as the title comes into view (SplitText) ── */
+    if (window.SplitText) {
+      gsap.registerPlugin(window.SplitText);
+      all('.head__title, .ap-title').forEach(function (el) {     // not the closing title: its line breaks are balanced by hand
+        if (skip(el)) return;
+        used.push(el); el.classList.add('is-split');
+        window.SplitText.create(el, { type: 'lines', mask: 'lines', autoSplit: true, onSplit: function (self) {
+          return gsap.from(self.lines, { yPercent: 115, duration: .95, ease: 'power4.out', stagger: .09,
+            scrollTrigger: { trigger: el, start: 'top 88%', once: true } });
+        } });
+      });
+    }
+
+    /* ── a button that leans toward the pointer (one reused tween per axis) ── */
+    if (matchMedia('(hover: hover) and (pointer: fine)').matches) all('[data-magnet]').forEach(function (el) {
+      var xTo = gsap.quickTo(el, 'x', { duration: .5, ease: 'power3' }), yTo = gsap.quickTo(el, 'y', { duration: .5, ease: 'power3' });
+      el.addEventListener('pointermove', function (e) { var r = el.getBoundingClientRect(); xTo((e.clientX - r.left - r.width / 2) * .28); yTo((e.clientY - r.top - r.height / 2) * .4); });
+      el.addEventListener('pointerleave', function () { xTo(0); yTo(0); });
+    });
+
     /* ── titles come up and settle ── */
     all('.head__title, .ap-title, .statement__text, .close__title').forEach(function (el) {
       if (!skip(el)) scrub(el, { opacity: 0, y: 44, scale: .96 }, { opacity: 1, y: 0, scale: 1 }, 'top bottom', 'top 72%');

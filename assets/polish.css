@@ -35,3 +35,21 @@
   .client__photo { height: auto; aspect-ratio: 4 / 5; max-height: 70vh; border-radius: 14px; }
   .client__body { padding: 0; }
 }
+
+/* ── 5. UI review pass: a real call to action in the hero, disciplined amber, a little surface depth ── */
+.ws-cta { display: flex; align-items: center; gap: 22px; margin-top: 24px; }
+.ws-cta__main { display: inline-flex; align-items: center; height: 46px; padding: 0 22px; border-radius: 999px; background: #fff; color: #000; font: 600 15px/1 var(--apple); letter-spacing: -.01em; will-change: transform; transition: background .2s, box-shadow .3s; }
+.ws-cta__main:hover { background: #fff; box-shadow: 0 0 0 5px rgb(255 255 255 / .12), 0 10px 30px rgb(245 158 11 / .25); }
+.ws-cta__main:active { background: #e8e8ed; }
+.ws-cta__more { display: inline-flex; gap: 6px; color: #f5f5f7; font: 500 15px/1 var(--apple); letter-spacing: -.01em; }
+.ws-cta__more span { transition: transform .25s var(--ease); }
+.ws-cta__more:hover span { transform: translateX(4px); }
+.ws-cta a:focus-visible { outline: 2px solid var(--signal); outline-offset: 3px; }
+/* split titles are revealed by motion.js; they must not also wait for the plain rise-in */
+html.has-gsap .is-split[data-rise] { opacity: 1; transform: none; }
+.is-split { padding-bottom: .08em; }                    /* room for descenders inside the line masks */
+/* the "accepting projects" flag: an outline chip, not a solid amber block */
+.flag { padding: 7px 12px; border-radius: 999px; background: rgb(245 158 11 / .08); color: var(--signal); box-shadow: inset 0 0 0 1px rgb(245 158 11 / .55); }
+.flag::before { background: var(--signal); }
+/* cards catch a little light on their top edge */
+.plan { box-shadow: inset 0 1px 0 rgb(255 255 255 / .07); }
