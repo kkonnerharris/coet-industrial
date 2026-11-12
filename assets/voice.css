@@ -1,23 +1,21 @@
-/* COET — labelled balls in the globe. Each is a real button that follows its ball; the first one starts the voice agent. */
-.orb-node { position: absolute; left: 0; top: 0; z-index: 2; display: inline-flex; align-items: center; gap: 12px; margin: -22px 0 0 -22px; padding: 0 14px 0 0; height: 44px;
-  border: 0; background: none; color: #fff; font: 600 14px/1 var(--apple, system-ui, sans-serif); letter-spacing: -.01em; cursor: pointer; white-space: nowrap; will-change: transform;
+/* COET — labelled balls in the globe. Each is a real, round button sitting on its ball, with a small label in the
+   middle of it; the first one starts the voice agent. */
+.orb-node { position: absolute; left: 0; top: 0; z-index: 2; width: 68px; height: 68px; margin: -34px 0 0 -34px; padding: 0 7px; display: grid; place-content: center; gap: 2px;
+  border: 0; border-radius: 50%; background: none; color: #120a00; font: 700 10px/1.1 var(--apple, system-ui, sans-serif); letter-spacing: -.005em; text-align: center; cursor: pointer; will-change: transform;
   -webkit-tap-highlight-color: transparent; }
-.orb-node__ring { position: relative; flex: none; width: 44px; height: 44px; border-radius: 50%; }
-.orb-node__ring::before, .orb-node__ring::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; border: 1px solid rgb(255 214 140 / .9); transition: inset .3s cubic-bezier(.2, .7, .1, 1), border-color .3s; }
+.orb-node__ring { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
+.orb-node__ring::before, .orb-node__ring::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid rgb(255 214 140 / .85); transition: inset .3s cubic-bezier(.2, .7, .1, 1), border-color .3s; }
 .orb-node__ring::after { animation: orbNodePulse 2.6s ease-out infinite; }
-@keyframes orbNodePulse { 0% { transform: scale(1); opacity: .8; } 80%, 100% { transform: scale(2.1); opacity: 0; } }
-.orb-node__text { display: grid; gap: 4px; padding: 7px 12px; border-radius: 999px; background: rgb(18 18 20 / .72); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); border: 1px solid rgb(255 255 255 / .14); text-align: left; transition: border-color .2s, background .2s; }
-.orb-node__sub { font: 400 11px/1 var(--apple, system-ui, sans-serif); color: #a1a1a6; letter-spacing: 0; }
-.orb-node:hover .orb-node__text, .orb-node:focus-visible .orb-node__text { border-color: rgb(245 158 11 / .8); }
-.orb-node:hover .orb-node__ring::before { inset: 5px; }
+@keyframes orbNodePulse { 0% { transform: scale(1); opacity: .8; } 80%, 100% { transform: scale(1.55); opacity: 0; } }
+.orb-node__text { position: relative; display: grid; gap: 2px; }
+.orb-node__sub { font: 600 8px/1 var(--apple, system-ui, sans-serif); letter-spacing: .01em; opacity: .75; }
+.orb-node__sub:empty { display: none; }
+.orb-node:hover .orb-node__ring::before { inset: -8px; }
 .orb-node:focus-visible { outline: none; }
 .orb-node:focus-visible .orb-node__ring::before { border-width: 2px; border-color: #fff; }
-.orb-node:active .orb-node__text { transform: scale(.97); }
+.orb-node:active { color: #000; }
 /* in a call */
 .orb-node[data-state="connecting"] .orb-node__ring::after { animation-duration: .9s; }
-.orb-node[data-state="listening"] .orb-node__ring::before, .orb-node[data-state="speaking"] .orb-node__ring::before { inset: 3px; border-color: #f59e0b; border-width: 2px; }
+.orb-node[data-state="listening"] .orb-node__ring::before, .orb-node[data-state="speaking"] .orb-node__ring::before { inset: -7px; border-color: #f59e0b; border-width: 2px; }
 .orb-node[data-state="speaking"] .orb-node__ring::after { animation-duration: .8s; border-color: #f59e0b; }
-.orb-node[data-state="listening"] .orb-node__text, .orb-node[data-state="speaking"] .orb-node__text { border-color: rgb(245 158 11 / .8); background: rgb(40 26 4 / .82); }
-.orb-node[data-state="blocked"] .orb-node__text, .orb-node[data-state="failed"] .orb-node__text { border-color: rgb(255 255 255 / .3); }
-@media (max-width: 760px) { .orb-node { font-size: 13px; } }
 @media (prefers-reduced-motion: reduce) { .orb-node__ring::after { animation: none; opacity: 0; } }

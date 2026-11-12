@@ -45,16 +45,17 @@
         press: function () { if (window.COETVoice) window.COETVoice.toggle(); },
         bind: function (show) { if (window.COETVoice) window.COETVoice.onState(show); } }
     ];
-    var VOICE_TEXT = { idle: ['Talk to COET', 'AI voice assistant'], connecting: ['Connecting…', 'Allow the microphone'], listening: ['Listening', 'Say “stop” to end'], speaking: ['Speaking', 'Say “stop” to end'], blocked: ['Microphone blocked', 'Allow it in your browser, then retry'], failed: ['Could not connect','Try again in a moment'] };
+    var VOICE_TEXT = { idle: ['Talk to COET', ''], connecting: ['Connecting', ''], listening: ['Listening', 'say stop'], speaking: ['Speaking', 'say stop'], blocked: ['Mic blocked', ''], failed: ['No connection', ''] };
+    var BALL_PX = 34;                                   // the labelled ball's radius on screen: big enough to hold its small label
     var stageEl = host.parentNode, lgeo = new THREE.SphereGeometry(1, 24, 18), tmp = new THREE.Vector3();
     LABELS.forEach(function (l) {
-      l.mesh = new THREE.Mesh(lgeo, new THREE.MeshStandardMaterial({ color: 0xfff2d6, roughness: .3, emissive: 0xffb347, emissiveIntensity: 1.1 }));
-      l.mesh.scale.setScalar(small ? .04 : .034); scene.add(l.mesh);
+      l.mesh = new THREE.Mesh(lgeo, new THREE.MeshStandardMaterial({ color: 0xfff2d6, roughness: .3, emissive: 0xffc46b, emissiveIntensity: 1.5 }));
+      scene.add(l.mesh);
       var b = document.createElement('button'); b.type = 'button'; b.className = 'orb-node'; b.dataset.state = 'idle';
       var ring = document.createElement('span'); ring.className = 'orb-node__ring';
       var text = document.createElement('span'); text.className = 'orb-node__text';
       var main = document.createElement('span'), sub = document.createElement('span'); sub.className = 'orb-node__sub';
-      main.textContent = l.text; sub.textContent = l.sub;
+      main.textContent = l.text; b.title = l.sub;
       text.appendChild(main); text.appendChild(sub); b.appendChild(ring); b.appendChild(text);
       b.addEventListener('click', function () { l.press(); });
       b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });          // a press on the label is not a press on the globe
@@ -126,8 +127,11 @@
         var l = LABELS[j], t = clock * .11 + l.phase;
         var lx = Math.sin(t) * .6 - .14, ly = .34 + Math.sin(t * 1.31 + 1) * .3, lz = Math.sqrt(Math.max(.05, 1.25 - lx * lx - ly * ly));
         l.mesh.position.set(lx * grow, ly * grow, lz * grow);
-        l.mesh.scale.setScalar((small ? .04 : .034) * (l.live ? 1.25 + Math.sin(clock * 6) * .12 : 1));
-        tmp.copy(l.mesh.position).project(camera);
+        tmp.copy(l.mesh.position).project(camera); var sx0 = tmp.x, sy0 = tmp.y;
+        tmp.copy(l.mesh.position); tmp.x += 1; tmp.project(camera);
+        var perUnit = Math.max(1, (tmp.x - sx0) * .5 * W);                 // screen pixels per world unit at the ball's depth
+        l.mesh.scale.setScalar(BALL_PX / perUnit * (l.live ? 1.06 + Math.sin(clock * 5) * .05 : 1));
+        tmp.x = sx0; tmp.y = sy0;
         l.el.style.transform = 'translate3d(' + ((tmp.x * .5 + .5) * W).toFixed(1) + 'px,' + ((-tmp.y * .5 + .5) * H).toFixed(1) + 'px,0)';
       }
       renderer.render(scene, camera);
