@@ -207,6 +207,24 @@
       p.addEventListener('focus', function () { show(i); });
       p.addEventListener('blur', function () { leaveT = setTimeout(function () { if (!ws.contains(document.activeElement)) show(-1); }, 120); });
     });
+    var nameIt = function (i) {
+      layers.forEach(function (l, k) {
+        var s = l.querySelector('.ws-shot'), n = l.querySelector('.ws-name');
+        if (s) s.style.viewTransitionName = k === i ? 'vt-hero' : ''; if (n) n.style.viewTransitionName = k === i ? 'vt-title' : '';
+      });
+    };
+    pills.forEach(function (p, i) { p.addEventListener('click', function () { show(i); nameIt(i); }); });
+    // coming back from a case study: put that project straight back on the stage so its hero shrinks home
+    try {
+      var cameFrom = window.navigation && navigation.activation && navigation.activation.from && navigation.activation.from.url || '';
+      var m = /\/work\/([^\/]+)\/?$/.exec(cameFrom.split(/[?#]/)[0]);
+      if (m) pills.some(function (p, i) {
+        if (p.getAttribute('href').indexOf('work/' + m[1] + '/') < 0) return false;
+        ws.classList.add('ws-instant'); show(i); nameIt(i);
+        requestAnimationFrame(function () { requestAnimationFrame(function () { ws.classList.remove('ws-instant'); }); });
+        return true;
+      });
+    } catch (err) {}
     var list = ws.querySelector('.ws-pills');
     if (fine) list.addEventListener('pointerleave', function () { leaveT = setTimeout(function () { show(-1); }, 380); });
 
@@ -243,6 +261,20 @@
   /* ── the team: a soft key clack as you move across the people, panned to where each one sits ── */
   if (fine) [].forEach.call(document.querySelectorAll('.person'), function (p) {
     p.addEventListener('pointerenter', function () { S.clicky(panX(p)); });
+  });
+
+  /* ── case pages: "next project" and the work index hand their image/title to the next page's hero ── */
+  [].forEach.call(document.querySelectorAll('.cs-next, .wi-row'), function (a) {
+    a.addEventListener('click', function () {
+      document.documentElement.classList.add('vt-leaving');
+      var img = a.querySelector('.cs-next__media img'), nm = a.querySelector('.cs-next__name, .wi-name');
+      if (img) img.style.viewTransitionName = 'vt-hero'; if (nm) nm.style.viewTransitionName = 'vt-title';
+    });
+  });
+  window.addEventListener('pageshow', function (e) {   // restored from the back/forward cache: clear the hand-off marks
+    if (!e.persisted) return;
+    document.documentElement.classList.remove('vt-leaving');
+    [].forEach.call(document.querySelectorAll('.cs-next__media img, .cs-next__name, .wi-name'), function (el) { el.style.viewTransitionName = ''; });
   });
 
   /* ── team bios: a person with a bio opens it in a dialog ── */
