@@ -240,5 +240,34 @@
     }
   }
 
+  /* ── the lead form: posts to FormSubmit, which emails it on. It says "sent" only when the service confirms it. ── */
+  var lead = document.querySelector('[data-lead]');
+  if (lead && window.fetch) {
+    var st = lead.querySelector('[data-lead-status]');
+    var say = function (msg, kind) { st.textContent = ''; st.className = 'lead__status' + (kind ? ' is-' + kind : ''); if (typeof msg === 'string') st.textContent = msg; else st.appendChild(msg); };
+    var fallback = function (text) { var s = document.createElement('span'); s.append(text + ' You can also '); var a = document.createElement('a'); a.href = 'https://coetsystems.com/start-a-project'; a.textContent = 'start a project on coetsystems.com'; s.append(a, '.'); return s; };
+    lead.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var bad = null;
+      [].forEach.call(lead.querySelectorAll('[required]'), function (f) {
+        var ok = f.value.trim() !== '' && (f.type !== 'email' || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(f.value.trim()));
+        f.setAttribute('aria-invalid', String(!ok)); if (!ok && !bad) bad = f;
+      });
+      if (bad) { say(bad.type === 'email' && bad.value.trim() ? 'Please enter a valid email.' : 'Please fill in ' + bad.closest('label').querySelector('span').firstChild.textContent.trim().toLowerCase() + '.', 'err'); bad.focus(); return; }
+      if (lead._honey && lead._honey.value) return;          // a bot filled the hidden field
+      lead.classList.add('is-sending'); say('Sending…');
+      var data = {}; new FormData(lead).forEach(function (v, k) { data[k] = v; });
+      fetch(lead.action, { method: 'POST', headers: { 'Content-Type': 'application/json', Accept: 'application/json' }, body: JSON.stringify(data) })
+        .then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok, j: j }; }); })
+        .then(function (res) {
+          lead.classList.remove('is-sending');
+          if (res.ok && String(res.j.success) === 'true') { lead.reset(); say('Sent. Thank you, we’ll be in touch soon.', 'ok'); S.press(0); }
+          else say(fallback('That didn’t go through' + (res.j.message ? ' (' + res.j.message + ').' : '.')), 'err');
+        })
+        .catch(function () { lead.classList.remove('is-sending'); say(fallback('We couldn’t reach the mail service.'), 'err'); });
+    });
+    [].forEach.call(lead.querySelectorAll('input, textarea'), function (f) { f.addEventListener('input', function () { f.removeAttribute('aria-invalid'); }); });
+  }
+
   onScroll();
 })();

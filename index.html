@@ -30,7 +30,7 @@
       <button class="mnav__icon" type="button" data-sound-toggle aria-pressed="false" aria-label="Sound off">
         <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-spk" d="M3 6h2l3-2.5v9L5 10H3z"/><path class="i-on" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12 4a5.5 5.5 0 0 1 0 8"/><path class="i-off" d="M10.5 6.5l3 3M13.5 6.5l-3 3"/></svg>
       </button>
-      <a class="mnav__icon" href="https://coetsystems.com/start-a-project" aria-label="Start a project" data-sfx="press">
+      <a class="mnav__icon" href="./#contact" aria-label="Get in touch" data-sfx="press" data-menu-close>
         <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="4" width="11" height="8.5" rx="1.2"/><path d="M3 4.8l5 3.8 5-3.8"/></svg>
       </a>
     </div>
@@ -44,14 +44,14 @@
         <a href="./#services" data-sfx="tick" data-menu-close>What We Do</a>
         <a href="./#team" data-sfx="tick" data-menu-close>About Us</a>
         <a href="./work/" data-sfx="tick">All Work</a>
-        <a href="https://coetsystems.com/start-a-project" data-sfx="press">Get in Touch</a>
+        <a href="./#contact" data-sfx="press" data-menu-close>Get in Touch</a>
       </nav>
       <p class="menu__label">Case Studies</p>
       <ul class="menu__pills"><li><a class="m-pill" href="work/real-talk/" data-sfx="tick">Real Talk</a></li><li><a class="m-pill" href="work/betterguest/" data-sfx="tick">BetterGuest</a></li><li><a class="m-pill" href="work/splash-c2/" data-sfx="tick">Splash C2</a></li><li><a class="m-pill" href="work/intuitive-pitching/" data-sfx="tick">Intuitive Pitching</a></li><li><a class="m-pill" href="work/water-credit-registry/" data-sfx="tick">Water Credit Registry</a></li><li><a class="m-pill" href="work/tap-water-database/" data-sfx="tick">Tap Water Database</a></li><li><a class="m-pill" href="work/ai-robotics/" data-sfx="tick">AI Robotics</a></li><li><a class="m-pill" href="work/hnl-holiday-lighting/" data-sfx="tick">H &amp; L Holiday Lighting</a></li><li><a class="m-pill" href="work/long-stroke-card-club/" data-sfx="tick">Long Stroke Card Club</a></li><li><a class="m-pill" href="work/" data-sfx="tick">All Work</a></li></ul>
     </div>
     <div class="menu__media" aria-hidden="true"><img src="./assets/img/c.webp" alt="" loading="lazy" decoding="async"></div>
     <div class="menu__cards">
-      <a class="menu__card" href="https://coetsystems.com/start-a-project" data-sfx="press"><span class="menu__card-k">Now</span><span>Accepting 3 more projects this quarter.</span></a>
+      <a class="menu__card" href="./#contact" data-sfx="press" data-menu-close><span class="menu__card-k">Now</span><span>Accepting 3 more projects this quarter.</span></a>
       <a class="menu__card" href="./#team" data-sfx="tick" data-menu-close><span class="menu__card-k">Studios</span><span>Milan and Scottsdale.</span></a>
       <a class="menu__card" href="./work/betterguest/" data-sfx="tick"><span class="menu__card-k">Latest case study</span><span>BetterGuest: a cinematic tour of every home.</span></a>
     </div>
@@ -143,14 +143,30 @@
   </section>
 
   <!-- Close -->
-  <section class="section close" aria-labelledby="close-title">
+  <section class="section close" id="contact" aria-labelledby="close-title">
     <div class="wrap">
       <p class="close__status"><span class="flag">Accepting 3 more projects this quarter</span></p>
       <h2 class="display close__title" id="close-title" data-rise><span>Let's build</span> <span>the future of hardware.</span></h2>
-      <div class="actions" data-rise>
-        <a class="btn" href="https://coetsystems.com/start-a-project" data-sfx="press">Start a project</a>
-        <a class="link" href="https://coetsystems.com/work" data-sfx="tick">See our work <span aria-hidden="true">→</span></a>
-      </div>
+      <!-- Leads go straight to Jason's inbox through FormSubmit (formsubmit.co). The first submission sends a
+           one-time activation email that must be clicked; after that FormSubmit gives a random alias that can
+           replace the address below, so the raw address is no longer in the page. -->
+      <form class="lead" data-lead action="https://formsubmit.co/ajax/jason.coawette@gmail.com" method="post" novalidate data-rise>
+        <p class="lead__intro">Tell us about the machine.</p>
+        <div class="lead__row">
+          <label class="lead__field"><span>Name</span><input name="name" autocomplete="name" required maxlength="80"></label>
+          <label class="lead__field"><span>Email</span><input name="email" type="email" autocomplete="email" required maxlength="120"></label>
+        </div>
+        <label class="lead__field"><span>Company <em>(optional)</em></span><input name="company" autocomplete="organization" maxlength="120"></label>
+        <label class="lead__field"><span>What are you building?</span><textarea name="message" rows="2" required maxlength="2000"></textarea></label>
+        <input type="text" name="_honey" class="lead__trap" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <input type="hidden" name="_subject" value="New lead from the COET site">
+        <input type="hidden" name="_template" value="table">
+        <div class="lead__foot">
+          <button class="btn" type="submit" data-sfx="press">Send</button>
+          <p class="lead__status" role="status" aria-live="polite" data-lead-status></p>
+        </div>
+      </form>
+      <a class="link" href="work/" data-sfx="tick">See our work <span aria-hidden="true">→</span></a>
     </div>
   </section>
 </main>

@@ -133,7 +133,7 @@ def help_block(base):
     return f"""<section class="cs-help"><div class="cs-wrap cs-help__in">
     <h2 class="cs-help__title">How can we help?</h2>
     <ul class="cs-help__rows">
-      <li><a href="https://coetsystems.com/start-a-project" data-sfx="press">Start a project <span aria-hidden="true">↗</span></a></li>
+      <li><a href="{base}#contact" data-sfx="press">Start a project <span aria-hidden="true">↗</span></a></li>
       <li><a href="{base}work/" data-sfx="tick">See all work <span aria-hidden="true">↗</span></a></li>
       <li><a href="{base}#team" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
     </ul></div></section>"""

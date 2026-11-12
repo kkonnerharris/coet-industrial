@@ -171,3 +171,24 @@
 /* keyboard focus on the work stage: a clear ring, since the custom cursor replaces the pointer there */
 .ws-pill:focus-visible, .m-pill:focus-visible, .mnav__menu:focus-visible, .mnav__icon:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
 .menu .m-pill:focus-visible, .menu__links a:focus-visible, .menu__card:focus-visible { outline-color: #111; }
+
+/* ── the lead form: quiet, underline-only, MetaLab's contact style ── */
+.lead { width: min(100%, 720px); display: grid; gap: 28px; margin-top: 8px; }
+.lead__intro { color: var(--ink-2); font-size: 16px; }
+.lead__row { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+.lead__field { display: grid; gap: 6px; }
+.lead__field span { font: 400 12px/1 var(--ml-ui); color: var(--muted); }
+.lead__field em { font-style: normal; color: #5e605c; }
+.lead__field input, .lead__field textarea { width: 100%; background: transparent; border: 0; border-bottom: 1px solid var(--hair-2); border-radius: 0; padding: 8px 0 10px; color: var(--ink); font: 400 18px/1.4 var(--display); outline: none; resize: none; transition: border-color .25s; }
+.lead__field textarea { min-height: 44px; field-sizing: content; max-height: 240px; }
+.lead__field input:focus, .lead__field textarea:focus { border-bottom-color: var(--ink); }
+.lead__field input:focus-visible, .lead__field textarea:focus-visible { outline: none; box-shadow: 0 1px 0 0 var(--ink); }
+.lead__field [aria-invalid="true"] { border-bottom-color: #e5806f; }
+.lead__trap { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+.lead__foot { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+.lead__status { font-size: 14px; color: var(--ink-2); min-height: 1.4em; }
+.lead__status.is-ok { color: #9fd3a8; }
+.lead__status.is-err { color: #f0a597; }
+.lead__status a { text-decoration: underline; text-underline-offset: 3px; }
+.lead.is-sending button { opacity: .6; pointer-events: none; }
+@media (max-width: 760px) { .lead__row { grid-template-columns: 1fr; } }
