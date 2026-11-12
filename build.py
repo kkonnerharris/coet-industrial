@@ -25,7 +25,7 @@ TEAM = [  # COET's team as on coetsystems.com, plus Konner Harris (user, 2026-11
     ("01c226b233", "Katie Little", "Product manager"), ("4399730803", "Matthew Schafman", "Interface designer"),
     ("c8e4e8d197", "Grace Gonzalez", "Interface designer"), ("25e9621bac", "Olaf Klimasz", "Motion designer"),
     ("a87de1edd8", "Laish Glenberg", "Software engineer"), ("3b9bb91c92", "Theo Xenakis", "Software engineer"),
-    ("konner-harris", "Konner Harris", "AI & systems engineer"),
+    ("konner-harris", "Konner Harris", "Head of AI Engineering"),
     ("21d586a60b", "Corsa DeCenzo", "Hardware engineer"), ("201bdec7a3", "Gabe Luraicella", "Brand & creative strategist"),
 ]
 
