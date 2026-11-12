@@ -128,7 +128,7 @@
         var front = Math.max(0, Math.min(1, tmp.z / .8 + .5));
         tmp.project(camera);
         l.el.style.transform = 'translate3d(' + ((tmp.x * .5 + .5) * W).toFixed(1) + 'px,' + ((-tmp.y * .5 + .5) * H).toFixed(1) + 'px,0) translate(-50%, -50%)';
-        l.el.style.opacity = (.5 + front * .5).toFixed(2);
+        l.el.style.opacity = (.78 + front * .22).toFixed(2);
       }
       renderer.render(scene, camera);
     }

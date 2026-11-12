@@ -1,11 +1,14 @@
-/* COET — labelled balls in the globe. The ball is an ordinary one; a very small label runs across it and is a real
-   button (with a comfortable invisible press area) that follows the ball. The first one starts the voice agent. */
-.orb-node { position: absolute; left: 0; top: 0; z-index: 2; padding: 14px 12px; border: 0; background: none; cursor: pointer; white-space: nowrap; will-change: transform, opacity;
-  color: #ffe6b8; font: 600 8px/1 var(--apple, system-ui, sans-serif); letter-spacing: .04em; text-transform: none; -webkit-tap-highlight-color: transparent; }
-.orb-node__text { display: block; text-shadow: 0 0 2px #000, 0 0 4px #000, 0 0 8px rgb(0 0 0 / .9); transition: color .2s; }
-.orb-node:hover .orb-node__text, .orb-node:focus-visible .orb-node__text { color: #fff; }
-.orb-node:focus-visible { outline: 1px solid rgb(255 214 140 / .9); outline-offset: -8px; border-radius: 999px; }
-.orb-node[data-state="listening"] .orb-node__text, .orb-node[data-state="speaking"] .orb-node__text, .orb-node[data-state="connecting"] .orb-node__text { color: #f59e0b; }
-.orb-node[data-state="speaking"] .orb-node__text { animation: orbNodeSpeak 1s ease-in-out infinite; }
-@keyframes orbNodeSpeak { 50% { opacity: .55; } }
-@media (prefers-reduced-motion: reduce) { .orb-node[data-state="speaking"] .orb-node__text { animation: none; } }
+/* COET — labelled balls in the globe. The ball is an ordinary one; a small label runs across it, on a thin dark
+   chip so it reads over anything behind it. The label is a real button (with a comfortable invisible press area)
+   that follows the ball. The first one starts the voice agent. */
+.orb-node { position: absolute; left: 0; top: 0; z-index: 2; padding: 12px 10px; border: 0; background: none; cursor: pointer; white-space: nowrap; will-change: transform, opacity;
+  color: #fff; font: 600 10px/1 var(--apple, system-ui, sans-serif); letter-spacing: .03em; -webkit-tap-highlight-color: transparent; }
+.orb-node__text { position: relative; display: block; padding: 4px 8px; border-radius: 999px; background: rgb(8 8 9 / .78); box-shadow: 0 0 0 1px rgb(245 158 11 / .75), 0 2px 10px rgb(0 0 0 / .6); transition: box-shadow .2s, background .2s; }
+.orb-node__text::after { content: ""; position: absolute; inset: -1px; border-radius: inherit; box-shadow: 0 0 0 1px rgb(245 158 11 / .8); animation: orbNodePing 2.8s ease-out infinite; pointer-events: none; }
+@keyframes orbNodePing { 0% { transform: scale(1); opacity: .9; } 70%, 100% { transform: scale(1.35, 1.9); opacity: 0; } }
+.orb-node:hover .orb-node__text, .orb-node:focus-visible .orb-node__text { box-shadow: 0 0 0 1px #ffd68c, 0 2px 14px rgb(245 158 11 / .45); background: rgb(30 20 4 / .9); }
+.orb-node:focus-visible { outline: none; }
+.orb-node:focus-visible .orb-node__text { box-shadow: 0 0 0 2px #fff; }
+.orb-node[data-state="listening"] .orb-node__text, .orb-node[data-state="speaking"] .orb-node__text, .orb-node[data-state="connecting"] .orb-node__text { background: #f59e0b; color: #1a1205; box-shadow: 0 0 0 1px #f59e0b, 0 2px 16px rgb(245 158 11 / .5); }
+.orb-node[data-state="speaking"] .orb-node__text::after, .orb-node[data-state="connecting"] .orb-node__text::after { animation-duration: .9s; }
+@media (prefers-reduced-motion: reduce) { .orb-node__text::after { animation: none; opacity: 0; } }
