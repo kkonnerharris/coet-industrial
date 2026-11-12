@@ -245,6 +245,24 @@
     p.addEventListener('pointerenter', function () { S.clicky(panX(p)); });
   });
 
+  /* ── team bios: a person with a bio opens it in a dialog ── */
+  var bio = document.querySelector('[data-bio-dialog]');
+  if (bio && bio.showModal) {
+    var bImg = bio.querySelector('[data-bio-img]'), bText = bio.querySelector('[data-bio-text]'), opener = null;
+    [].forEach.call(document.querySelectorAll('[data-bio]'), function (b) {
+      b.addEventListener('click', function () {
+        var t = document.getElementById('bio-' + b.getAttribute('data-bio')), img = b.querySelector('img');
+        bText.innerHTML = ''; bText.appendChild(t.content.cloneNode(true));
+        bText.querySelector('.bio__name').id = 'bio-title';
+        bImg.src = img.currentSrc || img.src; bImg.alt = img.alt;
+        opener = b; bio.showModal(); bio.scrollTop = 0; document.documentElement.classList.add('bio-open'); S.press();
+      });
+    });
+    bio.querySelector('[data-bio-close]').addEventListener('click', function () { bio.close(); });
+    bio.addEventListener('click', function (e) { if (e.target === bio) bio.close(); });
+    bio.addEventListener('close', function () { document.documentElement.classList.remove('bio-open'); if (opener) opener.focus(); S.tick(); });
+  }
+
   /* ── the lead form: posts to FormSubmit, which emails it on. It says "sent" only when the service confirms it. ── */
   var lead = document.querySelector('[data-lead]');
   if (lead && window.fetch) {

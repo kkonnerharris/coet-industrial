@@ -25,9 +25,26 @@ TEAM = [  # COET's team as on coetsystems.com, plus Konner Harris (user, 2026-11
     ("01c226b233", "Katie Little", "Product manager"), ("4399730803", "Matthew Schafman", "Interface designer"),
     ("c8e4e8d197", "Grace Gonzalez", "Interface designer"), ("25e9621bac", "Olaf Klimasz", "Motion designer"),
     ("a87de1edd8", "Laish Glenberg", "Software engineer"), ("3b9bb91c92", "Theo Xenakis", "Software engineer"),
-    ("konner-harris", "Konner Harris", "Systems engineer"),
+    ("konner-harris", "Konner Harris", "AI & systems engineer"),
     ("21d586a60b", "Corsa DeCenzo", "Hardware engineer"), ("201bdec7a3", "Gabe Luraicella", "Brand & creative strategist"),
 ]
+
+BIOS = {  # click-to-open bios. Konner's is his own text (2026-11-12); Jason's is what the user said about him. Others come later.
+    "konner-harris": [
+        "Konner Harris is a software engineer specializing in AI integration, full-stack development, intelligent systems, and software infrastructure. His experience spans commercial software development, independent contracting, enterprise networking, robotics, and applied artificial intelligence, with an emphasis on turning emerging technologies into practical, real-world solutions.",
+        "As a software engineer and contractor, Konner has worked on a diverse range of projects, including AI-powered applications, intelligent automation systems, conversational AI agents, business workflow integrations, web platforms, and custom software solutions. His work involves integrating large language models, external APIs, and automation frameworks into existing business systems, as well as designing and developing new applications from the ground up.",
+        "At COET Systems, his engineering work includes software and interfaces for autonomous surface vehicles, surgical robotics, and digital platforms. He brings experience in backend development, system architecture, API integration, and modern frontend technologies, connecting complex engineering systems with intuitive user experiences.",
+        "His technical background also includes enterprise network engineering at Southern Illinois University, where he supported large-scale networking infrastructure and developed Python automation tools. As a robotics research assistant at SIU's X-Lab, he has worked with ROS 2, robotic perception, LiDAR, large language models, and autonomous control systems.",
+        "Beyond commercial development, Konner has pursued research and independent projects in machine learning, computational neuroscience, EEG signal processing, computer vision, federated learning, and medical imaging. He has also contributed to open-source software, including BrainFlow, and submitted contributions to projects maintained by Microsoft, Google, and NVIDIA.",
+        "His technical toolkit includes Python, Go, C++, TypeScript, JavaScript, React, Linux, Docker, Kubernetes, cloud infrastructure, databases, and AI development frameworks.",
+        "Konner holds a bachelor's degree in Computer Science from Southern Illinois University and has been accepted into Georgia Tech's Master of Science in Computer Science program.",
+        "His approach combines software engineering, AI integration, infrastructure, and product development, with a focus on building intelligent, reliable systems that solve meaningful technical and business problems.",
+    ],
+    "ccdf94f84d": [
+        "Jason Coawette studied computer science at Arizona State University and took on a wide range of freelance projects before founding COET Systems.",
+        "His interests are UI/UX design and front-end development.",
+    ],
+}
 
 def read(p):
     with open(p, encoding="utf-8") as f: return f.read()
@@ -44,9 +61,17 @@ for i, (key, name, lede, tags) in enumerate(SERVICES):
     panels.append(
         f'<div class="stage__panel" role="tabpanel" id="panel-{key}" aria-labelledby="tab-{key}" data-key="{key}"{"" if on else " hidden"}>'
         f'<p class="sr-only">{e(name)}: {e(lede)}</p>{read(os.path.join(A, "scenes", key + ".html"))}</div>')
-TEAM_HTML = "".join(
-    '<li class="person" data-rise><img src="assets/img/team/%s.webp" width="600" height="750" alt="%s" loading="lazy" decoding="async">'
-    '<p class="person__name">%s</p><p class="mono person__role">%s</p></li>' % (img, e(n), e(n), e(r)) for img, n, r in TEAM)
+def person(img, n, r):
+    pic = '<img src="assets/img/team/%s.webp" width="600" height="750" alt="%s" loading="lazy" decoding="async">' % (img, e(n))
+    txt = '<p class="person__name">%s</p><p class="mono person__role">%s</p>' % (e(n), e(r))
+    if img not in BIOS:
+        return '<li class="person" data-rise>%s%s</li>' % (pic, txt)
+    body = "".join("<p>%s</p>" % e(p) for p in BIOS[img])
+    return ('<li class="person person--bio" data-rise><button class="person__open" type="button" aria-haspopup="dialog" data-bio="%s">%s%s'
+            '<span class="person__more">Read bio <span aria-hidden="true">+</span></span></button>'
+            '<template id="bio-%s"><p class="bio__role">%s</p><h3 class="bio__name">%s</h3><div class="bio__body">%s</div></template></li>'
+            % (img, pic, txt, img, e(r), e(n), body))
+TEAM_HTML = "".join(person(*t) for t in TEAM)
 
 import casegen
 LOGO = read(os.path.join(A, "logo.svg.html"))
