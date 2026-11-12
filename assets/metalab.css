@@ -324,3 +324,17 @@ html.vt-leaving .cs-hero .cs-plate, html.vt-leaving .cs-hero .cs-title { view-tr
 @keyframes mac-rise { from { opacity: 0; transform: translateY(28px); } }
 @keyframes mac-settle { from { opacity: .2; transform: scale(.9); } }
 @keyframes mac-title { from { opacity: 0; transform: translateY(40px) scale(.96); } }
+
+/* ==== Mac "switch spaces" scroll: each section is a window. Leaving, it recedes (shrinks, rounds, dims) and the
+        next one slides up over it. Tied to the scrollbar, transform/opacity only. ==== */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    main > section, main > .ws { position: relative; background: var(--black); transform-origin: 50% 0;
+      animation: space-in linear both, space-out linear both; animation-timeline: view(), view();
+      animation-range: entry 0% entry 60%, exit 15% exit 100%; }
+    main > .client { background: var(--paper, #f4f4f1); }
+    main > section:first-child, main > .ws { animation: space-out linear both; animation-timeline: view(); animation-range: exit 15% exit 100%; }
+  }
+}
+@keyframes space-in { from { transform: translateY(80px) scale(.96); border-radius: 32px; box-shadow: 0 0 0 1px rgb(255 255 255 / .14), 0 -40px 90px rgb(0 0 0 / .7); } to { border-radius: 0; box-shadow: 0 0 0 1px rgb(255 255 255 / 0); } }
+@keyframes space-out { to { transform: scale(.88); border-radius: 32px; opacity: .45; background: #111114; box-shadow: 0 0 0 1px rgb(255 255 255 / .16); } }
