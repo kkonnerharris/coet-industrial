@@ -38,6 +38,34 @@
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     var globe = new THREE.Group(); globe.add(mesh); scene.add(globe);
 
+    // ── labelled balls: a few balls carry a label and do something when pressed. Each drifts across the front of
+    //    the globe (never behind it) and has a real button that follows it. Add an entry here for each new one. ──
+    var LABELS = [
+      { key: 'voice', text: 'Talk to COET', sub: 'AI voice assistant', phase: 0,
+        press: function () { if (window.COETVoice) window.COETVoice.toggle(); },
+        bind: function (show) { if (window.COETVoice) window.COETVoice.onState(show); } }
+    ];
+    var VOICE_TEXT = { idle: ['Talk to COET', 'AI voice assistant'], connecting: ['Connecting…', 'Allow the microphone'], listening: ['Listening', 'Say “stop” to end'], speaking: ['Speaking', 'Say “stop” to end'], blocked: ['Microphone blocked', 'Allow it in your browser, then retry'], failed: ['Could not connect','Try again in a moment'] };
+    var stageEl = host.parentNode, lgeo = new THREE.SphereGeometry(1, 24, 18), tmp = new THREE.Vector3();
+    LABELS.forEach(function (l) {
+      l.mesh = new THREE.Mesh(lgeo, new THREE.MeshStandardMaterial({ color: 0xfff2d6, roughness: .3, emissive: 0xffb347, emissiveIntensity: 1.1 }));
+      l.mesh.scale.setScalar(small ? .04 : .034); scene.add(l.mesh);
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'orb-node'; b.dataset.state = 'idle';
+      var ring = document.createElement('span'); ring.className = 'orb-node__ring';
+      var text = document.createElement('span'); text.className = 'orb-node__text';
+      var main = document.createElement('span'), sub = document.createElement('span'); sub.className = 'orb-node__sub';
+      main.textContent = l.text; sub.textContent = l.sub;
+      text.appendChild(main); text.appendChild(sub); b.appendChild(ring); b.appendChild(text);
+      b.addEventListener('click', function () { l.press(); });
+      b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });          // a press on the label is not a press on the globe
+      stageEl.appendChild(b); l.el = b;
+      if (l.bind) l.bind(function (st) {
+        var t = VOICE_TEXT[st] || VOICE_TEXT.idle; b.dataset.state = st; main.textContent = t[0]; sub.textContent = t[1];
+        b.setAttribute('aria-label', st === 'idle' ? 'Talk to COET: start a voice conversation with an AI assistant (uses your microphone)' : st === 'listening' || st === 'speaking' || st === 'connecting' ? 'End the voice conversation' : t[0]);
+        l.live = st === 'listening' || st === 'speaking';
+      });
+    });
+
     var balls = [], tint = new THREE.Color(), amber = new THREE.Color(0xf59e0b), pale = new THREE.Color(0xffd08a), deep = new THREE.Color(0xd97706);
     function unit() { var u = rnd() * 2 - 1, a = rnd() * TAU, r = Math.sqrt(1 - u * u); return new THREE.Vector3(Math.cos(a) * r, u, Math.sin(a) * r); }
     for (var i = 0; i < N; i++) {
@@ -94,6 +122,14 @@
         arr[o + 12] = (b.ux * c + b.vx * s) * r; arr[o + 13] = (b.uy * c + b.vy * s) * r; arr[o + 14] = (b.uz * c + b.vz * s) * r; arr[o + 15] = 1;
       }
       mesh.instanceMatrix.needsUpdate = true;
+      for (var j = 0; j < LABELS.length; j++) {            // labelled balls wander over the upper front of the globe
+        var l = LABELS[j], t = clock * .11 + l.phase;
+        var lx = Math.sin(t) * .6 - .14, ly = .34 + Math.sin(t * 1.31 + 1) * .3, lz = Math.sqrt(Math.max(.05, 1.25 - lx * lx - ly * ly));
+        l.mesh.position.set(lx * grow, ly * grow, lz * grow);
+        l.mesh.scale.setScalar((small ? .04 : .034) * (l.live ? 1.25 + Math.sin(clock * 6) * .12 : 1));
+        tmp.copy(l.mesh.position).project(camera);
+        l.el.style.transform = 'translate3d(' + ((tmp.x * .5 + .5) * W).toFixed(1) + 'px,' + ((-tmp.y * .5 + .5) * H).toFixed(1) + 'px,0)';
+      }
       renderer.render(scene, camera);
     }
 
