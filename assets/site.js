@@ -7,13 +7,12 @@
   var S = window.COETSound || { tick: function () {}, select: function () {}, press: function () {}, arrive: function () {}, rush: function () {}, set: function () { return false; }, wanted: function () { return false; } };
   var panX = function (el) { var r = el.getBoundingClientRect(); return ((r.left + r.width / 2) / innerWidth) * 2 - 1; };
 
-  /* ── sound toggle: off until asked for; the choice is remembered on this device ── */
-  var toggle = document.querySelector('[data-sound-toggle]'), label = document.querySelector('[data-sound-label]');
-  function showSound(v) { toggle.setAttribute('aria-pressed', String(v)); label.textContent = v ? 'Sound on' : 'Sound off'; }
+  /* ── sound toggle (the speaker in the bar): off until asked for; remembered on this device ── */
+  var toggle = document.querySelector('[data-sound-toggle]');
+  function showSound(v) { if (!toggle) return; toggle.setAttribute('aria-pressed', String(v)); toggle.setAttribute('aria-label', v ? 'Sound on' : 'Sound off'); }
   if (toggle) {
     showSound(false);
     toggle.addEventListener('click', function () { showSound(S.set(toggle.getAttribute('aria-pressed') !== 'true')); });
-    // remembered "on": browsers only allow audio after a gesture, so it wakes on the first one
     if (S.wanted()) {
       var wake = function () { showSound(S.set(true)); removeEventListener('pointerdown', wake, true); removeEventListener('keydown', wake, true); };
       addEventListener('pointerdown', wake, true); addEventListener('keydown', wake, true);
@@ -44,7 +43,7 @@
   function onScroll() {
     ticking = false;
     var h = hero ? hero.offsetHeight : 600, y = scrollY, v = y - lastY; lastY = y;
-    nav.classList.toggle('is-solid', y > h - 90);
+    nav.classList.toggle('is-compact', y > 60);
     if (hero && !reduce) hero.style.setProperty('--hero-p', Math.min(1, y / h).toFixed(3));
     lightWords();
     S.rush(v); clearTimeout(idle); idle = setTimeout(function () { S.rush(0); }, 90);
@@ -154,21 +153,73 @@
     }
   }
 
-  /* ── work stage (MetaLab): pointing at or focusing a project swaps the whole stage; a click opens its case study ── */
+  /* ── the menu: full screen, light; Esc or Close shuts it, focus stays inside while open ── */
+  var menu = document.querySelector('[data-menu]'), menuBtn = document.querySelector('[data-menu-toggle]'), menuLabel = document.querySelector('[data-menu-label]');
+  if (menu && menuBtn) {
+    [].forEach.call(menu.querySelectorAll('.m-pill'), function (p, i) { p.style.setProperty('--i', i); });
+    var openMenu = function (open) {
+      menuBtn.setAttribute('aria-expanded', String(open)); menuLabel.textContent = open ? 'Close' : 'Menu';
+      document.documentElement.classList.toggle('menu-open', open); document.body.classList.toggle('menu-open', open);
+      if (open) { menu.hidden = false; requestAnimationFrame(function () { requestAnimationFrame(function () { menu.classList.add('is-open'); }); }); var f = menu.querySelector('a'); if (f) setTimeout(function () { f.focus({ preventScroll: true }); }, 60); S.press(-.8); }
+      else { menu.classList.remove('is-open'); setTimeout(function () { if (menuBtn.getAttribute('aria-expanded') === 'false') menu.hidden = true; }, reduce ? 0 : 420); menuBtn.focus({ preventScroll: true }); S.select(-.8); }
+    };
+    menuBtn.addEventListener('click', function () { openMenu(menuBtn.getAttribute('aria-expanded') !== 'true'); });
+    document.addEventListener('keydown', function (e) {
+      if (menuBtn.getAttribute('aria-expanded') !== 'true') return;
+      if (e.key === 'Escape') { e.preventDefault(); openMenu(false); return; }
+      if (e.key === 'Tab') {   // keep focus in the bar and the menu
+        var f = [].slice.call(document.querySelectorAll('.mnav a, .mnav button, .menu a'));
+        var i = f.indexOf(document.activeElement);
+        if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); } else if (!e.shiftKey && i === f.length - 1) { e.preventDefault(); f[0].focus(); }
+      }
+    });
+  }
+
+  /* ── the studio clock: Scottsdale time, like MetaLab's city clock ── */
+  var clock = document.querySelector('[data-clock]');
+  if (clock) {
+    var fmt = new Intl.DateTimeFormat('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/Phoenix' });
+    var tickClock = function () { clock.textContent = 'PHX ' + fmt.format(new Date()); };
+    tickClock(); setInterval(tickClock, 15000);
+  }
+
+  /* ── home stage: nothing picked at first; a project takes the stage while pointed at or focused ── */
   var ws = document.querySelector('[data-ws-root]');
   if (ws) {
-    var wsPills = [].slice.call(ws.querySelectorAll('[data-ws]')), wsLayers = [].slice.call(ws.querySelectorAll('[data-ws-layer]')), wsOn = 0;
-    function show(i) {
-      if (i === wsOn) return;
-      wsOn = i;
-      wsLayers.forEach(function (l, k) { l.classList.toggle('is-on', k === i); l.setAttribute('aria-hidden', String(k !== i)); });
-      wsPills.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
-      S.tick(-.6);
-    }
-    wsPills.forEach(function (p, i) {
+    var pills = [].slice.call(ws.querySelectorAll('[data-ws]')), layers = [].slice.call(ws.querySelectorAll('[data-ws-layer]')), home = ws.querySelector('[data-ws-home]');
+    var cur = -1, leaveT;
+    var show = function (i) {
+      clearTimeout(leaveT);
+      if (i === cur) return;
+      var prev = cur; cur = i;
+      layers.forEach(function (l, k) {
+        if (k === prev) { l.classList.add('is-leaving'); setTimeout(function () { l.classList.remove('is-leaving'); }, 400); }
+        l.classList.toggle('is-on', k === i); l.setAttribute('aria-hidden', String(k !== i));
+      });
+      pills.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
+      if (i === -1) {   // back to the C: its lines drop in from above again
+        home.classList.add('is-entering'); void home.offsetWidth; home.classList.add('is-on');
+        requestAnimationFrame(function () { home.classList.remove('is-entering'); });
+      } else home.classList.remove('is-on');
+      S.tick(-.7);
+    };
+    pills.forEach(function (p, i) {
       if (fine) p.addEventListener('pointerenter', function () { show(i); });
       p.addEventListener('focus', function () { show(i); });
+      p.addEventListener('blur', function () { leaveT = setTimeout(function () { if (!ws.contains(document.activeElement)) show(-1); }, 120); });
     });
+    var list = ws.querySelector('.ws-pills');
+    if (fine) list.addEventListener('pointerleave', function () { leaveT = setTimeout(function () { show(-1); }, 380); });
+
+    // the C leans toward the cursor and its liquid surface keeps moving
+    var c = ws.querySelector('[data-c]'), turb = ws.querySelector('[data-liquid]');
+    if (c && !reduce) {
+      if (fine) ws.addEventListener('pointermove', function (e) {
+        var x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
+        c.style.setProperty('--cy', (x * 14).toFixed(2) + 'deg'); c.style.setProperty('--cx', (-y * 10).toFixed(2) + 'deg');
+      });
+      if (turb) { var t0 = performance.now(); (function flow(t) { var k = (t - t0) / 1000; turb.setAttribute('baseFrequency', (0.008 + Math.sin(k * .35) * .0025).toFixed(4) + ' ' + (0.012 + Math.cos(k * .27) * .003).toFixed(4)); requestAnimationFrame(flow); })(t0); }
+    }
   }
 
   onScroll();

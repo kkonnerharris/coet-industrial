@@ -1,0 +1,36 @@
+<header class="mnav" data-nav>
+  <div class="mnav__bar">
+    <button class="mnav__menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu"><span data-menu-label>Menu</span><span class="mnav__x" aria-hidden="true">×</span></button>
+    <a class="mnav__logo" href="{{root}}" aria-label="COET, home" data-sfx="tick">{{logo}}</a>
+    <div class="mnav__end">
+      <span class="mnav__clock" data-clock aria-label="Local time at the Scottsdale studio">PHX --:--</span>
+      <button class="mnav__icon" type="button" data-sound-toggle aria-pressed="false" aria-label="Sound off">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-spk" d="M3 6h2l3-2.5v9L5 10H3z"/><path class="i-on" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12 4a5.5 5.5 0 0 1 0 8"/><path class="i-off" d="M10.5 6.5l3 3M13.5 6.5l-3 3"/></svg>
+      </button>
+      <a class="mnav__icon" href="https://coetsystems.com/start-a-project" aria-label="Start a project" data-sfx="press">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="4" width="11" height="8.5" rx="1.2"/><path d="M3 4.8l5 3.8 5-3.8"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu hidden>
+  <div class="menu__in">
+    <div class="menu__col">
+      <nav class="menu__links" aria-label="Main">
+        <a href="{{root}}what-we-do/" data-sfx="tick">What We Do</a>
+        <a href="{{root}}about/" data-sfx="tick">About Us</a>
+        <a href="{{root}}work/" data-sfx="tick">All Work</a>
+        <a href="https://coetsystems.com/start-a-project" data-sfx="press">Get in Touch</a>
+      </nav>
+      <p class="menu__label">Case Studies</p>
+      <ul class="menu__pills">{{menu-pills}}</ul>
+    </div>
+    <div class="menu__media" aria-hidden="true"><img src="{{root}}assets/img/c.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="menu__cards">
+      <a class="menu__card" href="https://coetsystems.com/start-a-project" data-sfx="press"><span class="menu__card-k">Now</span><span>Accepting 3 more projects this quarter.</span></a>
+      <a class="menu__card" href="{{root}}about/" data-sfx="tick"><span class="menu__card-k">Studios</span><span>Milan and Scottsdale.</span></a>
+      <a class="menu__card" href="{{root}}work/betterguest/" data-sfx="tick"><span class="menu__card-k">Latest case study</span><span>BetterGuest: a cinematic tour of every home.</span></a>
+    </div>
+  </div>
+</div>

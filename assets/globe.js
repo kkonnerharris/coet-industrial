@@ -160,7 +160,7 @@
     nearest();
     draw(now);
   }
-  fetch('assets/globe/coast.json').then(function (r) { return r.json(); }).then(function (d) { coast = d; if (!visible) draw(0); }).catch(function () {});
+  fetch(new URL('globe/coast.json', (document.querySelector('script[src*="globe.js"]') || {}).src || location.href).href).then(function (r) { return r.json(); }).then(function (d) { coast = d; if (!visible) draw(0); }).catch(function () {});
   size(); setStudio('Scottsdale'); draw(0);
   addEventListener('resize', function () { size(); draw(performance.now()); });
   new IntersectionObserver(function (es) {

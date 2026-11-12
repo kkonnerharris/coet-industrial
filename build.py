@@ -44,16 +44,31 @@ for i, (key, name, lede, tags) in enumerate(SERVICES):
     panels.append(
         f'<div class="stage__panel" role="tabpanel" id="panel-{key}" aria-labelledby="tab-{key}" data-key="{key}"{"" if on else " hidden"}>'
         f'<p class="sr-only">{e(name)}: {e(lede)}</p>{read(os.path.join(A, "scenes", key + ".html"))}</div>')
-
-out = read(os.path.join(HERE, "template.html"))
-out = out.replace("{{logo}}", read(os.path.join(A, "logo.svg.html")))
-out = out.replace("{{svc-tabs}}", "\n        ".join(tabs)).replace("{{svc-panels}}", "".join(panels))
-out = out.replace("{{team}}", "".join(
+TEAM_HTML = "".join(
     '<li class="person" data-rise><img src="assets/img/team/%s.webp" width="600" height="750" alt="%s" loading="lazy" decoding="async">'
-    '<p class="person__name">%s</p><p class="mono person__role">%s</p></li>' % (img, e(n), e(n), e(r)) for img, n, r in TEAM))
+    '<p class="person__name">%s</p><p class="mono person__role">%s</p></li>' % (img, e(n), e(n), e(r)) for img, n, r in TEAM)
+
 import casegen
-out = out.replace("{{work-stage}}", casegen.home_stage())
-assert "{{" not in out, re.findall(r"\{\{[^}]+\}\}", out)
+LOGO = read(os.path.join(A, "logo.svg.html"))
+TEMPLATE = read(os.path.join(HERE, "template.html"))
+NAV = read(os.path.join(HERE, "pages", "nav.html"))
+
+
+def rebase(t, base):
+    for attr in ('src="assets/', 'href="assets/', 'href="favicon', 'href="apple-touch'):
+        t = t.replace(attr, attr.split('"')[0] + '"' + base + attr.split('"', 1)[1])
+    return t
+
+
+def shell(title, desc, base, body, cls="is-sub"):
+    nav = NAV.replace("{{root}}", base or "./").replace("{{logo}}", LOGO).replace("{{menu-pills}}", casegen.menu_pills(base))
+    page = TEMPLATE.replace("{{nav}}", nav).replace("{{main}}", body.strip())
+    page = page.replace("<title>COET · Hardware product studio</title>", "<title>%s</title>" % e(title))
+    page = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % e(desc), page)
+    page = page.replace("{{logo}}", LOGO).replace("<body>", '<body class="%s">' % cls, 1)
+    page = rebase(page, base)
+    assert "{{" not in page, re.findall(r"\{\{[^}]+\}\}", page)
+    return page
 
 
 def write(rel, text):
@@ -63,24 +78,19 @@ def write(rel, text):
     print(rel, len(text) // 1024, "KB")
 
 
-write("index.html", out)
-
-# Case pages share the home page's head, nav and footer, cut from the same build, with links rebased.
-HEAD, FOOT = out.split('<main id="main">')[0], out.split("</main>", 1)[1]
-
-
-def shell(title, desc, base, body):
-    def rebase(t):
-        for attr in ('href="#', 'src="assets/', 'href="assets/', 'href="favicon', 'href="apple-touch'):
-            t = t.replace(attr, attr[:6] + base + attr[6:] if attr.startswith("href") else attr[:5] + base + attr[5:])
-        return t
-    head = rebase(HEAD).replace("<title>COET · Hardware product studio</title>", "<title>%s</title>" % e(title))
-    head = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % e(desc), head)
-    page = head + body.strip() + rebase(FOOT)
-    page = page.replace('href="%s#top"' % base, 'href="%s"' % base).replace('href="%s#main"' % base, 'href="#main"')
-    return page.replace("<body>", '<body class="is-sub">', 1)
+def page_head(title, sub):
+    return (f'<header class="cs-hero pg-hero"><div class="cs-wrap"><h1 class="cs-title" data-rise>{e(title)}</h1>'
+            f'<p class="cs-aside pg-sub" data-rise>{e(sub)}</p></div></header>')
 
 
+TITLE, DESC = "COET · Hardware product studio", "COET turns complicated hardware into intuitive product experiences. Brand, web, rendering, interfaces and implementation."
+write("index.html", shell(TITLE, DESC, "", casegen.home_stage(), "is-home"))
+what = read(os.path.join(HERE, "pages", "what-we-do.html")).replace("{{svc-tabs}}", "\n        ".join(tabs)).replace("{{svc-panels}}", "".join(panels))
+write("what-we-do/index.html", shell("What We Do · COET", "Brand, web, rendering, interfaces and implementation for hardware companies.", "../",
+      page_head("What we do", "Brand, web, interfaces and engineering, for machines people use every day.") + what))
+about = read(os.path.join(HERE, "pages", "about.html")).replace("{{team}}", TEAM_HTML)
+write("about/index.html", shell("About Us · COET", "The people behind COET, in Milan and Scottsdale.", "../",
+      page_head("About us", "Thirteen people across two studios, Milan and Scottsdale.") + about))
 for i, p in enumerate(casegen.PROJECTS):
     write("work/%s/index.html" % p["slug"], casegen.case_page(p, i, shell))
 write("work/index.html", casegen.work_index(shell))

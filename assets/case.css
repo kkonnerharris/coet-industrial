@@ -111,26 +111,6 @@
 .wi-del { color: var(--muted); line-height: 1.9; }
 .wi-row:hover .wi-name { color: var(--signal); }
 
-/* ── home: the MetaLab work stage ── */
-.ws { position: relative; height: 100svh; min-height: 640px; overflow: hidden; isolation: isolate; border-top: 1px solid var(--hair); }
-.ws-layers { position: absolute; inset: 0; z-index: -1; }
-.ws-layer { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .7s var(--ease), visibility 0s .7s; background: radial-gradient(120% 100% at 60% 30%, color-mix(in srgb, var(--tone, #111) 60%, #1e1e1e), #000 75%); }
-.ws-layer.is-on { opacity: 1; visibility: visible; transition: opacity .7s var(--ease); }
-.ws-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top; opacity: .22; filter: blur(14px) saturate(.8); transform: scale(1.1); }
-.ws-shot { position: absolute; right: var(--gutter); top: calc(72px + var(--s7)); width: min(46vw, 640px); border-radius: 8px; overflow: hidden; box-shadow: 0 40px 90px -30px rgb(0 0 0 / .8), 0 0 0 1px rgb(255 255 255 / .1); transform: translateY(16px) scale(.98); transition: transform 1s var(--ease); }
-.ws-layer.is-on .ws-shot { transform: none; }
-.ws-shot img { width: 100%; height: auto; display: block; }
-.ws-shot--diagram { background: #050505; padding: var(--s4); }
-.ws-del { position: absolute; right: var(--gutter); top: calc(72px + var(--s4)); color: var(--ink-2); }
-.ws-name { position: absolute; left: 50%; bottom: clamp(var(--s8), 12vh, var(--s10)); transform: translateX(-50%); font: 400 clamp(56px, 9vw, 160px)/.9 var(--serif); color: #fff; white-space: nowrap; letter-spacing: -.025em; text-shadow: 0 10px 40px rgb(0 0 0 / .5); }
-.ws-line { position: absolute; right: var(--gutter); bottom: clamp(var(--s6), 6vh, var(--s7)); max-width: 30ch; color: var(--ink-2); font-size: 14px; line-height: 1.5; text-align: right; }
-.ws-intro { position: absolute; left: var(--gutter); top: calc(72px + var(--s6)); max-width: 30ch; font-size: 14px; color: var(--ink-2); }
-.ws-pills { position: absolute; left: var(--gutter); top: 50%; transform: translateY(-50%); display: grid; gap: var(--s2); justify-items: start; }
-.ws-pill { display: inline-flex; align-items: center; min-height: 32px; padding: 0 var(--s3); border-radius: 999px; background: rgb(255 255 255 / .08); border: 1px solid transparent; font: 400 13px/1 var(--display); color: var(--ink-2); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: background-color .25s, color .25s, border-color .25s; position: relative; }
-.ws-pill::after { content: ""; position: absolute; inset: -6px 0; }
-.ws-pill:hover, .ws-pill.is-on { color: #fff; border-color: rgb(255 255 255 / .55); background: rgb(255 255 255 / .12); }
-.ws-pill--all { margin-top: var(--s2); background: transparent; color: var(--muted); }
-
 /* ── responsive ── */
 @media (max-width: 900px) {
   .cs-text { grid-template-columns: 1fr; align-items: start; }
@@ -139,20 +119,14 @@
   .cs-feat { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .cs-help__in { grid-template-columns: 1fr; }
   .wi-row { grid-template-columns: 1fr; gap: var(--s2); padding: var(--s6) 0; }
-  .ws-shot { left: var(--gutter); right: var(--gutter); width: auto; top: calc(72px + var(--s9)); }
-  .ws-pills { top: auto; bottom: calc(var(--s10) + var(--s9)); transform: none; display: flex; flex-wrap: wrap; right: var(--gutter); }
-  .ws-name { white-space: normal; text-align: center; width: calc(100% - 2 * var(--gutter)); bottom: var(--s9); font-size: clamp(44px, 12vw, 80px); }
-  .ws-line, .ws-del { display: none; }
 }
 @media (max-width: 760px) {
   .cs-grid--2, .cs-grid--split, .cs-grid--split:has(.cs-plate--phone:first-child) { grid-template-columns: 1fr; }
   .cs-feat { grid-template-columns: 1fr; }
   .cs-live { grid-template-columns: 1fr auto; }
   .cs-live .cs-label { grid-column: 1 / -1; }
-  .ws-intro { display: none; }
-  .ws-pill { min-height: 36px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .dg-link { animation: none; }
-  .ws-layer, .ws-shot, .cs-next__media img { transition: none; }
+  .cs-next__media img { transition: none; }
 }

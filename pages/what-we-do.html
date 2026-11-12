@@ -1,0 +1,38 @@
+  <!-- At a glance -->
+  <section class="specs" aria-label="COET at a glance">
+    <ul class="wrap specs__row">
+      <li data-rise><span class="specs__n" data-count="13">13</span><span class="mono specs__l">People on the team</span></li>
+      <li data-rise><span class="specs__n" data-count="5">5</span><span class="mono specs__l">Disciplines under one roof</span></li>
+      <li data-rise><span class="specs__n" data-count="2">2</span><span class="mono specs__l">Studios, Milan and Scottsdale</span></li>
+      <li data-rise><span class="specs__n" data-count="3">3</span><span class="mono specs__l">Projects open this quarter</span></li>
+    </ul>
+  </section>
+
+  <!-- Statement, lit word by word -->
+  <section class="statement" aria-label="What we do">
+    <div class="wrap wrap--narrow">
+      <p class="statement__text" data-words>We take all that technical depth and turn it into something people understand and enjoy.</p>
+      <p class="statement__sub" data-rise>No corporate fluff. Just the product and story you have been trying to say.</p>
+    </div>
+  </section>
+
+  <!-- Services: pick one, its drawing takes the stage -->
+  <section class="section services" id="services" aria-labelledby="services-title">
+    <header class="wrap head">
+      <h2 class="head__title" id="services-title" data-rise>Services<sup>05</sup></h2>
+      <p class="head__sub" data-rise>Brand, web, interfaces and engineering.</p>
+    </header>
+
+    <div class="wrap svc" data-services>
+      <div class="svc__list" role="tablist" aria-label="Services" aria-orientation="vertical">
+        {{svc-tabs}}
+      </div>
+      <div class="svc__stage" data-stage>
+        <div class="stage" data-tilt>
+          <span class="stage__label mono" aria-hidden="true"><span data-stage-idx>01</span> <span class="sep">/</span> 05</span>
+          {{svc-panels}}
+          <span class="stage__hint mono" aria-hidden="true">Move to look around</span>
+        </div>
+      </div>
+    </div>
+  </section>

@@ -120,7 +120,7 @@ def help_block(base):
     <ul class="cs-help__rows">
       <li><a href="https://coetsystems.com/start-a-project" data-sfx="press">Start a project <span aria-hidden="true">↗</span></a></li>
       <li><a href="{base}work/" data-sfx="tick">See all work <span aria-hidden="true">↗</span></a></li>
-      <li><a href="{base}#team" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
+      <li><a href="{base}about/" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
     </ul></div></section>"""
 
 
@@ -141,21 +141,35 @@ def work_index(shell):
 
 
 def home_stage():
-    """The home page's work section: MetaLab's stage. Pills on the left; pointing at one swaps the whole stage."""
-    pills, layers = [], []
+    """The home page, MetaLab's way: one screen. By default the liquid C and the catchphrase; pointing at a project
+    swaps the whole stage (background, image, title, line), each project in its own arrangement."""
+    layers = []
     for i, p in enumerate(PROJECTS):
-        on = " is-on" if i == 0 else ""
-        pills.append(f'<li><a class="ws-pill{on}" href="work/{p["slug"]}/" data-ws="{i}" data-sfx="press">{e(p["short"])}</a></li>')
-        bg = (f'<img class="ws-bg" src="assets/img/case/{p["slug"]}/{p["hero"]}" alt="" loading="lazy" decoding="async">' if p.get("hero") else '<span class="ws-bg ws-bg--plain"></span>')
-        shot = (f'<span class="ws-shot"><img src="assets/img/case/{p["slug"]}/{p["hero"]}" alt="" loading="lazy" decoding="async"></span>' if p.get("hero")
-                else (f'<span class="ws-shot ws-shot--diagram">{diagram(p["diagram"])}</span>' if p.get("diagram") else ""))
-        layers.append(f'<div class="ws-layer{on}" data-ws-layer="{i}" style="--tone:{p["tone"]}" aria-hidden="{str(i != 0).lower()}">{bg}{shot}'
-                      f'<span class="ws-del mono">{" · ".join(e(d) for d in p["deliverables"])}</span>'
-                      f'<span class="ws-name">{e(p["short"])}</span><span class="ws-line">{e(p["teaser"])}</span></div>')
-    pills.append('<li><a class="ws-pill ws-pill--all" href="work/" data-sfx="press">All work</a></li>')
-    return f"""<section class="ws" id="work" aria-labelledby="work-title" data-ws-root>
-    <h2 class="sr-only" id="work-title">Work</h2>
+        lay = "abc"[i % 3]
+        if p.get("hero"):
+            bg = f'<img class="ws-bg" src="assets/img/case/{p["slug"]}/{p["hero"]}" alt="" loading="lazy" decoding="async">'
+            shot = f'<span class="ws-shot"><img src="assets/img/case/{p["slug"]}/{p["hero"]}" alt="" loading="lazy" decoding="async"></span>'
+        elif p.get("diagram"):
+            bg, shot = '<span class="ws-bg ws-bg--plain"></span>', f'<span class="ws-shot ws-shot--diagram">{diagram(p["diagram"])}</span>'
+        else:
+            bg, shot = '<span class="ws-bg ws-bg--plain"></span>', f'<span class="ws-shot ws-shot--type"><span>{e(p["line"])}</span></span>'
+        layers.append(f'<div class="ws-layer ws-layer--{lay}" data-ws-layer="{i}" style="--tone:{p["tone"]}" aria-hidden="true">{bg}{shot}'
+                      f'<span class="ws-del">{", ".join(e(d) for d in p["deliverables"])}</span>'
+                      f'<span class="ws-title"><span class="ws-name">{e(p["short"])}</span></span>'
+                      f'<span class="ws-line">{e(p["teaser"])}</span></div>')
+    pills = "".join(f'<li><a class="ws-pill" href="work/{p["slug"]}/" data-ws="{i}" data-sfx="press">{e(p["short"])}</a></li>' for i, p in enumerate(PROJECTS))
+    pills += '<li><a class="ws-pill" href="work/" data-ws-all data-sfx="press">All Work</a></li>'
+    return f"""<section class="ws" aria-labelledby="ws-catch" data-ws-root>
+    <div class="ws-home is-on" data-ws-home>
+      <svg class="sr-only" aria-hidden="true" focusable="false"><filter id="liquid" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="3" data-liquid/><feDisplacementMap in="SourceGraphic" scale="14"/></filter></svg>
+      <div class="ws-c" data-c aria-hidden="true"><img src="assets/img/c.webp" alt="" decoding="async" fetchpriority="high"></div>
+      <h1 class="ws-catch" id="ws-catch"><span class="ws-catch__a">Interfaces, workflows</span><span class="ws-catch__b">and all in between</span></h1>
+      <p class="ws-intro">We turn complicated hardware into intuitive product experiences. Brand, web, interfaces and engineering, from Milan and Scottsdale.</p>
+    </div>
     <div class="ws-layers">{"".join(layers)}</div>
-    <p class="ws-intro">We take all that technical depth and turn it into something people understand and enjoy.</p>
-    <ul class="ws-pills" aria-label="Case studies">{"".join(pills)}</ul>
+    <ul class="ws-pills" aria-label="Case studies">{pills}</ul>
   </section>"""
+
+
+def menu_pills(root):
+    return "".join(f'<li><a class="m-pill" href="{root}work/{p["slug"]}/" data-sfx="tick">{e(p["short"])}</a></li>' for p in PROJECTS) +         f'<li><a class="m-pill" href="{root}work/" data-sfx="tick">All Work</a></li>'

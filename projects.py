@@ -10,10 +10,10 @@ PROJECTS = [
         "slug": "real-talk", "name": "Real Talk Real Estate", "short": "Real Talk",
         "line": "A home base for real estate investors.",
         "teaser": "Deal analysis on a Go service, communities built around the numbers, and a blog its host writes through Claude.",
-        "type": "Community platform", "stage": "Live", "deliverables": ["Web", "Interface", "Engineering"],
+        "type": "Community platform", "stage": "Live", "deliverables": ["Web", "iOS app", "Interface", "Engineering"],
         "live": "https://www.realtalkrealestate.com/", "live_label": "realtalkrealestate.com",
         "hero": "home.webp", "tone": "#0b1a33",
-        "overview": "Real Talk Real Estate is where investors learn the strategies, run the numbers and talk a deal through with people who have done it. It pairs a media brand with tools members actually use: calculators, communities and a news feed.",
+        "overview": "Real Talk Real Estate is where investors learn the strategies, run the numbers and talk a deal through with people who have done it, on the web and in its iPhone app. It pairs a media brand with tools members actually use: calculators, communities and a news feed.",
         "context": ("A community only works if the numbers can be trusted.",
                     "Every conversation on Real Talk turns on a deal: what it costs, what it earns, when to walk away. So the maths had to be the same everywhere it appears, and anything a member posts had to show its numbers and its interests."),
         "contribution": [
@@ -188,7 +188,7 @@ PROJECTS = [
         "results": [],
     },
     {
-        "slug": "unitree-go2", "name": "Unitree Go2 Research Interface", "short": "Unitree Go2",
+        "slug": "unitree-go2", "name": "Unitree Go2 Research Interface", "short": "Go2 Robot",
         "line": "Talk to a robot dog, and it listens.",
         "teaser": "A web interface and voice agent for a university research lab's Go2 quadruped, with local AI, LiDAR and camera perception.",
         "type": "Research robotics", "stage": "Research", "deliverables": ["Web interface", "Voice agent", "AI integration"],

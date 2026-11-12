@@ -16,37 +16,62 @@
 <link rel="stylesheet" href="../assets/original-scenes.css">
 <link rel="stylesheet" href="../assets/site.css">
 <link rel="stylesheet" href="../assets/case.css">
+<link rel="stylesheet" href="../assets/metalab.css">
 </head>
 <body class="is-sub">
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="nav" data-nav>
-  <a class="nav__logo" href="../" aria-label="COET, back to top" data-sfx="tick"><svg viewBox="0 0 106.88 23.04" fill="currentColor" role="img" aria-label="COET" focusable="false"><path d="M22.98 23.04L4.45 23.04Q3.23 23.04 2.22 22.43Q1.22 21.82 0.61 20.82Q0 19.81 0 18.59L0 4.45Q0 3.23 0.61 2.22Q1.22 1.22 2.22 0.61Q3.23 0 4.45 0L22.98 0L22.98 4.26L5.34 4.26Q4.83 4.26 4.53 4.54Q4.22 4.83 4.22 5.38L4.22 17.66Q4.22 18.18 4.53 18.48Q4.83 18.78 5.34 18.78L22.98 18.78L22.98 23.04M47.39 23.04L33.25 23.04Q32.03 23.04 31.02 22.43Q30.02 21.82 29.41 20.82Q28.80 19.81 28.80 18.59L28.80 4.45Q28.80 3.23 29.41 2.22Q30.02 1.22 31.02 0.61Q32.03 0 33.25 0L47.39 0Q48.61 0 49.62 0.61Q50.62 1.22 51.23 2.22Q51.84 3.23 51.84 4.45L51.84 18.59Q51.84 19.81 51.23 20.82Q50.62 21.82 49.62 22.43Q48.61 23.04 47.39 23.04M33.41 18.78L47.17 18.78Q47.33 18.78 47.46 18.67Q47.58 18.56 47.58 18.40L47.58 4.64Q47.58 4.48 47.46 4.37Q47.33 4.26 47.17 4.26L33.41 4.26Q33.25 4.26 33.14 4.37Q33.02 4.48 33.02 4.64L33.02 18.40Q33.02 18.56 33.14 18.67Q33.25 18.78 33.41 18.78M79.20 23.04L57.98 23.04L57.98 0L79.20 0L79.20 4.26L62.24 4.26L62.24 9.38L75.87 9.38L75.87 13.66L62.24 13.66L62.24 18.78L79.20 18.78L79.20 23.04M97.50 23.04L93.25 23.04L93.25 4.26L83.84 4.26L83.84 0L106.88 0L106.88 4.26L97.50 4.26"></path></svg></a>
-  <nav class="nav__links" aria-label="Sections">
-    <a class="chip" href="../#services" data-spy="services" data-sfx="tick">Services</a>
-    <a class="chip" href="../#work" data-spy="work" data-sfx="tick">Work</a>
-    <a class="chip" href="../#team" data-spy="team" data-sfx="tick">Team</a>
-  </nav>
-  <div class="nav__end">
-    <button class="chip chip--sound" type="button" data-sound-toggle aria-pressed="false">
-      <span class="bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-      <span data-sound-label>Sound off</span>
-    </button>
-    <a class="chip chip--cta" href="https://coetsystems.com/start-a-project" data-sfx="press">Start a project <span aria-hidden="true">↗</span></a>
+<header class="mnav" data-nav>
+  <div class="mnav__bar">
+    <button class="mnav__menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu"><span data-menu-label>Menu</span><span class="mnav__x" aria-hidden="true">×</span></button>
+    <a class="mnav__logo" href="../" aria-label="COET, home" data-sfx="tick"><svg viewBox="0 0 106.88 23.04" fill="currentColor" role="img" aria-label="COET" focusable="false"><path d="M22.98 23.04L4.45 23.04Q3.23 23.04 2.22 22.43Q1.22 21.82 0.61 20.82Q0 19.81 0 18.59L0 4.45Q0 3.23 0.61 2.22Q1.22 1.22 2.22 0.61Q3.23 0 4.45 0L22.98 0L22.98 4.26L5.34 4.26Q4.83 4.26 4.53 4.54Q4.22 4.83 4.22 5.38L4.22 17.66Q4.22 18.18 4.53 18.48Q4.83 18.78 5.34 18.78L22.98 18.78L22.98 23.04M47.39 23.04L33.25 23.04Q32.03 23.04 31.02 22.43Q30.02 21.82 29.41 20.82Q28.80 19.81 28.80 18.59L28.80 4.45Q28.80 3.23 29.41 2.22Q30.02 1.22 31.02 0.61Q32.03 0 33.25 0L47.39 0Q48.61 0 49.62 0.61Q50.62 1.22 51.23 2.22Q51.84 3.23 51.84 4.45L51.84 18.59Q51.84 19.81 51.23 20.82Q50.62 21.82 49.62 22.43Q48.61 23.04 47.39 23.04M33.41 18.78L47.17 18.78Q47.33 18.78 47.46 18.67Q47.58 18.56 47.58 18.40L47.58 4.64Q47.58 4.48 47.46 4.37Q47.33 4.26 47.17 4.26L33.41 4.26Q33.25 4.26 33.14 4.37Q33.02 4.48 33.02 4.64L33.02 18.40Q33.02 18.56 33.14 18.67Q33.25 18.78 33.41 18.78M79.20 23.04L57.98 23.04L57.98 0L79.20 0L79.20 4.26L62.24 4.26L62.24 9.38L75.87 9.38L75.87 13.66L62.24 13.66L62.24 18.78L79.20 18.78L79.20 23.04M97.50 23.04L93.25 23.04L93.25 4.26L83.84 4.26L83.84 0L106.88 0L106.88 4.26L97.50 4.26"></path></svg></a>
+    <div class="mnav__end">
+      <span class="mnav__clock" data-clock aria-label="Local time at the Scottsdale studio">PHX --:--</span>
+      <button class="mnav__icon" type="button" data-sound-toggle aria-pressed="false" aria-label="Sound off">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-spk" d="M3 6h2l3-2.5v9L5 10H3z"/><path class="i-on" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12 4a5.5 5.5 0 0 1 0 8"/><path class="i-off" d="M10.5 6.5l3 3M13.5 6.5l-3 3"/></svg>
+      </button>
+      <a class="mnav__icon" href="https://coetsystems.com/start-a-project" aria-label="Start a project" data-sfx="press">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="4" width="11" height="8.5" rx="1.2"/><path d="M3 4.8l5 3.8 5-3.8"/></svg>
+      </a>
+    </div>
   </div>
 </header>
 
+<div class="menu" id="menu" data-menu hidden>
+  <div class="menu__in">
+    <div class="menu__col">
+      <nav class="menu__links" aria-label="Main">
+        <a href="../what-we-do/" data-sfx="tick">What We Do</a>
+        <a href="../about/" data-sfx="tick">About Us</a>
+        <a href="../work/" data-sfx="tick">All Work</a>
+        <a href="https://coetsystems.com/start-a-project" data-sfx="press">Get in Touch</a>
+      </nav>
+      <p class="menu__label">Case Studies</p>
+      <ul class="menu__pills"><li><a class="m-pill" href="../work/real-talk/" data-sfx="tick">Real Talk</a></li><li><a class="m-pill" href="../work/betterguest/" data-sfx="tick">BetterGuest</a></li><li><a class="m-pill" href="../work/intuitive-pitching/" data-sfx="tick">Intuitive Pitching</a></li><li><a class="m-pill" href="../work/water-credit-registry/" data-sfx="tick">Water Credit Registry</a></li><li><a class="m-pill" href="../work/tap-water-database/" data-sfx="tick">Tap Water Database</a></li><li><a class="m-pill" href="../work/unitree-go2/" data-sfx="tick">Go2 Robot</a></li><li><a class="m-pill" href="../work/hnl-holiday-lighting/" data-sfx="tick">H &amp; L Holiday Lighting</a></li><li><a class="m-pill" href="../work/long-stroke-card-club/" data-sfx="tick">Long Stroke Card Club</a></li><li><a class="m-pill" href="../work/" data-sfx="tick">All Work</a></li></ul>
+    </div>
+    <div class="menu__media" aria-hidden="true"><img src="../assets/img/c.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="menu__cards">
+      <a class="menu__card" href="https://coetsystems.com/start-a-project" data-sfx="press"><span class="menu__card-k">Now</span><span>Accepting 3 more projects this quarter.</span></a>
+      <a class="menu__card" href="../about/" data-sfx="tick"><span class="menu__card-k">Studios</span><span>Milan and Scottsdale.</span></a>
+      <a class="menu__card" href="../work/betterguest/" data-sfx="tick"><span class="menu__card-k">Latest case study</span><span>BetterGuest: a cinematic tour of every home.</span></a>
+    </div>
+  </div>
+</div>
+
+
+<main id="main">
 <main id="main" class="cs wi">
   <header class="cs-hero"><div class="cs-wrap"><h1 class="cs-title wi-title" data-rise>A sample of our work.</h1>
   <p class="cs-aside wi-sub" data-rise>Brand, web, interfaces and engineering, from public registries to robots.</p></div></header>
-  <section><div class="cs-wrap"><ul class="wi-list"><li><a class="wi-row" href="../work/real-talk/" data-sfx="tick"><span class="wi-name">Real Talk Real Estate</span><span class="wi-desc">Deal analysis on a Go service, communities built around the numbers, and a blog its host writes through Claude.</span><span class="wi-del mono">Web<br>Interface<br>Engineering</span></a></li><li><a class="wi-row" href="../work/betterguest/" data-sfx="tick"><span class="wi-name">BetterGuest</span><span class="wi-desc">A members-only rental platform with AI search, swipe-to-save discovery and a cinematic tour of every home.</span><span class="wi-del mono">Web<br>Interface<br>Engineering<br>iOS app</span></a></li><li><a class="wi-row" href="../work/intuitive-pitching/" data-sfx="tick"><span class="wi-name">Intuitive Pitching</span><span class="wi-desc">Softball pitching analytics and player management: how the body throws it, what the ball does, and one plan for every pitcher.</span><span class="wi-del mono">Product design<br>Web app<br>Engineering</span></a></li><li><a class="wi-row" href="../work/water-credit-registry/" data-sfx="tick"><span class="wi-name">Water Credit Registry</span><span class="wi-desc">Water metered at the source, countersigned by an independent verifier, and issued on a public ledger.</span><span class="wi-del mono">Brand<br>Web<br>Engineering</span></a></li><li><a class="wi-row" href="../work/tap-water-database/" data-sfx="tick"><span class="wi-name">Tap Water Database</span><span class="wi-desc">A national map of contaminants found in U.S. tap water, searchable down to a single ZIP code.</span><span class="wi-del mono">Web<br>Interface<br>Landing pages</span></a></li><li><a class="wi-row" href="../work/unitree-go2/" data-sfx="tick"><span class="wi-name">Unitree Go2 Research Interface</span><span class="wi-desc">A web interface and voice agent for a university research lab&#x27;s Go2 quadruped, with local AI, LiDAR and camera perception.</span><span class="wi-del mono">Web interface<br>Voice agent<br>AI integration</span></a></li><li><a class="wi-row" href="../work/hnl-holiday-lighting/" data-sfx="tick"><span class="wi-name">H &amp; L Holiday Lighting</span><span class="wi-desc">A website for a Southern Illinois holiday lighting installer, with a lead workflow that lands every inquiry in a spreadsheet and an inbox.</span><span class="wi-del mono">Web design<br>Automated emails<br>Lead workflow<br>Spreadsheet integration</span></a></li><li><a class="wi-row" href="../work/long-stroke-card-club/" data-sfx="tick"><span class="wi-name">Long Stroke Card Club</span><span class="wi-desc">Infrastructure for an online gaming club, and an interface to run the site and its payments.</span><span class="wi-del mono">Infrastructure<br>Admin interface<br>Payments</span></a></li></ul></div></section>
+  <section><div class="cs-wrap"><ul class="wi-list"><li><a class="wi-row" href="../work/real-talk/" data-sfx="tick"><span class="wi-name">Real Talk Real Estate</span><span class="wi-desc">Deal analysis on a Go service, communities built around the numbers, and a blog its host writes through Claude.</span><span class="wi-del mono">Web<br>iOS app<br>Interface<br>Engineering</span></a></li><li><a class="wi-row" href="../work/betterguest/" data-sfx="tick"><span class="wi-name">BetterGuest</span><span class="wi-desc">A members-only rental platform with AI search, swipe-to-save discovery and a cinematic tour of every home.</span><span class="wi-del mono">Web<br>Interface<br>Engineering<br>iOS app</span></a></li><li><a class="wi-row" href="../work/intuitive-pitching/" data-sfx="tick"><span class="wi-name">Intuitive Pitching</span><span class="wi-desc">Softball pitching analytics and player management: how the body throws it, what the ball does, and one plan for every pitcher.</span><span class="wi-del mono">Product design<br>Web app<br>Engineering</span></a></li><li><a class="wi-row" href="../work/water-credit-registry/" data-sfx="tick"><span class="wi-name">Water Credit Registry</span><span class="wi-desc">Water metered at the source, countersigned by an independent verifier, and issued on a public ledger.</span><span class="wi-del mono">Brand<br>Web<br>Engineering</span></a></li><li><a class="wi-row" href="../work/tap-water-database/" data-sfx="tick"><span class="wi-name">Tap Water Database</span><span class="wi-desc">A national map of contaminants found in U.S. tap water, searchable down to a single ZIP code.</span><span class="wi-del mono">Web<br>Interface<br>Landing pages</span></a></li><li><a class="wi-row" href="../work/unitree-go2/" data-sfx="tick"><span class="wi-name">Unitree Go2 Research Interface</span><span class="wi-desc">A web interface and voice agent for a university research lab&#x27;s Go2 quadruped, with local AI, LiDAR and camera perception.</span><span class="wi-del mono">Web interface<br>Voice agent<br>AI integration</span></a></li><li><a class="wi-row" href="../work/hnl-holiday-lighting/" data-sfx="tick"><span class="wi-name">H &amp; L Holiday Lighting</span><span class="wi-desc">A website for a Southern Illinois holiday lighting installer, with a lead workflow that lands every inquiry in a spreadsheet and an inbox.</span><span class="wi-del mono">Web design<br>Automated emails<br>Lead workflow<br>Spreadsheet integration</span></a></li><li><a class="wi-row" href="../work/long-stroke-card-club/" data-sfx="tick"><span class="wi-name">Long Stroke Card Club</span><span class="wi-desc">Infrastructure for an online gaming club, and an interface to run the site and its payments.</span><span class="wi-del mono">Infrastructure<br>Admin interface<br>Payments</span></a></li></ul></div></section>
   <section class="cs-help"><div class="cs-wrap cs-help__in">
     <h2 class="cs-help__title">How can we help?</h2>
     <ul class="cs-help__rows">
       <li><a href="https://coetsystems.com/start-a-project" data-sfx="press">Start a project <span aria-hidden="true">↗</span></a></li>
       <li><a href="../work/" data-sfx="tick">See all work <span aria-hidden="true">↗</span></a></li>
-      <li><a href="../#team" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
+      <li><a href="../about/" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
     </ul></div></section>
+</main>
 </main>
 
 <footer class="foot">
