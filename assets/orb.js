@@ -12,7 +12,7 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   var small = innerWidth < 700;
-  var OPACITY = .7;                                     // how strongly the globe shows against the black stage
+  var OPACITY = .88;                                    // how strongly the globe shows against the black stage
   var src = new URL('vendor/three-0.160.0.module.min.js', document.currentScript.src).href;
 
   import(src).then(function (THREE) {
@@ -33,10 +33,20 @@
     // ── the balls: one instanced mesh ──
     var N = small ? 900 : 2200, rnd = Math.random, TAU = Math.PI * 2;
     var geo = new THREE.SphereGeometry(1, 10, 8);
-    var mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .32, metalness: .15, emissive: 0x9a4e00, emissiveIntensity: .8 });
+    var mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .32, metalness: .15, emissive: 0xb04a00, emissiveIntensity: .95 });
     var mesh = new THREE.InstancedMesh(geo, mat, N);
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     var globe = new THREE.Group(); globe.add(mesh); scene.add(globe);
+
+    // the opening film (intro.js): the balls wait at the centre, unseen, and fly out when the film bursts
+    var burst = { v: 1 }, intro = window.COETIntro;
+    if (intro && intro.pending) {
+      burst.v = 0; mesh.visible = false;
+      intro.onBurst(function (instant) {
+        mesh.visible = true;
+        if (instant || !window.gsap) burst.v = 1; else window.gsap.to(burst, { v: 1, duration: 1.7, ease: 'power3.out' });
+      });
+    }
 
     // ── labelled balls: a few ordinary balls carry a very small label across them and do something when pressed.
     //    The ball itself is exactly like the rest (same size, same orbit); only the label marks it. Add an entry
@@ -60,7 +70,7 @@
       });
     });
 
-    var balls = [], tint = new THREE.Color(), amber = new THREE.Color(0xf59e0b), pale = new THREE.Color(0xffd08a), deep = new THREE.Color(0xd97706);
+    var balls = [], tint = new THREE.Color(), amber = new THREE.Color(0xf59e0b), pale = new THREE.Color(0xffd08a), deep = new THREE.Color(0xf2620a);
     function unit() { var u = rnd() * 2 - 1, a = rnd() * TAU, r = Math.sqrt(1 - u * u); return new THREE.Vector3(Math.cos(a) * r, u, Math.sin(a) * r); }
     for (var i = 0; i < N; i++) {
       // a thick, uneven shell: most balls near the surface, some inside, a few far out
@@ -75,7 +85,7 @@
         th: rnd() * TAU, bob: .02 + rnd() * .07, bf: .2 + rnd() * .5, bp: rnd() * TAU,
         s: (big < .05 ? .016 + rnd() * .007 : big < .3 ? .009 + rnd() * .004 : .0045 + rnd() * .003)   // small, like nodes in a neural network
       });
-      tint.copy(amber).lerp(rnd() < .5 ? pale : deep, rnd() * .6);
+      tint.copy(amber).lerp(rnd() < .3 ? pale : deep, rnd() * .75);        // mostly amber into orange, like the film's sparks
       mesh.setColorAt(i, tint);
     }
     mesh.instanceColor.needsUpdate = true;
@@ -118,7 +128,7 @@
       leanX += (aimX - leanX) * Math.min(1, dt * 2.5); leanY += (aimY - leanY) * Math.min(1, dt * 2.5);
       kv += (-kick * 30 - kv * 5) * dt; kick += kv * dt;                 // a soft spring for the click
       globe.rotation.set(-.16 + leanY * .5, spin + leanX * .8, 0);
-      var grow = 1 + kick * .12;
+      var grow = (1 + kick * .12) * burst.v;
       for (var i = 0, o = 0; i < N; i++, o += 16) {
         var b = balls[i], a = b.th + clock * b.w, c = Math.cos(a), s = Math.sin(a);
         var r = b.r * (1 + Math.sin(clock * b.bf + b.bp) * b.bob) * grow;
@@ -135,7 +145,8 @@
         var front = Math.max(0, Math.min(1, tmp.z / .8 + .5));
         tmp.project(camera);
         l.el.style.transform = 'translate3d(' + ((tmp.x * .5 + .5) * W).toFixed(1) + 'px,' + ((-tmp.y * .5 + .5) * H).toFixed(1) + 'px,0) translate(-50%, -50%)';
-        l.el.style.opacity = (.78 + front * .22).toFixed(2);
+        l.el.style.opacity = burst.v < .92 ? 0 : (.78 + front * .22).toFixed(2);
+        l.el.style.visibility = burst.v < .92 ? 'hidden' : '';
       }
       renderer.render(scene, camera);
     }
