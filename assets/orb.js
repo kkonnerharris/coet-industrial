@@ -85,6 +85,11 @@
       l.i = pick < 0 ? n : pick;
     });
 
+    // in light mode the page is white, so the far side of the globe fades to white instead of black
+    function themed() { scene.fog.color.set(root.dataset.theme === 'light' ? 0xffffff : 0x000000); }
+    var root = document.documentElement; themed();
+    document.addEventListener('coet:theme', function () { themed(); if (reduce) frame(0); });
+
     // ── size ──
     var W = 0, H = 0;
     function setup() {

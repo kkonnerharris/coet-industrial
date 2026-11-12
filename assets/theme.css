@@ -1,0 +1,19 @@
+/* COET — light and dark. Dark is the site as designed. Light flips the whole page's lightness in one step (black
+   becomes white, white becomes black, amber stays amber) and then puts photographs, screenshots and the 3D globe
+   back the right way round, so pictures keep their true colours. The choice is remembered on this device. */
+html[data-theme="light"] { filter: invert(1) hue-rotate(180deg); }
+html[data-theme="light"] :is(img, video, .orb__main) { filter: invert(1) hue-rotate(180deg); }
+/* pictures that already carry their own filter keep it, on top of the flip back */
+html[data-theme="light"] .client__photo { filter: invert(1) hue-rotate(180deg) grayscale(1) contrast(1.05); }
+html[data-theme="light"] .person img { filter: invert(1) hue-rotate(180deg) grayscale(1); }
+html[data-theme="light"] .person:hover img, html[data-theme="light"] .person--bio:hover img, html[data-theme="light"] .person__open:focus-visible img { filter: invert(1) hue-rotate(180deg) grayscale(0); }
+html[data-theme="light"] .card__media--dark img { filter: invert(1) hue-rotate(180deg) saturate(.8); }
+html[data-theme="light"] .cs-next__media img { filter: invert(1) hue-rotate(180deg) grayscale(.3); }
+/* the globe reads better a little stronger on a white stage */
+html[data-theme="light"] .orb__main { opacity: 1 !important; }
+
+/* the switch in the bar: a sun in dark mode, a moon in light mode */
+[data-theme-toggle] .i-moon { display: none; }
+html[data-theme="light"] [data-theme-toggle] .i-sun { display: none; }
+html[data-theme="light"] [data-theme-toggle] .i-moon { display: inline; }
+[data-theme-toggle] svg { fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; }
