@@ -127,17 +127,3 @@ write("index.html", shell(TITLE, DESC, "", casegen.home_stage() + what + about, 
 for i, p in enumerate(casegen.PROJECTS):
     write("work/%s/index.html" % p["slug"], casegen.case_page(p, i, shell))
 write("work/index.html", casegen.work_index(shell))
-
-# what the "Get ideas" assistant is allowed to know: the same real copy the site shows, nothing more
-import json
-with open(os.path.join(HERE, "chat-api", "knowledge.json"), "w", encoding="utf-8", newline="\n") as f:
-    json.dump({
-        "services": [{"name": n, "what": lede, "includes": tags} for _, n, lede, tags in SERVICES],
-        "pricing": [
-            {"name": "Take Ownership", "terms": "Equity, negotiated per product"},
-            {"name": "Revenue Sharing", "terms": "A share of future revenue, negotiated per product"},
-            {"name": "Company Template", "terms": "$50,000 fixed price"},
-        ],
-        "work": [{"name": p["name"], "type": p["type"], "line": p["line"], "about": p["teaser"], "page": "work/%s/" % p["slug"]} for p in casegen.PROJECTS],
-    }, f, indent=1, ensure_ascii=False)
-print("chat-api/knowledge.json")
