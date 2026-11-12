@@ -1,0 +1,37 @@
+/* COET — design pass (2026-11-12). Loaded last; each block overrides an earlier rule on purpose.
+   1 hero hierarchy · 2 footer wordmark as an outline · 3 spacing rhythm and a quiet numbers line · 4 the client band joins the dark palette */
+
+/* ── 1. Hero: the globe sits up and to the left (see orb.js); the headline and the paragraph each get calm ground ── */
+@media (min-width: 901px) {
+  .ws-catch { text-shadow: none; }
+  .ws-catch::before { content: ""; position: absolute; z-index: -1; left: 26%; right: -4%; top: -34%; bottom: -46%; pointer-events: none;
+    background: radial-gradient(60% 62% at 52% 50%, rgb(0 0 0 / .86), rgb(0 0 0 / .6) 55%, transparent 100%); filter: blur(24px); }
+  .ws-intro { left: 63%; top: 19%; max-width: 21.5em; font: 400 clamp(17px, 1.3vw, 19px)/1.45 var(--apple); letter-spacing: -.005em; color: #d2d2d7; text-shadow: none; }
+}
+
+/* ── 2. Footer: the giant wordmark is an amber outline, so amber stays an accent ── */
+.foot__mark svg { color: transparent; overflow: visible; }
+.foot__mark svg path { fill: rgb(245 158 11 / .05); stroke: rgb(245 158 11 / .8); stroke-width: var(--mark-stroke, .12); stroke-linejoin: round; }
+
+/* ── 3. Rhythm: sections breathe a little less; the four numbers become one quiet line ── */
+:root { --section: clamp(var(--s8), 8.5vw, var(--s10)); }
+.specs { padding-block: clamp(var(--s6), 4vw, var(--s7)); }
+.specs__row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--s4) var(--s6); }
+.specs__row li, .specs__row li:first-child, .specs__row li:nth-child(3) { display: flex; align-items: baseline; gap: 10px; padding: 0; border: 0; }
+.specs__n { font: 600 clamp(22px, 2vw, 28px)/1 var(--apple); letter-spacing: -.02em; }
+.specs__l { max-width: none; font: 400 clamp(14px, 1.1vw, 16px)/1.3 var(--apple); letter-spacing: 0; text-transform: none; color: var(--apple-grey, #86868b); }
+.statement { padding-block: clamp(var(--s8), 8vw, var(--s10)); }
+@media (min-width: 901px) { .svc__stage .stage { aspect-ratio: 5 / 4; } }   /* the stage ends where the list ends */
+@media (max-width: 900px) { .specs__row { display: grid; grid-template-columns: 1fr 1fr; row-gap: var(--s4); } }
+
+/* ── 4. Client band: dark like the rest, set apart by a hairline and a slightly raised surface ── */
+.client, html.has-gsap main > .client { background: #0a0a0b; color: #f5f5f7; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); min-height: 64vh; }
+.client__kicker { color: var(--signal); }
+.quote__text { font-size: clamp(26px, 2.9vw, 44px); line-height: 1.14; max-width: 22ch; }
+.quote__role { color: var(--apple-grey, #86868b); }
+.client__photo { filter: grayscale(1) contrast(1.05) brightness(.92); }
+@media (min-width: 901px) {   /* the portrait becomes an inset card, so the band reads as one dark surface */
+  .client { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; padding: clamp(var(--s7), 6vw, var(--s9)) var(--gutter); gap: clamp(var(--s6), 5vw, var(--s9)); }
+  .client__photo { height: auto; aspect-ratio: 4 / 5; max-height: 70vh; border-radius: 14px; }
+  .client__body { padding: 0; }
+}

@@ -87,6 +87,22 @@
     /* ── the footer wordmark lifts into view at the very end ── */
     var mark = document.querySelector('.foot__mark');
     if (mark) scrub(mark, { opacity: 0, yPercent: 30 }, { opacity: 1, yPercent: 0 }, 'top bottom', 'bottom bottom');
+    // its outline draws itself as you arrive (one tween, scrubbed; the path is measured as length 1)
+    var markSvg = mark && mark.querySelector('svg'), markPath = markSvg && markSvg.querySelector('path');
+    if (markPath) {
+      var sizeStroke = function () { var vb = markSvg.viewBox.baseVal, w = markSvg.getBoundingClientRect().width; if (w) markSvg.style.setProperty('--mark-stroke', (1.4 * vb.width / w).toFixed(4)); };
+      sizeStroke(); ST.addEventListener('refresh', sizeStroke);
+      markPath.setAttribute('pathLength', '1');
+      gsap.fromTo(markPath, { strokeDasharray: 1.02, strokeDashoffset: 1.02, fillOpacity: 0 }, { strokeDashoffset: 0, fillOpacity: 1, ease: 'none',
+        scrollTrigger: { trigger: mark, start: 'clamp(top bottom)', end: 'clamp(bottom bottom)', scrub: true } });
+    }
+
+    /* ── the first screen arrives in order: the paragraph, then the project list (a timeline, not delays) ── */
+    if (matchMedia('(min-width: 901px)').matches && document.querySelector('.ws-intro')) {
+      gsap.timeline({ defaults: { duration: .6, ease: 'power3.out' } })
+        .from('.ws-intro', { y: 16, autoAlpha: 0, clearProps: 'all' }, .25)
+        .from('.ws-pills li', { x: -14, autoAlpha: 0, stagger: .04, clearProps: 'all' }, '<0.1');
+    }
 
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { ST.refresh(); });
 

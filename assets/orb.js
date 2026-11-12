@@ -97,6 +97,8 @@
       var half = H / ((small ? 1 : .84) * Math.min(W, H)), d = half / Math.tan(FOV * Math.PI / 360);
       camera.position.set(0, 0, d); camera.updateProjectionMatrix();
       scene.fog.near = d - 1.1; scene.fog.far = d + 2.4;
+      // on wide screens the globe sits up and to the left, leaving the headline and paragraph calm ground
+      if (matchMedia('(min-width: 901px)').matches) globe.position.set(-.4, .13, 0); else globe.position.set(0, 0, 0);
     }
 
     // ── pointer ──
