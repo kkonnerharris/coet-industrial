@@ -1,8 +1,7 @@
-/* COET — the orb. Built on the "working" orb from Libraries.dev's thinking-orbs (MIT, © Jakub Antalik): particles
-   on tilted orbits with faint dotted trails, computed and painted by that library's own engine (framework-free,
-   so no React is needed here). At its real size (56px) that orb reads as fine points of light, so at this size
-   the same design is given more orbits and much smaller dots, using the library's own knobs, instead of being
-   blown up into large discs. It is tinted COET amber.
+/* COET — the orb. This is the "working" orb from Libraries.dev's thinking-orbs (MIT, © Jakub Antalik), straight
+   from the package: its own preset, its own frame maths and its own painter, with nothing re-tuned. The package's
+   engine is framework-free, so no React is needed here. Two things differ from the 64px original, both things the
+   package itself allows: it is enlarged (the 64px drawing is scaled as a vector, never redrawn) and tinted COET amber.
    Around it: light/dark mode picks the ink (theme.js), and a few of its particles carry a small label that does
    something when pressed (the first starts the voice agent).
    Like the original it draws on a plain 2D canvas, pauses off screen and in hidden tabs, and shows one still
@@ -23,10 +22,8 @@
     if (!ctx) return;
     if (spare) spare.style.display = 'none';
     canvas.style.opacity = 1;
-    var preset = lib.resolvePreset('working', DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed;
-    // the library's "working" recipe, re-proportioned for a large orb: more orbits, more trail dots, far smaller dots
-    var opts = Object.assign({}, preset.opts, { orbitN: 22, ghostN: 64, ghostR: .27, ghostA: .8, particles: 5, partR: .42, partRDepth: .56, rMin: .05 });
-    var PARTICLE_R = .3;                                 // dots at least this big are particles, the rest are trail dots
+    var preset = lib.resolvePreset('working', DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed, opts = preset.opts;   // the stock preset, untouched
+    var PARTICLE_R = .75;                                // dots at least this big are particles, the rest are trail dots
 
     // ── labelled particles: a very small label rides on an ordinary particle. Add an entry here for each new one. ──
     var LABELS = [
