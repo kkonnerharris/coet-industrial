@@ -12,7 +12,7 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
   var small = innerWidth < 700;
-  var OPACITY = .55;                                    // how strongly the globe shows against the black stage
+  var OPACITY = .7;                                     // how strongly the globe shows against the black stage
   var src = new URL('vendor/three-0.160.0.module.min.js', document.currentScript.src).href;
 
   import(src).then(function (THREE) {
@@ -31,9 +31,9 @@
     var core = new THREE.PointLight(0xffa726, 14, 6, 1.6); scene.add(core);
 
     // ── the balls: one instanced mesh ──
-    var N = small ? 520 : 1100, rnd = Math.random, TAU = Math.PI * 2;
-    var geo = new THREE.SphereGeometry(1, small ? 12 : 16, small ? 10 : 12);
-    var mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .32, metalness: .15, emissive: 0x7a3c00, emissiveIntensity: .55 });
+    var N = small ? 900 : 2200, rnd = Math.random, TAU = Math.PI * 2;
+    var geo = new THREE.SphereGeometry(1, 10, 8);
+    var mat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .32, metalness: .15, emissive: 0x9a4e00, emissiveIntensity: .8 });
     var mesh = new THREE.InstancedMesh(geo, mat, N);
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     var globe = new THREE.Group(); globe.add(mesh); scene.add(globe);
@@ -51,7 +51,7 @@
         ux: u.x, uy: u.y, uz: u.z, vx: v.x, vy: v.y, vz: v.z, r: rad,
         w: (rnd() < .5 ? -1 : 1) * (.06 + rnd() * .3) / rad,              // orbit speed (rad/s); outer balls travel slower
         th: rnd() * TAU, bob: .02 + rnd() * .07, bf: .2 + rnd() * .5, bp: rnd() * TAU,
-        s: (big < .04 ? .05 + rnd() * .03 : big < .26 ? .026 + rnd() * .016 : .011 + rnd() * .011)
+        s: (big < .05 ? .016 + rnd() * .007 : big < .3 ? .009 + rnd() * .004 : .0045 + rnd() * .003)   // small, like nodes in a neural network
       });
       tint.copy(amber).lerp(rnd() < .5 ? pale : deep, rnd() * .6);
       mesh.setColorAt(i, tint);
