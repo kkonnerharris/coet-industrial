@@ -17,7 +17,7 @@
 .mnav__menu:hover { background: rgb(255 255 255 / .24); }
 .mnav__x { display: none; font-size: 14px; line-height: 1; }
 .mnav.is-compact .mnav__menu { background: transparent; }
-.mnav__logo { display: inline-flex; align-items: center; min-height: 44px; color: #fff; }
+.mnav__logo { display: inline-flex; align-items: center; min-height: 44px; color: var(--signal); }
 .mnav__logo svg { height: 15px; width: auto; }
 .mnav__end { justify-self: end; display: flex; align-items: center; gap: 8px; }
 .mnav__clock { font: 400 12px/1 var(--ml-ui); color: #fff; margin-right: 6px; white-space: nowrap; font-variant-numeric: tabular-nums; }
@@ -48,7 +48,7 @@
 .menu__pills { display: grid; gap: 6px; justify-items: start; }
 .m-pill { display: inline-flex; align-items: center; height: 32px; padding: 0 16px; border-radius: 999px; background: #e7e7e3; color: #111; font: 400 15px/1 var(--ml-ui); transition: background-color .2s, transform .7s var(--ml-ease), opacity .7s var(--ml-ease); transform: translateY(10px); opacity: 0; }
 .m-pill:hover { background: #dcdcd6; }
-.menu__media { align-self: center; height: min(740px, calc(100vh - 140px)); border-radius: 8px; overflow: hidden; background: radial-gradient(90% 70% at 50% 40%, #1c1027, #050308 75%); display: grid; place-items: center; transform: scale(.96); opacity: 0; transition: transform .9s var(--ml-ease), opacity .7s var(--ml-ease); }
+.menu__media { align-self: center; height: min(740px, calc(100vh - 140px)); border-radius: 8px; overflow: hidden; background: radial-gradient(90% 70% at 50% 40%, #221703, #060401 75%); display: grid; place-items: center; transform: scale(.96); opacity: 0; transition: transform .9s var(--ml-ease), opacity .7s var(--ml-ease); }
 .menu__media img { width: 78%; height: auto; mix-blend-mode: screen; animation: cFloat 9s ease-in-out infinite; }
 .menu__cards { align-self: center; justify-self: end; width: min(100%, 226px); display: grid; gap: 4px; }
 .menu__card { display: grid; gap: 10px; padding: 14px; border-radius: 6px; background: #e8eaed; color: #111; font: 400 13px/1.35 var(--ml-ui); transform: translateY(12px); opacity: 0; transition: transform .7s var(--ml-ease), opacity .7s var(--ml-ease), background-color .2s; }
@@ -69,11 +69,11 @@
 .ws-home { position: absolute; inset: 0; transition: opacity .35s ease .08s; }
 .ws-home:not(.is-on) { opacity: 0; pointer-events: none; transition: opacity .12s ease-out; }
 .ws-c { position: absolute; left: 50%; top: 50%; height: 128vh; aspect-ratio: 763 / 937; transform: translate(-46%, -52%) perspective(1600px) rotateY(var(--cy, 0deg)) rotateX(var(--cx, 0deg)); transition: transform 1.4s var(--ml-ease); will-change: transform; }
-.ws-c img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; filter: url(#liquid) brightness(.5) contrast(1.25) saturate(.95); animation: cFloat 12s ease-in-out infinite; }
+.ws-c img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; filter: url(#liquid) brightness(.62) contrast(1.08); animation: cFloat 12s ease-in-out infinite; }
 /* a dark vignette, so type always reads on the C (MetaLab's object is dark with highlights) */
 .ws-home::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 60% at 50% 45%, transparent 30%, rgb(0 0 0 / .55) 100%), linear-gradient(180deg, rgb(0 0 0 / .35), transparent 25%, transparent 70%, rgb(0 0 0 / .4)); }
 .ws-catch, .ws-intro { z-index: 1; }
-.ws-c::before { content: ""; position: absolute; inset: 18% 10%; background: radial-gradient(closest-side, rgb(122 60 220 / .35), transparent); filter: blur(40px); z-index: -1; animation: cGlow 7s ease-in-out infinite alternate; }
+.ws-c::before { content: ""; position: absolute; inset: 18% 10%; background: radial-gradient(closest-side, rgb(245 158 11 / .28), transparent); filter: blur(40px); z-index: -1; animation: cGlow 7s ease-in-out infinite alternate; }
 @keyframes cFloat { 0%, 100% { transform: translateY(0) rotate(-1.2deg); } 50% { transform: translateY(-2.2%) rotate(1.2deg); } }
 @keyframes cGlow { from { opacity: .6; transform: scale(.94); } to { opacity: 1; transform: scale(1.05); } }
 
@@ -338,3 +338,8 @@ html.vt-leaving .cs-hero .cs-plate, html.vt-leaving .cs-hero .cs-title { view-tr
 }
 @keyframes space-in { from { transform: translateY(80px) scale(.96); border-radius: 32px; box-shadow: 0 0 0 1px rgb(255 255 255 / .14), 0 -40px 90px rgb(0 0 0 / .7); } to { border-radius: 0; box-shadow: 0 0 0 1px rgb(255 255 255 / 0); } }
 @keyframes space-out { to { transform: scale(.88); border-radius: 32px; opacity: .45; background: #111114; box-shadow: 0 0 0 1px rgb(255 255 255 / .16); } }
+
+/* services light up in COET amber, as on coetsystems.com: the original drawings read --draw (0 → 1) */
+@property --draw { syntax: "<number>"; inherits: true; initial-value: 0; }
+.stage__panel { --draw: 0; transition: --draw .5s var(--ease); }
+.stage__panel:not([hidden]):not(.is-out) { --draw: 1; transition-delay: .3s; }

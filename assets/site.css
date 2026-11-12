@@ -95,7 +95,7 @@ ul { list-style: none; }
 .nav { position: fixed; inset: 0 0 auto; z-index: 50; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: var(--s4); height: 72px; padding: env(safe-area-inset-top, 0px) var(--gutter) 0; transition: background-color .4s var(--ease), border-color .4s var(--ease); border-bottom: 1px solid transparent; }
 .nav.is-solid { background: rgb(0 0 0 / .72); backdrop-filter: blur(18px) saturate(1.2); -webkit-backdrop-filter: blur(18px) saturate(1.2); border-color: var(--hair); }
 .nav__logo { justify-self: start; display: inline-flex; min-height: 44px; align-items: center; }
-.nav__logo svg { height: 16px; width: auto; color: var(--ink); }
+.nav__logo svg { height: 16px; width: auto; color: var(--signal); }
 .nav__links { display: flex; gap: var(--s2); padding: var(--s1); border-radius: 999px; background: rgb(0 0 0 / .25); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .nav__links .chip { background: transparent; }
 .nav__links .chip:hover, .nav__links .chip[aria-current="true"] { background: var(--fill-2); }
@@ -219,7 +219,7 @@ ul { list-style: none; }
 .foot a { color: var(--ink-2); min-height: 44px; display: inline-flex; align-items: center; transition: color .2s; }
 .foot a:hover { color: var(--ink); }
 .foot__mark { margin-top: clamp(var(--s7), 8vw, var(--s10)); }
-.foot__mark svg { width: 100%; height: auto; color: var(--bronze); opacity: .9; }
+.foot__mark svg { width: 100%; height: auto; color: var(--signal); }
 .foot__note { margin-top: var(--s5); color: var(--muted); }
 .foot__note a { display: inline; min-height: 0; text-decoration: underline; text-underline-offset: 3px; }
 
