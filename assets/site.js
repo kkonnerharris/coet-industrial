@@ -196,6 +196,7 @@
       // set the final state directly: exactly one layer (or the C) is on, whatever was mid-transition
       layers.forEach(function (l, k) { l.classList.toggle('is-on', k === i); l.setAttribute('aria-hidden', String(k !== i)); });
       pills.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
+      ws.classList.toggle('has-pick', i >= 0);
       if (i === -1) {   // back to the C: its lines drop in from above again
         home.classList.add('is-entering'); void home.offsetWidth; home.classList.add('is-on');
         requestAnimationFrame(function () { home.classList.remove('is-entering'); });
@@ -226,6 +227,25 @@
       });
     } catch (err) {}
     var list = ws.querySelector('.ws-pills');
+    // phones (MetaLab's mobile home): the pills scroll in their own column; the pill that crosses the line just
+    // above the middle is picked and its project takes the stage. At the top of the list, nothing is picked.
+    var phone = matchMedia('(max-width: 900px)');
+    if (list) {
+      var pickT = 0;
+      var pick = function () {
+        pickT = 0;
+        if (!phone.matches) return;
+        var top = list.getBoundingClientRect().top, line = top + list.clientHeight * .49, at = -1;
+        pills.forEach(function (p, k) { if (p.getBoundingClientRect().top <= line) at = k; });
+        show(at);
+      };
+      list.addEventListener('scroll', function () { if (!pickT) pickT = requestAnimationFrame(pick); }, { passive: true });
+      var phoneMode = function () {
+        if (phone.matches) list.setAttribute('data-lenis-prevent', ''); else list.removeAttribute('data-lenis-prevent');
+        if (phone.matches) pick();
+      };
+      phoneMode(); (phone.addEventListener ? phone.addEventListener('change', phoneMode) : phone.addListener(phoneMode));
+    }
     if (fine) list.addEventListener('pointerleave', function () { leaveT = setTimeout(function () { show(-1); }, 380); });
 
     // MetaLab's cursor on the work screen: a thin ring that trails the pointer and opens up over a project

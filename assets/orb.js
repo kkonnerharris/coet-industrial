@@ -18,7 +18,7 @@
     var y = 1 - (i + .5) / N * 2, r = Math.sqrt(1 - y * y), th = i * GA;
     // a little jitter so it reads as grown, not machined
     var j = 1 + (Math.random() - .5) * .06;
-    pts.push({ x: Math.cos(th) * r * j, y: y * j, z: Math.sin(th) * r * j, ph: Math.random() * Math.PI * 2, s: .6 + Math.random() * .8, ox: 0, oy: 0, vx: 0, vy: 0, pop: 0 });
+    pts.push({ x: Math.cos(th) * r * j, y: y * j, z: Math.sin(th) * r * j, ph: Math.random() * Math.PI * 2, s: .6 + Math.random() * .8, ox: 0, oy: 0, vx: 0, vy: 0, pop: 0, jy: 0 });
   }
   var seen = {};
   pts.forEach(function (p, a) {
@@ -31,11 +31,15 @@
   for (var s = 0; s < 18; s++) links.push([Math.floor(Math.random() * N), Math.floor(Math.random() * N), 1]);
 
   // sparks: tiny particles a node throws off when it jumps (polar spread, controlled randomness, always cleaned up)
-  var sparks = [], MAX_SPARKS = 160;
+  var sparks = [], MAX_SPARKS = 260;
   function burst(n, count, amber) {
     var p = pts[n]; p.pop = 1;
     var q = proj[n]; if (!q) return;
-    p.vx += (Math.random() - .5) * 120; p.vy -= 90 + Math.random() * 80;          // the node itself hops up
+    p.vx += (Math.random() - .5) * 120; p.vy -= 60 + Math.random() * 60;          // a sideways kick from the spring
+    if (window.gsap) window.gsap.to(p, { overwrite: true, keyframes: [                 // the jump: up fast, bounce back down
+      { jy: -(16 + Math.random() * 30) * (.6 + q.d * .8), duration: .16, ease: 'power2.out' },
+      { jy: 0, duration: .6, ease: 'bounce.out' }] });
+    else p.vy -= 60;
     for (var i = 0; i < count && sparks.length < MAX_SPARKS; i++) {
       var ang = (i / count) * Math.PI * 2 + (Math.random() - .5) * .9, sp = 40 + Math.random() * 110;
       sparks.push({ x: q.x, y: q.y, vx: Math.cos(ang) * sp, vy: Math.sin(ang) * sp - 30, life: 0, max: .5 + Math.random() * .6, r: .6 + Math.random() * 1.2, amber: amber && Math.random() < .7 });
@@ -96,7 +100,7 @@
         p.vx += (-p.ox * 60 - p.vx * 9) * dt; p.vy += (-p.oy * 60 - p.vy * 9) * dt;
         p.ox += p.vx * dt; p.oy += p.vy * dt; p.pop = Math.max(0, p.pop - dt * 3);
       }
-      proj[i] = { x: px + p.ox, y: py + p.oy, d: dep };  // d: 0 back … 1 front
+      proj[i] = { x: px + p.ox, y: py + p.oy + p.jy, d: dep };  // d: 0 back … 1 front
     }
     ctxM.clearRect(0, 0, W, H); ctxG.clearRect(0, 0, W, H);
 
@@ -104,28 +108,37 @@
     ctxM.lineWidth = .6;
     for (var l = 0; l < links.length; l++) {
       var A = proj[links[l][0]], B = proj[links[l][1]], d = (A.d + B.d) / 2;
-      ctxM.strokeStyle = 'rgba(226,230,238,' + (links[l][2] ? .04 + d * .06 : .05 + d * .26).toFixed(3) + ')';
+      ctxM.strokeStyle = 'rgba(245,158,11,' + (links[l][2] ? .04 + d * .06 : .05 + d * .26).toFixed(3) + ')';
       ctxM.beginPath(); ctxM.moveTo(A.x, A.y); ctxM.lineTo(B.x, B.y); ctxM.stroke();
     }
     // nodes
     for (var n = 0; n < N; n++) {
       var q = proj[n], a = Math.min(1, .18 + q.d * .82 + pts[n].pop * .5), rad = (.5 + q.d * 1.5) * pts[n].s * (1 + pts[n].pop * 1.4);
-      ctxM.fillStyle = 'rgba(244,246,250,' + a.toFixed(3) + ')';
+      ctxM.fillStyle = (pts[n].pop > .05 ? 'rgba(255,214,140,' : 'rgba(245,158,11,') + a.toFixed(3) + ')';
       ctxM.beginPath(); ctxM.arc(q.x, q.y, rad, 0, 6.2832); ctxM.fill();
-      if (q.d > .72) { ctxG.fillStyle = 'rgba(255,255,255,' + ((q.d - .72) * 1.6).toFixed(3) + ')'; ctxG.beginPath(); ctxG.arc(q.x, q.y, rad * 2.2, 0, 6.2832); ctxG.fill(); }
+      if (q.d > .72) { ctxG.fillStyle = 'rgba(245,158,11,' + ((q.d - .72) * 1.6).toFixed(3) + ')'; ctxG.beginPath(); ctxG.arc(q.x, q.y, rad * 2.2, 0, 6.2832); ctxG.fill(); }
     }
     // signals (COET amber), drawn on both canvases so they glow
     if (!reduce) {
-      if (pulses.length < 14 && Math.random() < dt * 9) spawn();
+      if (pulses.length < 34 && Math.random() < dt * 22) spawn();
+      if (Math.random() < dt * 5) { var rn = Math.floor(Math.random() * N); if (proj[rn].d > .4) burst(rn, 4, true); }   // neurons firing on their own
       pulses = pulses.filter(function (u) {
         u.t += dt * u.v;
-        if (u.t >= 1) { var e = proj[u.b]; if (e && e.d > .35 && (u.hop || Math.random() < .55)) burst(u.b, u.hop ? 3 : 5, true); return false; }
+        if (u.t >= 1) { var e = proj[u.b]; if (e && e.d > .3) {
+            burst(u.b, u.hop ? 3 : 5, true);
+            if (!u.hop && pulses.length < 44 && Math.random() < .45) {                 // the jump passes the signal to a neighbour
+              var nb = links[Math.floor(Math.random() * links.length)];
+              for (var li = 0; li < links.length; li++) { var L = links[(li * 7 + u.b) % links.length]; if (L[0] === u.b || L[1] === u.b) { nb = L; break; } }
+              pulses.push({ a: u.b, b: nb[0] === u.b ? nb[1] : nb[0], t: 0, v: 1.1 + Math.random() * .6, hop: Math.random() < .5 ? 0 : 1 });
+            }
+          }
+          return false; }
         return true;
       });
       // sparks: drift, a touch of gravity, fade, then dropped
       sparks = sparks.filter(function (k) { k.life += dt; k.vy += 140 * dt; k.vx *= 1 - dt * 1.5; k.x += k.vx * dt; k.y += k.vy * dt; return k.life < k.max; });
       sparks.forEach(function (k) {
-        var a = 1 - k.life / k.max, col = k.amber ? '245,158,11' : '244,246,250';
+        var a = 1 - k.life / k.max, col = k.amber ? '245,158,11' : '255,214,140';
         ctxM.fillStyle = 'rgba(' + col + ',' + a.toFixed(3) + ')'; ctxM.beginPath(); ctxM.arc(k.x, k.y, k.r * (0.6 + a * .6), 0, 6.2832); ctxM.fill();
         ctxG.fillStyle = 'rgba(' + col + ',' + (a * .8).toFixed(3) + ')'; ctxG.beginPath(); ctxG.arc(k.x, k.y, k.r * 2.4, 0, 6.2832); ctxG.fill();
       });
@@ -135,7 +148,7 @@
       var t0 = Math.max(0, t - .18), x0 = A.x + (B.x - A.x) * t0, y0 = A.y + (B.y - A.y) * t0;
       var a = Math.sin(t * Math.PI) * (.35 + ((A.d + B.d) / 2) * .65);
       [ctxM, ctxG].forEach(function (c, gi) {
-        c.strokeStyle = 'rgba(245,158,11,' + (a * (gi ? 1 : .9)).toFixed(3) + ')'; c.lineWidth = gi ? 4 : 1.6;
+        c.strokeStyle = 'rgba(' + (gi ? '245,158,11' : '255,226,170') + ',' + (a * (gi ? 1 : .95)).toFixed(3) + ')'; c.lineWidth = gi ? 4 : 1.6;
         c.beginPath(); c.moveTo(x0, y0); c.lineTo(x, y); c.stroke();
       });
     });
