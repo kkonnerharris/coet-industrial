@@ -69,7 +69,7 @@
 .ws-home { position: absolute; inset: 0; transition: opacity .35s ease .08s; }
 .ws-home:not(.is-on) { opacity: 0; pointer-events: none; transition: opacity .12s ease-out; }
 .ws-c { position: absolute; left: 50%; top: 50%; height: 128vh; aspect-ratio: 763 / 937; transform: translate(-46%, -52%) perspective(1600px) rotateY(var(--cy, 0deg)) rotateX(var(--cx, 0deg)); transition: transform 1.4s var(--ml-ease); will-change: transform; }
-.ws-c img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; filter: url(#liquid) brightness(.62) contrast(1.08); animation: cFloat 12s ease-in-out infinite; }
+.ws-c img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; filter: url(#liquid) brightness(.56) contrast(1.08); animation: cFloat 12s ease-in-out infinite; }
 /* a dark vignette, so type always reads on the C (MetaLab's object is dark with highlights) */
 .ws-home::after { content: ""; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 60% at 50% 45%, transparent 30%, rgb(0 0 0 / .55) 100%), linear-gradient(180deg, rgb(0 0 0 / .35), transparent 25%, transparent 70%, rgb(0 0 0 / .4)); }
 .ws-catch, .ws-intro { z-index: 1; }
