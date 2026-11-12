@@ -192,3 +192,42 @@
 .lead__status a { text-decoration: underline; text-underline-offset: 3px; }
 .lead.is-sending button { opacity: .6; pointer-events: none; }
 @media (max-width: 760px) { .lead__row { grid-template-columns: 1fr; } }
+
+
+/* ---- Apple-style type for Services and Pricing (2026-11-12): SF on Apple devices, Inter elsewhere ---- */
+:root { --apple: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Helvetica Neue", Arial, sans-serif; --apple-grey: #86868b; }
+.services, .pricing { font-family: var(--apple); }
+.services .head__title, .ap-title { font: 600 clamp(40px, 5vw, 80px)/1.05 var(--apple); letter-spacing: -.015em; text-transform: none; }
+.services .head__title sup { font: 600 .28em/1 var(--apple); letter-spacing: 0; color: var(--apple-grey); top: .35em; }
+.services .head__sub, .ap-sub { font: 400 clamp(19px, 1.6vw, 24px)/1.38 var(--apple); letter-spacing: .004em; color: var(--apple-grey); max-width: 34ch; }
+.ap-eyebrow { font: 600 clamp(17px, 1.4vw, 21px)/1.2 var(--apple); color: var(--signal); }
+.svc__idx { font: 600 15px/1 var(--apple); letter-spacing: 0; text-transform: none; font-variant-numeric: tabular-nums; }
+.svc__name { font: 600 clamp(32px, 3.4vw, 56px)/1.07 var(--apple); letter-spacing: -.012em; text-transform: none; }
+.svc__lede { font: 400 clamp(17px, 1.3vw, 21px)/1.42 var(--apple); letter-spacing: .004em; color: var(--apple-grey); max-width: 36ch; }
+.svc__tab[aria-selected="true"] .svc__lede { color: #d2d2d7; }
+.services .tags { gap: 6px 14px; }
+.services .tag { padding: 0; background: none; border-radius: 0; font: 500 14px/1.4 var(--apple); letter-spacing: -.01em; text-transform: none; color: #f5f5f7; }
+.services .tag + .tag::before { content: "·"; margin-right: 14px; color: var(--apple-grey); }
+.services .stage__label, .services .stage__hint { font-family: var(--apple); font-weight: 500; font-size: 12px; letter-spacing: 0; text-transform: none; }
+
+.plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); grid-template-rows: auto auto auto 1fr auto; gap: 0 20px; }
+.plan { grid-row: span 5; display: grid; grid-template-rows: subgrid; row-gap: 0; padding: 36px 36px 32px; border: 1px solid rgb(255 255 255 / .1); border-radius: 22px; background: linear-gradient(180deg, #111113, #0a0a0b); transition: border-color .3s var(--ease); }
+.plan:hover { border-color: rgb(255 255 255 / .2); }
+.plan--feat { border-color: color-mix(in srgb, var(--signal) 45%, transparent); background: linear-gradient(180deg, #17140e, #0a0a0b); }
+.plan--feat:hover { border-color: color-mix(in srgb, var(--signal) 70%, transparent); }
+.plan__top { display: flex; justify-content: space-between; align-items: center; min-height: 26px; }
+.plan__k { font: 500 13px/1 var(--apple); color: var(--apple-grey); font-variant-numeric: tabular-nums; }
+.plan__badge { padding: 6px 10px; border-radius: 999px; background: color-mix(in srgb, var(--signal) 16%, transparent); color: var(--signal); font: 600 12px/1 var(--apple); }
+.plan__name { margin-top: 28px; font: 600 clamp(22px, 1.8vw, 28px)/1.15 var(--apple); letter-spacing: -.01em; color: #f5f5f7; }
+.plan__price { margin-top: 20px; padding-bottom: 28px; border-bottom: 1px solid rgb(255 255 255 / .1); }
+.plan__amt { font: 600 clamp(34px, 3vw, 46px)/1.05 var(--apple); letter-spacing: -.025em; color: #fff; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.plan__cap { margin-top: 8px; font: 400 14px/1.4 var(--apple); color: var(--apple-grey); }
+.plan__body { padding-top: 24px; font: 400 16px/1.5 var(--apple); letter-spacing: -.01em; color: #a1a1a6; }
+.plan__btn { justify-self: start; margin-top: 32px; display: inline-flex; align-items: center; min-height: 44px; padding: 0 22px; border-radius: 999px; background: #f5f5f7; color: #1d1d1f; font: 500 15px/1 var(--apple); transition: background-color .25s var(--ease); }
+.plan__btn:hover { background: #fff; }
+.plan:not(.plan--feat) .plan__btn { background: rgb(255 255 255 / .08); color: #f5f5f7; }
+.plan:not(.plan--feat) .plan__btn:hover { background: rgb(255 255 255 / .14); }
+.plan-cta { margin-top: 36px; text-align: center; }
+.ap-link { font: 400 clamp(17px, 1.4vw, 21px)/1.2 var(--apple); color: #2997ff; }
+.ap-link:hover { text-decoration: underline; }
+@media (max-width: 900px) { .plan-grid { grid-template-columns: 1fr; grid-template-rows: none; gap: 16px; } .plan { grid-row: auto; grid-template-rows: none; } }

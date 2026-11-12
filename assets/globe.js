@@ -14,12 +14,14 @@
       lngEl = host.querySelector('[data-studio-lng]'), label = host.querySelector('.team__studio');
 
   // the original's data, verbatim
-  var STUDIOS = { Milan: { lat: 45.46, lng: 9.19 }, Scottsdale: { lat: 33.4942, lng: -111.9261 } };
+  var STUDIOS = { Milan: { lat: 45.46, lng: 9.19 }, Scottsdale: { lat: 33.4942, lng: -111.9261 }, 'Southern Illinois': { lat: 37.7273, lng: -89.2168 } };  // Carbondale
   var ROUTES = [{ from: 'Milan', to: [['London', 51.5074, -.1278], ['Paris', 48.8566, 2.3522], ['Berlin', 52.52, 13.405],
                                       ['Stockholm', 59.3293, 18.0686], ['Dubai', 25.2048, 55.2708], ['Tokyo', 35.6762, 139.6503]] },
                 { from: 'Scottsdale', to: [['Los Angeles', 34.0522, -118.2437], ['Seattle', 47.6062, -122.3321], ['Chicago', 41.8781, -87.6298],
                                            ['Toronto', 43.6532, -79.3832], ['New York', 40.7128, -74.006], ['Mexico City', 19.4326, -99.1332]] }];
-  var ARCS = [{ a: STUDIOS.Milan, b: STUDIOS.Scottsdale, trunk: true }];
+  var ARCS = [{ a: STUDIOS.Milan, b: STUDIOS.Scottsdale, trunk: true },
+              { a: STUDIOS.Scottsdale, b: STUDIOS['Southern Illinois'], trunk: true },
+              { a: STUDIOS.Milan, b: STUDIOS['Southern Illinois'], trunk: true }];
   ROUTES.forEach(function (r) { r.to.forEach(function (c) { ARCS.push({ a: STUDIOS[r.from], b: { lat: c[1], lng: c[2] }, from: r.from }); }); });
   ARCS.forEach(function (arc, i) { arc.seed = (i * 0.618) % 1; });
 

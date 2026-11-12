@@ -179,7 +179,7 @@ def home_stage():
       <svg class="sr-only" aria-hidden="true" focusable="false"><filter id="liquid" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="3" data-liquid/><feDisplacementMap in="SourceGraphic" scale="14"/></filter></svg>
       <div class="ws-c" data-c aria-hidden="true"><img src="assets/img/c.webp" alt="" decoding="async" fetchpriority="high"></div>
       <h1 class="ws-catch" id="ws-catch"><span class="ws-catch__a">Interfaces, workflows</span><span class="ws-catch__b">and all in between</span></h1>
-      <p class="ws-intro">We turn complicated hardware into intuitive product experiences. Brand, web, interfaces and engineering, from Milan and Scottsdale.</p>
+      <p class="ws-intro">We turn complicated hardware into intuitive product experiences. Brand, web, interfaces and engineering, from Milan, Scottsdale and Southern Illinois.</p>
     </div>
     <div class="ws-layers">{"".join(layers)}</div>
     <ul class="ws-pills" aria-label="Case studies">{pills}</ul>

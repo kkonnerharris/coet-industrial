@@ -76,6 +76,15 @@
       if (!ready() || !gate('select', 70)) return;
       key(ctx.currentTime + .004, pan(x), 1);
     },
+    /** the team: a crisp clicky switch, the click jacket snapping then the cap bottoming out */
+    clicky: function (x) {
+      if (!ready() || !gate('clicky', 55)) return;
+      var t = ctx.currentTime + .004, p = pan(x);
+      click(t, p, vary(4600, .08), 3.2, .09, .006);
+      click(t + .003, p, vary(2200, .1), 1.4, .05, .012);
+      body(t + .004, p, vary(380, .06), .045, .022).connect(room);
+      click(t + vary(.028, .15), p, vary(5200, .08), 2.6, .035, .005);
+    },
     /** a big action: a spacebar thock, deeper and wider */
     press: function (x) {
       if (!ready() || !gate('press', 120)) return;

@@ -4,7 +4,7 @@
   'use strict';
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = matchMedia('(hover: hover) and (pointer: fine)').matches;
-  var S = window.COETSound || { tick: function () {}, select: function () {}, press: function () {}, arrive: function () {}, rush: function () {}, set: function () { return false; }, wanted: function () { return false; } };
+  var S = window.COETSound || { tick: function () {}, select: function () {}, clicky: function () {}, press: function () {}, arrive: function () {}, rush: function () {}, set: function () { return false; }, wanted: function () { return false; } };
   var panX = function (el) { var r = el.getBoundingClientRect(); return ((r.left + r.width / 2) / innerWidth) * 2 - 1; };
 
   /* ── sound toggle (the speaker in the bar): off until asked for; remembered on this device ── */
@@ -242,7 +242,7 @@
 
   /* ── the team: a soft key clack as you move across the people, panned to where each one sits ── */
   if (fine) [].forEach.call(document.querySelectorAll('.person'), function (p) {
-    p.addEventListener('pointerenter', function () { S.select(panX(p)); });
+    p.addEventListener('pointerenter', function () { S.clicky(panX(p)); });
   });
 
   /* ── the lead form: posts to FormSubmit, which emails it on. It says "sent" only when the service confirms it. ── */
