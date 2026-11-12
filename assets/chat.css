@@ -1,0 +1,62 @@
+/* COET — the "Get ideas?" assistant: a pill in the corner that opens into a small glass panel. */
+.idea-pill { position: fixed; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 60; display: inline-flex; align-items: center; gap: 10px; height: 48px; padding: 0 20px 0 16px;
+  border-radius: 999px; border: 1px solid rgb(255 255 255 / .16); background: rgb(22 22 24 / .78); -webkit-backdrop-filter: blur(18px) saturate(1.4); backdrop-filter: blur(18px) saturate(1.4);
+  color: #fff; font: 600 15px/1 var(--apple, system-ui, sans-serif); letter-spacing: -.01em; cursor: pointer; box-shadow: 0 10px 40px rgb(0 0 0 / .5);
+  transition: transform .2s cubic-bezier(.2, .7, .1, 1), border-color .2s, opacity .25s; }
+.idea-pill:hover { border-color: rgb(245 158 11 / .7); }
+.idea-pill:active { transform: scale(.97); }
+.idea-pill__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--signal, #f59e0b); box-shadow: 0 0 0 0 rgb(245 158 11 / .6); animation: ideaPulse 2.4s ease-out infinite; }
+@keyframes ideaPulse { 0% { box-shadow: 0 0 0 0 rgb(245 158 11 / .55); } 70%, 100% { box-shadow: 0 0 0 10px rgb(245 158 11 / 0); } }
+.idea-open .idea-pill, .menu-open .idea-pill, .bio-open .idea-pill { opacity: 0; pointer-events: none; }
+.menu-open .idea, .bio-open .idea { display: none; }
+
+.idea { position: fixed; right: 24px; bottom: calc(24px + env(safe-area-inset-bottom, 0px)); z-index: 61; width: min(400px, calc(100vw - 32px)); height: min(600px, calc(100svh - 120px));
+  display: grid; grid-template-rows: auto 1fr auto; border-radius: 24px; border: 1px solid rgb(255 255 255 / .14); overflow: hidden;
+  background: rgb(16 16 18 / .86); -webkit-backdrop-filter: blur(28px) saturate(1.5); backdrop-filter: blur(28px) saturate(1.5); box-shadow: 0 30px 90px rgb(0 0 0 / .65);
+  color: #f5f5f7; font: 400 15px/1.45 var(--apple, system-ui, sans-serif); transform-origin: 100% 100%; }
+.idea[hidden] { display: none; }
+/* without GSAP: a plain CSS open */
+.idea:not(.idea--gsap) { animation: ideaIn .3s cubic-bezier(.2, .7, .1, 1) both; }
+@keyframes ideaIn { from { opacity: 0; transform: translateY(12px) scale(.96); } }
+
+.idea__head { display: flex; align-items: center; gap: 12px; padding: 16px 16px 14px 20px; border-bottom: 1px solid rgb(255 255 255 / .08); }
+.idea__title { margin: 0; font: 600 17px/1.2 var(--apple, system-ui, sans-serif); letter-spacing: -.015em; }
+.idea__tag { margin: 2px 0 0; font-size: 12px; color: #86868b; }
+.idea__close { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; border: 0; background: rgb(255 255 255 / .1); color: #fff; font-size: 18px; line-height: 1; cursor: pointer; transition: background .2s, transform .2s; }
+.idea__close:hover { background: rgb(255 255 255 / .18); }
+.idea__close:active { transform: scale(.94); }
+
+.idea__log { overflow-y: auto; overscroll-behavior: contain; padding: 18px 16px 8px; display: flex; flex-direction: column; gap: 10px; scrollbar-width: thin; scrollbar-color: rgb(255 255 255 / .2) transparent; }
+.idea__msg { max-width: 86%; padding: 10px 14px; border-radius: 18px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.idea__msg--bot { align-self: flex-start; background: rgb(255 255 255 / .08); border-bottom-left-radius: 6px; }
+.idea__msg--me { align-self: flex-end; background: var(--signal, #f59e0b); color: #1a1205; border-bottom-right-radius: 6px; }
+.idea__msg--note { align-self: center; max-width: 100%; padding: 4px 8px; background: none; color: #86868b; font-size: 13px; text-align: center; }
+.idea__dots { display: inline-flex; gap: 4px; padding: 4px 0; }
+.idea__dots i { width: 6px; height: 6px; border-radius: 50%; background: #a1a1a6; animation: ideaDot 1.1s ease-in-out infinite; }
+.idea__dots i:nth-child(2) { animation-delay: .15s; } .idea__dots i:nth-child(3) { animation-delay: .3s; }
+@keyframes ideaDot { 0%, 60%, 100% { opacity: .3; transform: translateY(0); } 30% { opacity: 1; transform: translateY(-3px); } }
+
+.idea__chips { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 2px; }
+.idea__chip { padding: 8px 12px; border-radius: 999px; border: 1px solid rgb(255 255 255 / .16); background: transparent; color: #d2d2d7; font: 500 13px/1.2 var(--apple, system-ui, sans-serif); text-align: left; cursor: pointer; transition: border-color .2s, color .2s, transform .2s; }
+.idea__chip:hover { border-color: rgb(245 158 11 / .7); color: #fff; }
+.idea__chip:active { transform: scale(.97); }
+
+.idea__form { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: end; padding: 10px 12px 6px; border-top: 1px solid rgb(255 255 255 / .08); }
+.idea__input { resize: none; max-height: 120px; min-height: 44px; padding: 11px 14px; border-radius: 22px; border: 1px solid rgb(255 255 255 / .14); background: rgb(255 255 255 / .06); color: #fff; font: inherit; outline: none; transition: border-color .2s; }
+.idea__input::placeholder { color: #86868b; }
+.idea__input:focus { border-color: rgb(245 158 11 / .8); }
+.idea__send { width: 44px; height: 44px; border-radius: 50%; border: 0; background: var(--signal, #f59e0b); color: #1a1205; font-size: 18px; font-weight: 700; cursor: pointer; transition: transform .2s, opacity .2s; }
+.idea__send:active { transform: scale(.94); }
+.idea__send:disabled { opacity: .35; cursor: default; }
+.idea__fine { margin: 0; padding: 0 16px 12px; font-size: 11.5px; line-height: 1.35; color: #86868b; }
+.idea__fine a { color: #d2d2d7; text-decoration: underline; text-underline-offset: 2px; }
+.idea :focus-visible, .idea-pill:focus-visible { outline: 2px solid var(--signal, #f59e0b); outline-offset: 2px; }
+
+@media (max-width: 600px) {
+  .idea-pill { right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); }
+  .idea { right: 8px; left: 8px; bottom: calc(8px + env(safe-area-inset-bottom, 0px)); width: auto; height: min(78svh, 620px); }
+  .idea__input { font-size: 16px; }   /* stops iOS zooming the page on focus */
+}
+@media (prefers-reduced-motion: reduce) {
+  .idea-pill__dot, .idea__dots i, .idea:not(.idea--gsap) { animation: none; }
+}
