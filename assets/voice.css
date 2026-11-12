@@ -1,21 +1,11 @@
-/* COET — labelled balls in the globe. Each is a real, round button sitting on its ball, with a small label in the
-   middle of it; the first one starts the voice agent. */
-.orb-node { position: absolute; left: 0; top: 0; z-index: 2; width: 68px; height: 68px; margin: -34px 0 0 -34px; padding: 0 7px; display: grid; place-content: center; gap: 2px;
-  border: 0; border-radius: 50%; background: none; color: #120a00; font: 700 10px/1.1 var(--apple, system-ui, sans-serif); letter-spacing: -.005em; text-align: center; cursor: pointer; will-change: transform;
-  -webkit-tap-highlight-color: transparent; }
-.orb-node__ring { position: absolute; inset: 0; border-radius: 50%; pointer-events: none; }
-.orb-node__ring::before, .orb-node__ring::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 1px solid rgb(255 214 140 / .85); transition: inset .3s cubic-bezier(.2, .7, .1, 1), border-color .3s; }
-.orb-node__ring::after { animation: orbNodePulse 2.6s ease-out infinite; }
-@keyframes orbNodePulse { 0% { transform: scale(1); opacity: .8; } 80%, 100% { transform: scale(1.55); opacity: 0; } }
-.orb-node__text { position: relative; display: grid; gap: 2px; }
-.orb-node__sub { font: 600 8px/1 var(--apple, system-ui, sans-serif); letter-spacing: .01em; opacity: .75; }
-.orb-node__sub:empty { display: none; }
-.orb-node:hover .orb-node__ring::before { inset: -8px; }
-.orb-node:focus-visible { outline: none; }
-.orb-node:focus-visible .orb-node__ring::before { border-width: 2px; border-color: #fff; }
-.orb-node:active { color: #000; }
-/* in a call */
-.orb-node[data-state="connecting"] .orb-node__ring::after { animation-duration: .9s; }
-.orb-node[data-state="listening"] .orb-node__ring::before, .orb-node[data-state="speaking"] .orb-node__ring::before { inset: -7px; border-color: #f59e0b; border-width: 2px; }
-.orb-node[data-state="speaking"] .orb-node__ring::after { animation-duration: .8s; border-color: #f59e0b; }
-@media (prefers-reduced-motion: reduce) { .orb-node__ring::after { animation: none; opacity: 0; } }
+/* COET — labelled balls in the globe. The ball is an ordinary one; a very small label runs across it and is a real
+   button (with a comfortable invisible press area) that follows the ball. The first one starts the voice agent. */
+.orb-node { position: absolute; left: 0; top: 0; z-index: 2; padding: 14px 12px; border: 0; background: none; cursor: pointer; white-space: nowrap; will-change: transform, opacity;
+  color: #ffe6b8; font: 600 8px/1 var(--apple, system-ui, sans-serif); letter-spacing: .04em; text-transform: none; -webkit-tap-highlight-color: transparent; }
+.orb-node__text { display: block; text-shadow: 0 0 2px #000, 0 0 4px #000, 0 0 8px rgb(0 0 0 / .9); transition: color .2s; }
+.orb-node:hover .orb-node__text, .orb-node:focus-visible .orb-node__text { color: #fff; }
+.orb-node:focus-visible { outline: 1px solid rgb(255 214 140 / .9); outline-offset: -8px; border-radius: 999px; }
+.orb-node[data-state="listening"] .orb-node__text, .orb-node[data-state="speaking"] .orb-node__text, .orb-node[data-state="connecting"] .orb-node__text { color: #f59e0b; }
+.orb-node[data-state="speaking"] .orb-node__text { animation: orbNodeSpeak 1s ease-in-out infinite; }
+@keyframes orbNodeSpeak { 50% { opacity: .55; } }
+@media (prefers-reduced-motion: reduce) { .orb-node[data-state="speaking"] .orb-node__text { animation: none; } }

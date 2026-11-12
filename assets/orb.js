@@ -38,32 +38,25 @@
     mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
     var globe = new THREE.Group(); globe.add(mesh); scene.add(globe);
 
-    // ── labelled balls: a few balls carry a label and do something when pressed. Each drifts across the front of
-    //    the globe (never behind it) and has a real button that follows it. Add an entry here for each new one. ──
+    // ── labelled balls: a few ordinary balls carry a very small label across them and do something when pressed.
+    //    The ball itself is exactly like the rest (same size, same orbit); only the label marks it. Add an entry
+    //    here for each new one. ──
     var LABELS = [
-      { key: 'voice', text: 'Talk to COET', sub: 'AI voice assistant', phase: 0,
+      { key: 'voice', text: 'Talk to COET', hint: 'AI voice assistant',
         press: function () { if (window.COETVoice) window.COETVoice.toggle(); },
         bind: function (show) { if (window.COETVoice) window.COETVoice.onState(show); } }
     ];
-    var VOICE_TEXT = { idle: ['Talk to COET', ''], connecting: ['Connecting', ''], listening: ['Listening', 'say stop'], speaking: ['Speaking', 'say stop'], blocked: ['Mic blocked', ''], failed: ['No connection', ''] };
-    var BALL_PX = 34;                                   // the labelled ball's radius on screen: big enough to hold its small label
-    var stageEl = host.parentNode, lgeo = new THREE.SphereGeometry(1, 24, 18), tmp = new THREE.Vector3();
+    var VOICE_TEXT = { idle: 'Talk to COET', connecting: 'Connecting…', listening: 'Listening · say stop', speaking: 'Speaking · say stop', blocked: 'Mic blocked', failed: 'No connection' };
+    var stageEl = host.parentNode, tmp = new THREE.Vector3();
     LABELS.forEach(function (l) {
-      l.mesh = new THREE.Mesh(lgeo, new THREE.MeshStandardMaterial({ color: 0xfff2d6, roughness: .3, emissive: 0xffc46b, emissiveIntensity: 1.5 }));
-      scene.add(l.mesh);
-      var b = document.createElement('button'); b.type = 'button'; b.className = 'orb-node'; b.dataset.state = 'idle';
-      var ring = document.createElement('span'); ring.className = 'orb-node__ring';
-      var text = document.createElement('span'); text.className = 'orb-node__text';
-      var main = document.createElement('span'), sub = document.createElement('span'); sub.className = 'orb-node__sub';
-      main.textContent = l.text; b.title = l.sub;
-      text.appendChild(main); text.appendChild(sub); b.appendChild(ring); b.appendChild(text);
+      var b = document.createElement('button'); b.type = 'button'; b.className = 'orb-node'; b.dataset.state = 'idle'; b.title = l.hint;
+      var text = document.createElement('span'); text.className = 'orb-node__text'; text.textContent = l.text; b.appendChild(text);
       b.addEventListener('click', function () { l.press(); });
       b.addEventListener('pointerdown', function (e) { e.stopPropagation(); });          // a press on the label is not a press on the globe
       stageEl.appendChild(b); l.el = b;
       if (l.bind) l.bind(function (st) {
-        var t = VOICE_TEXT[st] || VOICE_TEXT.idle; b.dataset.state = st; main.textContent = t[0]; sub.textContent = t[1];
-        b.setAttribute('aria-label', st === 'idle' ? 'Talk to COET: start a voice conversation with an AI assistant (uses your microphone)' : st === 'listening' || st === 'speaking' || st === 'connecting' ? 'End the voice conversation' : t[0]);
-        l.live = st === 'listening' || st === 'speaking';
+        b.dataset.state = st; text.textContent = VOICE_TEXT[st] || VOICE_TEXT.idle;
+        b.setAttribute('aria-label', st === 'idle' ? 'Talk to COET: start a voice conversation with an AI assistant (uses your microphone)' : st === 'listening' || st === 'speaking' || st === 'connecting' ? 'End the voice conversation' : text.textContent);
       });
     });
 
@@ -86,6 +79,11 @@
       mesh.setColorAt(i, tint);
     }
     mesh.instanceColor.needsUpdate = true;
+    LABELS.forEach(function (l, n) {                       // each label rides an ordinary ball: mid-sized, near the surface
+      var pick = -1, seen = 0;
+      for (var q = 0; q < N && pick < 0; q++) if (balls[q].s > .009 && balls[q].s < .013 && balls[q].r > .95 && balls[q].r < 1.1 && seen++ === n) pick = q;
+      l.i = pick < 0 ? n : pick;
+    });
 
     // ── size ──
     var W = 0, H = 0;
@@ -123,16 +121,14 @@
         arr[o + 12] = (b.ux * c + b.vx * s) * r; arr[o + 13] = (b.uy * c + b.vy * s) * r; arr[o + 14] = (b.uz * c + b.vz * s) * r; arr[o + 15] = 1;
       }
       mesh.instanceMatrix.needsUpdate = true;
-      for (var j = 0; j < LABELS.length; j++) {            // labelled balls wander over the upper front of the globe
-        var l = LABELS[j], t = clock * .11 + l.phase;
-        var lx = Math.sin(t) * .6 - .14, ly = .34 + Math.sin(t * 1.31 + 1) * .3, lz = Math.sqrt(Math.max(.05, 1.25 - lx * lx - ly * ly));
-        l.mesh.position.set(lx * grow, ly * grow, lz * grow);
-        tmp.copy(l.mesh.position).project(camera); var sx0 = tmp.x, sy0 = tmp.y;
-        tmp.copy(l.mesh.position); tmp.x += 1; tmp.project(camera);
-        var perUnit = Math.max(1, (tmp.x - sx0) * .5 * W);                 // screen pixels per world unit at the ball's depth
-        l.mesh.scale.setScalar(BALL_PX / perUnit * (l.live ? 1.06 + Math.sin(clock * 5) * .05 : 1));
-        tmp.x = sx0; tmp.y = sy0;
-        l.el.style.transform = 'translate3d(' + ((tmp.x * .5 + .5) * W).toFixed(1) + 'px,' + ((-tmp.y * .5 + .5) * H).toFixed(1) + 'px,0)';
+      globe.updateMatrixWorld();
+      for (var j = 0; j < LABELS.length; j++) {            // each label follows its ball; it dims while the ball is round the back
+        var l = LABELS[j], o2 = l.i * 16;
+        tmp.set(arr[o2 + 12], arr[o2 + 13], arr[o2 + 14]).applyMatrix4(globe.matrixWorld);
+        var front = Math.max(0, Math.min(1, tmp.z / .8 + .5));
+        tmp.project(camera);
+        l.el.style.transform = 'translate3d(' + ((tmp.x * .5 + .5) * W).toFixed(1) + 'px,' + ((-tmp.y * .5 + .5) * H).toFixed(1) + 'px,0) translate(-50%, -50%)';
+        l.el.style.opacity = (.5 + front * .5).toFixed(2);
       }
       renderer.render(scene, camera);
     }
