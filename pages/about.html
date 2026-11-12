@@ -44,7 +44,8 @@
       <!-- Leads go straight to Jason's inbox through FormSubmit (formsubmit.co). The first submission sends a
            one-time activation email that must be clicked; after that FormSubmit gives a random alias that can
            replace the address below, so the raw address is no longer in the page. -->
-      <form class="lead" data-lead action="https://formsubmit.co/ajax/jason.coawette@gmail.com" method="post" novalidate data-rise>
+      <form class="lead lead--sched" data-lead action="https://formsubmit.co/ajax/jason.coawette@gmail.com" method="post" novalidate data-rise>
+        <div class="lead__main">
         <p class="lead__intro">Tell us about the machine.</p>
         <div class="lead__row">
           <label class="lead__field"><span>Name</span><input name="name" autocomplete="name" required maxlength="80"></label>
@@ -52,6 +53,23 @@
         </div>
         <label class="lead__field"><span>Company <em>(optional)</em></span><input name="company" autocomplete="organization" maxlength="120"></label>
         <label class="lead__field"><span>What are you building?</span><textarea name="message" rows="2" required maxlength="2000"></textarea></label>
+        </div>
+        <!-- Preferred call time: a preference sent with the message, not a booking (there is no calendar system behind it) -->
+        <fieldset class="sched" data-sched>
+          <legend>Preferred day and time for a call <em>Optional. A preference, not a booking.</em></legend>
+          <div class="sched__head">
+            <p class="sched__month" data-sched-month aria-live="polite"></p>
+            <div class="sched__nav"><button type="button" data-sched-prev aria-label="Previous month">&lsaquo;</button><button type="button" data-sched-next aria-label="Next month">&rsaquo;</button></div>
+          </div>
+          <div class="sched__week" data-sched-week></div>
+          <div class="sched__days" data-sched-days role="group" aria-label="Day"></div>
+          <div class="sched__times">
+            <p class="sched__label"><span>Time</span><span data-sched-tz></span></p>
+            <div class="sched__slots" data-sched-slots role="group" aria-label="Time"></div>
+          </div>
+          <div class="sched__foot"><p class="sched__out" data-sched-out aria-live="polite"></p><button type="button" class="sched__clear" data-sched-clear>Clear</button></div>
+          <input type="hidden" name="preferred_day"><input type="hidden" name="preferred_time"><input type="hidden" name="preferred_time_phoenix">
+        </fieldset>
         <input type="text" name="_honey" class="lead__trap" tabindex="-1" autocomplete="off" aria-hidden="true">
         <input type="hidden" name="_subject" value="New lead from the COET site">
         <input type="hidden" name="_template" value="table">
