@@ -88,7 +88,7 @@ def rebase(t, base):
 def shell(title, desc, base, body, cls="is-sub"):
     nav = NAV.replace("{{root}}", base or "./").replace("{{logo}}", LOGO).replace("{{menu-pills}}", casegen.menu_pills(base))
     page = TEMPLATE.replace("{{nav}}", nav).replace("{{main}}", body.strip())
-    page = page.replace("<title>COET · Hardware product studio</title>", "<title>%s</title>" % e(title))
+    page = page.replace("<title>COET · Where hardware meets software</title>", "<title>%s</title>" % e(title))
     page = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % e(desc), page)
     page = page.replace("{{logo}}", LOGO).replace("<body>", '<body class="%s">' % cls, 1)
     page = rebase(page, base)
@@ -119,7 +119,7 @@ def page_head(title, sub):
             f'<p class="cs-aside pg-sub" data-rise>{e(sub)}</p></div></header>')
 
 
-TITLE, DESC = "COET · Hardware product studio", "COET turns complicated hardware into intuitive product experiences. Brand, web, rendering, interfaces and implementation."
+TITLE, DESC = "COET · Where hardware meets software", "COET bridges hardware and software: brand, web, rendering, interfaces, implementation and custom software that make complicated products intuitive."
 what = read(os.path.join(HERE, "pages", "what-we-do.html")).replace("{{svc-tabs}}", "\n        ".join(tabs)).replace("{{svc-panels}}", "".join(panels))
 about = read(os.path.join(HERE, "pages", "about.html")).replace("{{team}}", TEAM_HTML)
 # One continuous page: the MetaLab work stage opens it, then the numbers, the statement, services, client, team and close.

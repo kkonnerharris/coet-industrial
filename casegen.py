@@ -178,7 +178,7 @@ def home_stage():
     <div class="ws-home is-on" data-ws-home>
       <div class="ws-orb" data-orb aria-hidden="true"><canvas class="orb__main"></canvas><canvas class="orb__glow"></canvas></div>
       <h1 class="ws-catch" id="ws-catch"><span class="ws-catch__a">Interfaces, workflows</span><span class="ws-catch__b">and all in between</span></h1>
-      <p class="ws-intro">We turn complicated hardware into intuitive product experiences. Brand, web, interfaces and engineering, from Milan, Scottsdale and Southern Illinois.<span class="ws-cta"><a class="ws-cta__main" href="#contact" data-sfx="press" data-magnet>Start a project</a><a class="ws-cta__more" href="work/">See the work <span aria-hidden="true">→</span></a></span></p>
+      <p class="ws-intro">We bridge hardware and software. Brand, interfaces, engineering and custom software that make complicated products intuitive, from Milan, Scottsdale and Southern Illinois.<span class="ws-cta"><a class="ws-cta__main" href="#contact" data-sfx="press" data-magnet>Start a project</a><a class="ws-cta__more" href="work/">See the work <span aria-hidden="true">→</span></a></span></p>
     </div>
     <div class="ws-layers">{"".join(layers)}</div>
     <ul class="ws-pills" aria-label="Case studies">{pills}</ul>
