@@ -65,8 +65,9 @@
 .ws { position: relative; height: 100svh; min-height: 560px; overflow: hidden; isolation: isolate; background: #000; }
 
 /* default: the liquid C and the catchphrase */
-.ws-home { position: absolute; inset: 0; transition: opacity .45s var(--ml-ease); }
-.ws-home:not(.is-on) { opacity: 0; pointer-events: none; }
+/* exits are fast and enters wait for them, so two things are never on stage together (cancel, don't overlap) */
+.ws-home { position: absolute; inset: 0; transition: opacity .35s ease .08s; }
+.ws-home:not(.is-on) { opacity: 0; pointer-events: none; transition: opacity .12s ease-out; }
 .ws-c { position: absolute; left: 50%; top: 50%; height: 128vh; aspect-ratio: 763 / 937; transform: translate(-46%, -52%) perspective(1600px) rotateY(var(--cy, 0deg)) rotateX(var(--cx, 0deg)); transition: transform 1.4s var(--ml-ease); will-change: transform; }
 .ws-c img { width: 100%; height: 100%; object-fit: contain; mix-blend-mode: screen; filter: url(#liquid) brightness(.5) contrast(1.25) saturate(.95); animation: cFloat 12s ease-in-out infinite; }
 /* a dark vignette, so type always reads on the C (MetaLab's object is dark with highlights) */
@@ -84,13 +85,13 @@
 
 /* the title drops in from above; the old one sinks and fades */
 .ws-home .ws-catch span { transition: transform .75s var(--ml-ease), opacity .6s var(--ml-ease); }
-.ws-home:not(.is-on) .ws-catch span { transform: translateY(40px); opacity: 0; transition-duration: .35s; transition-timing-function: ease-in; }
+.ws-home:not(.is-on) .ws-catch span { transform: translateY(30px); opacity: 0; transition-duration: .12s; transition-timing-function: ease-out; }
 .ws-home.is-entering .ws-catch span { transform: translateY(-70px); opacity: 0; transition: none; }
 
 /* project layers */
 .ws-layers { position: absolute; inset: 0; }
-.ws-layer { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .4s ease, visibility 0s .4s; background: radial-gradient(120% 100% at 60% 30%, color-mix(in srgb, var(--tone, #111) 55%, #1a1a1a), #000 80%); }
-.ws-layer.is-on { opacity: 1; visibility: visible; transition: opacity .4s ease; }
+.ws-layer { position: absolute; inset: 0; opacity: 0; visibility: hidden; transition: opacity .12s ease-out, visibility 0s .12s; background: radial-gradient(120% 100% at 60% 30%, color-mix(in srgb, var(--tone, #111) 55%, #1a1a1a), #000 80%); }
+.ws-layer.is-on { opacity: 1; visibility: visible; transition: opacity .35s ease .08s; }
 .ws-bg { position: absolute; inset: -4%; width: 108%; height: 108%; object-fit: cover; object-position: top; opacity: .3; filter: blur(5px) saturate(.85) brightness(.75); transform: scale(1.04); transition: transform 2.4s var(--ml-ease); }
 .ws-layer.is-on .ws-bg { transform: none; }
 .ws-bg--plain { display: block; background: radial-gradient(90% 70% at 70% 40%, color-mix(in srgb, var(--tone) 40%, #222), transparent); opacity: .7; }
@@ -103,9 +104,8 @@
 .ws-del, .ws-line { position: absolute; font: 400 13px/1.42 var(--ml-ui); color: #fff; max-width: 240px; opacity: 0; transition: opacity .5s ease .1s; }
 .ws-layer.is-on .ws-del, .ws-layer.is-on .ws-line { opacity: 1; }
 .ws-title { position: absolute; }
-.ws-name { display: block; font: 400 clamp(56px, 6.15vw, 96px)/1 var(--serif); letter-spacing: -.02em; color: #fff; white-space: nowrap; transform: translateY(-70px); opacity: 0; transition: transform .35s ease-in, opacity .3s ease-in; }
-.ws-layer.is-on .ws-name { transform: none; opacity: 1; transition: transform .75s var(--ml-ease), opacity .6s var(--ml-ease); }
-.ws-layer.is-leaving .ws-name { transform: translateY(40px); opacity: 0; }
+.ws-name { display: block; font: 400 clamp(56px, 6.15vw, 96px)/1 var(--serif); letter-spacing: -.02em; color: #fff; white-space: nowrap; transform: translateY(-70px); opacity: 0; transition: transform 0s .12s, opacity .1s ease-out; }
+.ws-layer.is-on .ws-name { transform: none; opacity: 1; transition: transform .75s var(--ml-ease) .08s, opacity .5s var(--ml-ease) .08s; }
 
 /* arrangement A (like Uber): image top-right, title centred low, line bottom-right */
 .ws-layer--a .ws-shot { left: 52%; top: 13%; width: 40%; aspect-ratio: 16 / 10; }
@@ -167,3 +167,7 @@
 .ws-cursor::after { content: ""; position: absolute; left: -2px; top: -2px; width: 4px; height: 4px; border-radius: 50%; background: #fff; transition: opacity .2s; }
 .ws-cursor.is-big::before { transform: scale(1.7); border-color: rgb(255 255 255 / .55); }
 .ws-cursor.is-big::after { opacity: 0; }
+
+/* keyboard focus on the work stage: a clear ring, since the custom cursor replaces the pointer there */
+.ws-pill:focus-visible, .m-pill:focus-visible, .mnav__menu:focus-visible, .mnav__icon:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+.menu .m-pill:focus-visible, .menu__links a:focus-visible, .menu__card:focus-visible { outline-color: #111; }

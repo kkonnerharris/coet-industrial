@@ -192,17 +192,15 @@
     var show = function (i) {
       clearTimeout(leaveT);
       if (i === cur) return;
-      var prev = cur; cur = i;
-      layers.forEach(function (l, k) {
-        if (k === prev) { l.classList.add('is-leaving'); setTimeout(function () { l.classList.remove('is-leaving'); }, 400); }
-        l.classList.toggle('is-on', k === i); l.setAttribute('aria-hidden', String(k !== i));
-      });
+      cur = i;
+      // set the final state directly: exactly one layer (or the C) is on, whatever was mid-transition
+      layers.forEach(function (l, k) { l.classList.toggle('is-on', k === i); l.setAttribute('aria-hidden', String(k !== i)); });
       pills.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
       if (i === -1) {   // back to the C: its lines drop in from above again
         home.classList.add('is-entering'); void home.offsetWidth; home.classList.add('is-on');
         requestAnimationFrame(function () { home.classList.remove('is-entering'); });
       } else home.classList.remove('is-on');
-      S.tick(-.7);
+      S.arrive();
     };
     pills.forEach(function (p, i) {
       if (fine) p.addEventListener('pointerenter', function () { show(i); });
@@ -232,7 +230,13 @@
         var x = e.clientX / innerWidth - .5, y = e.clientY / innerHeight - .5;
         c.style.setProperty('--cy', (x * 14).toFixed(2) + 'deg'); c.style.setProperty('--cx', (-y * 10).toFixed(2) + 'deg');
       });
-      if (turb) { var t0 = performance.now(); (function flow(t) { var k = (t - t0) / 1000; turb.setAttribute('baseFrequency', (0.008 + Math.sin(k * .35) * .0025).toFixed(4) + ' ' + (0.012 + Math.cos(k * .27) * .003).toFixed(4)); requestAnimationFrame(flow); })(t0); }
+      // the liquid only moves while the stage is on screen (no work, and no battery, spent off screen)
+      if (turb) {
+        var t0 = performance.now(), live = true, flowing = 0;
+        var flow = function (t) { flowing = 0; if (!live) return; var k = (t - t0) / 1000; turb.setAttribute('baseFrequency', (0.008 + Math.sin(k * .35) * .0025).toFixed(4) + ' ' + (0.012 + Math.cos(k * .27) * .003).toFixed(4)); flowing = requestAnimationFrame(flow); };
+        if ('IntersectionObserver' in window) new IntersectionObserver(function (es) { live = es[0].isIntersecting; if (live && !flowing) flowing = requestAnimationFrame(flow); }).observe(ws);
+        flowing = requestAnimationFrame(flow);
+      }
     }
   }
 

@@ -218,10 +218,10 @@ PROJECTS = [
         "results": [],
     },
     {
-        "slug": "embodied-autonomy", "name": "Embodied Autonomy Platform", "short": "Embodied Autonomy",
-        "line": "Multimodal command and perception for a quadruped robot.",
+        "slug": "ai-robotics", "name": "AI Robotics Command Platform", "short": "AI Robotics",
+        "line": "AI that sees, listens and commands a quadruped robot.",
         "teaser": "A multimodal command and perception stack for a Unitree Go2 quadruped: web and voice control, an agentic decision layer, on-prem inference, LiDAR and vision.",
-        "type": "Embodied AI · Robotics research", "stage": "Research", "deliverables": ["Operator interface", "Voice agent", "Agentic AI", "Perception integration"],
+        "type": "AI · Robotics research", "stage": "Research", "deliverables": ["Operator interface", "Voice agent", "Agentic AI", "Perception integration"],
         "live": None,
         "hero": None, "diagram": "go2", "tone": "#0a0c0f",
         "overview": "For a university research lab, COET built the command layer between people and a Unitree Go2 quadruped: an operator interface that holds the platform's documentation and directs the robot in natural language, typed or spoken, with an agentic AI deciding how to act on what the robot senses.",
