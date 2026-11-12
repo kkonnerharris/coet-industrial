@@ -176,8 +176,7 @@ def home_stage():
     pills += '<li><a class="ws-pill" href="work/" data-ws-all data-sfx="press">All Work</a></li>'
     return f"""<section class="ws" id="work" aria-labelledby="ws-catch" data-ws-root>
     <div class="ws-home is-on" data-ws-home>
-      <svg class="sr-only" aria-hidden="true" focusable="false"><filter id="liquid" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="3" data-liquid/><feDisplacementMap in="SourceGraphic" scale="14"/></filter></svg>
-      <div class="ws-c" data-c aria-hidden="true"><img src="assets/img/c.webp" alt="" decoding="async" fetchpriority="high"></div>
+      <div class="ws-orb" data-orb aria-hidden="true"><canvas class="orb__main"></canvas><canvas class="orb__glow"></canvas></div>
       <h1 class="ws-catch" id="ws-catch"><span class="ws-catch__a">Interfaces, workflows</span><span class="ws-catch__b">and all in between</span></h1>
       <p class="ws-intro">We turn complicated hardware into intuitive product experiences. Brand, web, interfaces and engineering, from Milan, Scottsdale and Southern Illinois.</p>
     </div>
