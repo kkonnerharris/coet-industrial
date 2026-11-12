@@ -6,9 +6,14 @@ import html, os, re
 HERE = os.path.dirname(os.path.abspath(__file__))
 A = os.path.join(HERE, "assets")
 
-TEAM = [  # the team shown (user, 2026-11-11: just Jason and Konner)
-    ("ccdf94f84d", "Jason Coawette", "Founder & CEO"),
+TEAM = [  # COET's team as on coetsystems.com, plus Konner Harris (user, 2026-11-11)
+    ("ccdf94f84d", "Jason Coawette", "Founder & CEO"), ("36975729e6", "Jackie Gilbert", "Head of design"),
+    ("003d1294c5", "Giorgio Bordoli", "Head of engineering"), ("fdab99521a", "Lucas Lauachella", "Head of operations"),
+    ("01c226b233", "Katie Little", "Product manager"), ("4399730803", "Matthew Schafman", "Interface designer"),
+    ("c8e4e8d197", "Grace Gonzalez", "Interface designer"), ("25e9621bac", "Olaf Klimasz", "Motion designer"),
+    ("a87de1edd8", "Laish Glenberg", "Software engineer"), ("3b9bb91c92", "Theo Xenakis", "Software engineer"),
     ("konner-harris", "Konner Harris", "Systems engineer"),
+    ("21d586a60b", "Corsa DeCenzo", "Hardware engineer"), ("201bdec7a3", "Gabe Luraicella", "Brand & creative strategist"),
 ]
 
 def read(p):
