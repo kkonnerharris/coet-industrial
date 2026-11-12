@@ -1,4 +1,5 @@
-/* COET — the orb. This is the "working" orb from Libraries.dev's thinking-orbs (MIT, © Jakub Antalik), straight
+/* COET — the orb. This is <ThinkingOrb state="searching" size={64} /> from Libraries.dev's thinking-orbs (MIT,
+   © Jakub Antalik): a scan meridian sweeping a dotted globe, straight
    from the package: its own preset, its own frame maths and its own painter, with nothing re-tuned. The package's
    engine is framework-free, so no React is needed here. Two things differ from the 64px original, both things the
    package itself allows: it is enlarged (the 64px drawing is scaled as a vector, never redrawn) and tinted COET amber.
@@ -15,15 +16,15 @@
   var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var ENGINE = new URL('vendor/thinking-orbs-0.3.2/engine.es.js', document.currentScript.src).href;
   var TINT = { r: 245, g: 158, b: 11 };                // COET amber (#f59e0b)
-  var DESIGN = 64, ORB_R = 23.2;                       // the library's design size, and the orb's radius inside it
+  var STATE = 'searching', DESIGN = 64, ORB_R = 26.24;                      // the library's design size, and the orb's radius inside it
 
   import(ENGINE).then(function (lib) {
     var ctx = canvas.getContext('2d');
     if (!ctx) return;
     if (spare) spare.style.display = 'none';
     canvas.style.opacity = 1;
-    var preset = lib.resolvePreset('working', DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed, opts = preset.opts;   // the stock preset, untouched
-    var PARTICLE_R = .75;                                // dots at least this big are particles, the rest are trail dots
+    var preset = lib.resolvePreset(STATE, DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed, opts = preset.opts;   // the stock preset, untouched
+    var PARTICLE_R = .8;                                 // a label rides one of the larger, nearer dots
 
     // ── labelled particles: a very small label rides on an ordinary particle. Add an entry here for each new one. ──
     var LABELS = [
