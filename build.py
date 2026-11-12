@@ -96,7 +96,18 @@ def shell(title, desc, base, body, cls="is-sub"):
     return page
 
 
+def stamp(text):
+    """Adds ?v=<content hash> to the stylesheets, scripts and the C image, so a push shows up without a hard refresh."""
+    import hashlib, re
+    def ver(m):
+        f = os.path.join(A, m.group(2).replace("/", os.sep))
+        if not os.path.isfile(f): return m.group(0)
+        with open(f, "rb") as fh: h = hashlib.md5(fh.read()).hexdigest()[:8]
+        return '%sassets/%s?v=%s"' % (m.group(1), m.group(2), h)
+    return re.sub(r'((?:href|src)="(?:\.\./)*(?:\./)?)assets/((?:[\w-]+\.(?:css|js))|img/c\.webp)"', ver, text)
+
 def write(rel, text):
+    text = stamp(text)
     path = os.path.join(HERE, *rel.split("/"))
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as f: f.write(text)
