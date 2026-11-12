@@ -9,8 +9,6 @@ html[data-theme="light"] .person img { filter: invert(1) hue-rotate(180deg) gray
 html[data-theme="light"] .person:hover img, html[data-theme="light"] .person--bio:hover img, html[data-theme="light"] .person__open:focus-visible img { filter: invert(1) hue-rotate(180deg) grayscale(0); }
 html[data-theme="light"] .card__media--dark img { filter: invert(1) hue-rotate(180deg) saturate(.8); }
 html[data-theme="light"] .cs-next__media img { filter: invert(1) hue-rotate(180deg) grayscale(.3); }
-/* the globe reads better a little stronger on a white stage */
-html[data-theme="light"] .orb__main { opacity: 1 !important; }
 
 /* the switch in the bar: a sun in dark mode, a moon in light mode */
 [data-theme-toggle] .i-moon { display: none; }
