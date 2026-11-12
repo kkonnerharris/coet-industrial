@@ -240,6 +240,11 @@
     }
   }
 
+  /* ── the team: a soft key clack as you move across the people, panned to where each one sits ── */
+  if (fine) [].forEach.call(document.querySelectorAll('.person'), function (p) {
+    p.addEventListener('pointerenter', function () { S.select(panX(p)); });
+  });
+
   /* ── the lead form: posts to FormSubmit, which emails it on. It says "sent" only when the service confirms it. ── */
   var lead = document.querySelector('[data-lead]');
   if (lead && window.fetch) {
