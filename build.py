@@ -84,13 +84,10 @@ def page_head(title, sub):
 
 
 TITLE, DESC = "COET · Hardware product studio", "COET turns complicated hardware into intuitive product experiences. Brand, web, rendering, interfaces and implementation."
-write("index.html", shell(TITLE, DESC, "", casegen.home_stage(), "is-home"))
 what = read(os.path.join(HERE, "pages", "what-we-do.html")).replace("{{svc-tabs}}", "\n        ".join(tabs)).replace("{{svc-panels}}", "".join(panels))
-write("what-we-do/index.html", shell("What We Do · COET", "Brand, web, rendering, interfaces and implementation for hardware companies.", "../",
-      page_head("What we do", "Brand, web, interfaces and engineering, for machines people use every day.") + what))
 about = read(os.path.join(HERE, "pages", "about.html")).replace("{{team}}", TEAM_HTML)
-write("about/index.html", shell("About Us · COET", "The people behind COET, in Milan and Scottsdale.", "../",
-      page_head("About us", "Thirteen people across two studios, Milan and Scottsdale.") + about))
+# One continuous page: the MetaLab work stage opens it, then the numbers, the statement, services, client, team and close.
+write("index.html", shell(TITLE, DESC, "", casegen.home_stage() + what + about, "is-home"))
 for i, p in enumerate(casegen.PROJECTS):
     write("work/%s/index.html" % p["slug"], casegen.case_page(p, i, shell))
 write("work/index.html", casegen.work_index(shell))

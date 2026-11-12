@@ -164,6 +164,7 @@
       else { menu.classList.remove('is-open'); setTimeout(function () { if (menuBtn.getAttribute('aria-expanded') === 'false') menu.hidden = true; }, reduce ? 0 : 420); menuBtn.focus({ preventScroll: true }); S.select(-.8); }
     };
     menuBtn.addEventListener('click', function () { openMenu(menuBtn.getAttribute('aria-expanded') !== 'true'); });
+    [].forEach.call(document.querySelectorAll('[data-menu-close]'), function (l) { l.addEventListener('click', function () { if (menuBtn.getAttribute('aria-expanded') === 'true') openMenu(false); }); });
     document.addEventListener('keydown', function (e) {
       if (menuBtn.getAttribute('aria-expanded') !== 'true') return;
       if (e.key === 'Escape') { e.preventDefault(); openMenu(false); return; }
@@ -210,6 +211,19 @@
     });
     var list = ws.querySelector('.ws-pills');
     if (fine) list.addEventListener('pointerleave', function () { leaveT = setTimeout(function () { show(-1); }, 380); });
+
+    // MetaLab's cursor on the work screen: a thin ring that trails the pointer and opens up over a project
+    if (fine && !reduce) {
+      var ring = document.createElement('span'); ring.className = 'ws-cursor'; ring.setAttribute('aria-hidden', 'true'); ws.appendChild(ring);
+      var tx = 0, ty = 0, rx = 0, ry = 0, raf2 = 0, inside = false;
+      var loop = function () { rx += (tx - rx) * .2; ry += (ty - ry) * .2; ring.style.transform = 'translate3d(' + rx.toFixed(1) + 'px,' + ry.toFixed(1) + 'px,0)'; raf2 = (Math.abs(tx - rx) + Math.abs(ty - ry) > .2 || inside) ? requestAnimationFrame(loop) : 0; };
+      ws.addEventListener('pointermove', function (e) { var r = ws.getBoundingClientRect(); tx = e.clientX - r.left; ty = e.clientY - r.top; if (!inside) { rx = tx; ry = ty; } inside = true; ws.classList.add('has-cursor'); if (!raf2) raf2 = requestAnimationFrame(loop); });
+      ws.addEventListener('pointerleave', function () { inside = false; ws.classList.remove('has-cursor'); });
+      [].forEach.call(ws.querySelectorAll('a, button'), function (el) {
+        el.addEventListener('pointerenter', function () { ring.classList.add('is-big'); });
+        el.addEventListener('pointerleave', function () { ring.classList.remove('is-big'); });
+      });
+    }
 
     // the C leans toward the cursor and its liquid surface keeps moving
     var c = ws.querySelector('[data-c]'), turb = ws.querySelector('[data-liquid]');

@@ -62,8 +62,6 @@
 .menu-open { overflow: hidden; }
 
 /* ── home: one screen ── */
-.is-home { overflow: hidden; height: 100svh; }
-.is-home .foot { display: none; }
 .ws { position: relative; height: 100svh; min-height: 560px; overflow: hidden; isolation: isolate; background: #000; }
 
 /* default: the liquid C and the catchphrase */
@@ -160,3 +158,12 @@
   .ws-c img, .menu__media img, .ws-c::before { animation: none; filter: none; }
   .ws-c { transition: none; }
 }
+
+/* MetaLab's cursor on the work screen: a thin ring trailing the pointer, opening up over a project */
+.ws.has-cursor, .ws.has-cursor a, .ws.has-cursor button { cursor: none; }
+.ws-cursor { position: absolute; left: 0; top: 0; z-index: 5; width: 0; height: 0; pointer-events: none; opacity: 0; transition: opacity .25s; }
+.ws.has-cursor .ws-cursor { opacity: 1; }
+.ws-cursor::before { content: ""; position: absolute; left: -17px; top: -17px; width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgb(255 255 255 / .9); transition: transform .45s var(--ml-ease), border-color .3s; }
+.ws-cursor::after { content: ""; position: absolute; left: -2px; top: -2px; width: 4px; height: 4px; border-radius: 50%; background: #fff; transition: opacity .2s; }
+.ws-cursor.is-big::before { transform: scale(1.7); border-color: rgb(255 255 255 / .55); }
+.ws-cursor.is-big::after { opacity: 0; }

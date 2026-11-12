@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Splash C2 · COET</title>
+<meta name="description" content="An operator console for supervising fleets of uncrewed surface vessels: mission tasking, escort and perimeter patterns, live ship traffic, and a helm for direct control.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Martian+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/original-scenes.css">
+<link rel="stylesheet" href="../../assets/site.css">
+<link rel="stylesheet" href="../../assets/case.css">
+<link rel="stylesheet" href="../../assets/metalab.css">
+</head>
+<body class="is-sub">
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="mnav" data-nav>
+  <div class="mnav__bar">
+    <button class="mnav__menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu"><span data-menu-label>Menu</span><span class="mnav__x" aria-hidden="true">×</span></button>
+    <a class="mnav__logo" href="../../" aria-label="COET, home" data-sfx="tick"><svg viewBox="0 0 106.88 23.04" fill="currentColor" role="img" aria-label="COET" focusable="false"><path d="M22.98 23.04L4.45 23.04Q3.23 23.04 2.22 22.43Q1.22 21.82 0.61 20.82Q0 19.81 0 18.59L0 4.45Q0 3.23 0.61 2.22Q1.22 1.22 2.22 0.61Q3.23 0 4.45 0L22.98 0L22.98 4.26L5.34 4.26Q4.83 4.26 4.53 4.54Q4.22 4.83 4.22 5.38L4.22 17.66Q4.22 18.18 4.53 18.48Q4.83 18.78 5.34 18.78L22.98 18.78L22.98 23.04M47.39 23.04L33.25 23.04Q32.03 23.04 31.02 22.43Q30.02 21.82 29.41 20.82Q28.80 19.81 28.80 18.59L28.80 4.45Q28.80 3.23 29.41 2.22Q30.02 1.22 31.02 0.61Q32.03 0 33.25 0L47.39 0Q48.61 0 49.62 0.61Q50.62 1.22 51.23 2.22Q51.84 3.23 51.84 4.45L51.84 18.59Q51.84 19.81 51.23 20.82Q50.62 21.82 49.62 22.43Q48.61 23.04 47.39 23.04M33.41 18.78L47.17 18.78Q47.33 18.78 47.46 18.67Q47.58 18.56 47.58 18.40L47.58 4.64Q47.58 4.48 47.46 4.37Q47.33 4.26 47.17 4.26L33.41 4.26Q33.25 4.26 33.14 4.37Q33.02 4.48 33.02 4.64L33.02 18.40Q33.02 18.56 33.14 18.67Q33.25 18.78 33.41 18.78M79.20 23.04L57.98 23.04L57.98 0L79.20 0L79.20 4.26L62.24 4.26L62.24 9.38L75.87 9.38L75.87 13.66L62.24 13.66L62.24 18.78L79.20 18.78L79.20 23.04M97.50 23.04L93.25 23.04L93.25 4.26L83.84 4.26L83.84 0L106.88 0L106.88 4.26L97.50 4.26"></path></svg></a>
+    <div class="mnav__end">
+      <span class="mnav__clock" data-clock aria-label="Local time at the Scottsdale studio">PHX --:--</span>
+      <button class="mnav__icon" type="button" data-sound-toggle aria-pressed="false" aria-label="Sound off">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><path class="i-spk" d="M3 6h2l3-2.5v9L5 10H3z"/><path class="i-on" d="M10.5 5.5a3.5 3.5 0 0 1 0 5M12 4a5.5 5.5 0 0 1 0 8"/><path class="i-off" d="M10.5 6.5l3 3M13.5 6.5l-3 3"/></svg>
+      </button>
+      <a class="mnav__icon" href="https://coetsystems.com/start-a-project" aria-label="Start a project" data-sfx="press">
+        <svg viewBox="0 0 16 16" aria-hidden="true"><rect x="2.5" y="4" width="11" height="8.5" rx="1.2"/><path d="M3 4.8l5 3.8 5-3.8"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu hidden>
+  <div class="menu__in">
+    <div class="menu__col">
+      <nav class="menu__links" aria-label="Main">
+        <a href="../../#services" data-sfx="tick" data-menu-close>What We Do</a>
+        <a href="../../#team" data-sfx="tick" data-menu-close>About Us</a>
+        <a href="../../work/" data-sfx="tick">All Work</a>
+        <a href="https://coetsystems.com/start-a-project" data-sfx="press">Get in Touch</a>
+      </nav>
+      <p class="menu__label">Case Studies</p>
+      <ul class="menu__pills"><li><a class="m-pill" href="../../work/real-talk/" data-sfx="tick">Real Talk</a></li><li><a class="m-pill" href="../../work/betterguest/" data-sfx="tick">BetterGuest</a></li><li><a class="m-pill" href="../../work/splash-c2/" data-sfx="tick">Splash C2</a></li><li><a class="m-pill" href="../../work/intuitive-pitching/" data-sfx="tick">Intuitive Pitching</a></li><li><a class="m-pill" href="../../work/water-credit-registry/" data-sfx="tick">Water Credit Registry</a></li><li><a class="m-pill" href="../../work/tap-water-database/" data-sfx="tick">Tap Water Database</a></li><li><a class="m-pill" href="../../work/embodied-autonomy/" data-sfx="tick">Embodied Autonomy</a></li><li><a class="m-pill" href="../../work/hnl-holiday-lighting/" data-sfx="tick">H &amp; L Holiday Lighting</a></li><li><a class="m-pill" href="../../work/long-stroke-card-club/" data-sfx="tick">Long Stroke Card Club</a></li><li><a class="m-pill" href="../../work/" data-sfx="tick">All Work</a></li></ul>
+    </div>
+    <div class="menu__media" aria-hidden="true"><img src="../../assets/img/c.webp" alt="" loading="lazy" decoding="async"></div>
+    <div class="menu__cards">
+      <a class="menu__card" href="https://coetsystems.com/start-a-project" data-sfx="press"><span class="menu__card-k">Now</span><span>Accepting 3 more projects this quarter.</span></a>
+      <a class="menu__card" href="../../#team" data-sfx="tick" data-menu-close><span class="menu__card-k">Studios</span><span>Milan and Scottsdale.</span></a>
+      <a class="menu__card" href="../../work/betterguest/" data-sfx="tick"><span class="menu__card-k">Latest case study</span><span>BetterGuest: a cinematic tour of every home.</span></a>
+    </div>
+  </div>
+</div>
+
+
+<main id="main">
+<main id="main" class="cs">
+  <header class="cs-hero">
+    <div class="cs-wrap">
+      <a class="cs-back mono" href="../../work/" data-sfx="tick">← All work</a>
+      <h1 class="cs-title" data-rise>Splash C2</h1>
+      <dl class="cs-meta mono" data-rise><div><dt>Project type</dt><dd>Defense · Autonomy C2</dd></div><div><dt>Stage</dt><dd>Demo</dd></div><div><dt>Deliverables</dt><dd>Operator console · Mission simulation · 3D chart and helm · Engineering</dd></div></dl>
+    </div>
+    <div class="cs-panel cs-panel--hero" style="--tone:#071018"><div class="cs-wrap"><figure class="cs-plate cs-plate--diagram"><svg class="dg" viewBox="0 0 1000 440" role="img" aria-label="System diagram: the operator and live Open Waters data feed the Splash C2 core, which plans missions on a deterministic fleet clock and tasks Typhoon and Tempest uncrewed surface vessels."><path class="dg-link " d="M280 108 C330 108 330 198 380 198"/><path class="dg-link dg-back" d="M280 288 C330 288 330 198 380 198"/><path class="dg-link " d="M620 182 C670 182 670 108 720 108"/><path class="dg-link " d="M620 214 C670 214 670 288 720 288"/><path class="dg-link dg-back" d="M500 340 L500 236"/><g class="dg-node" transform="translate(40,70)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Operator</text><text x="18" y="55" class="dg-s">fleet view + helm</text></g><g class="dg-node" transform="translate(40,250)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Open Waters</text><text x="18" y="55" class="dg-s">AIS, seamarks, depth</text></g><g class="dg-node" transform="translate(380,160)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Splash C2 core</text><text x="18" y="55" class="dg-s">missions, patterns, safety</text></g><g class="dg-node" transform="translate(720,70)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Typhoon</text><text x="18" y="55" class="dg-s">uncrewed surface vessel</text></g><g class="dg-node" transform="translate(720,250)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Tempest</text><text x="18" y="55" class="dg-s">uncrewed surface vessel</text></g><g class="dg-node" transform="translate(380,340)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Fleet clock</text><text x="18" y="55" class="dg-s">deterministic steps</text></g></svg></figure></div></div>
+  </header>
+
+  <section class="cs-intro"><div class="cs-wrap"><p class="cs-lede" data-rise>Splash Industries builds uncrewed surface vessels, the Typhoon and the larger Tempest. Splash says a Typhoon carried out the first fully autonomous underway resupply of a U.S. Navy warship, USS Essex, during RIMPAC. Splash C2 is the console an operator uses to supervise and task those boats.</p></div></section>
+
+  <section class="cs-context"><div class="cs-wrap cs-text"><p class="cs-label">Product context</p>
+    <h2 class="cs-statement" data-rise>One operator, many boats, and no room for ambiguity.</h2><p class="cs-aside" data-rise>Supervising autonomous vessels means seeing the whole picture at once: where every boat is, what it has been told to do, what else is on the water, and what happens when a link drops. Every requirement was questioned, cut or simplified before it was built, and each decision is written down with the evidence that would reopen it.</p></div></section>
+
+  <section class="cs-role"><div class="cs-wrap"><p class="cs-label">COET's contribution</p><ul class="cs-rows"><li><h3>A deterministic mission core</h3><p>Fleet, mission and navigation logic as pure functions, independent of the interface, the map and the clock, so any run can be replayed exactly.</p></li><li><h3>Fleet view</h3><p>A nautical chart with 3D hulls for both vessel classes, every tasked route, seamarks and depth context, and live AIS traffic from Open Waters.</p></li><li><h3>Tasking by pattern</h3><p>Drop an objective, pick a pattern, and each selected boat gets its own slot. Five patterns, escort and monitor for moving contacts, and perimeters you drag to re-plan in place.</p></li><li><h3>Safety rules in the simulation</h3><p>Boats stop at the shoreline, keep clear of each other and of reported ships, and a lost link puts a boat into onboard hold while the operator re-tasks the rest.</p></li><li><h3>The helm</h3><p>Take one boat: its hull in 3D with contacts at true bearing, four camera stations, and keyboard throttle and rudder that only engage after the operator confirms the named vessel.</p></li></ul></div></section>
+
+  <section class="cs-chapter"><div class="cs-wrap cs-text"><p class="cs-label">How it fits together</p><h2 class="cs-statement" data-rise>Operator intent in, deterministic missions out.</h2><p class="cs-aside" data-rise>The operator works in two views of one chart. Orders become missions in a pure core that steps the fleet on a fixed clock, with live traffic and chart data as context, never as truth.</p></div><div class="cs-panel"><div class="cs-wrap cs-grid cs-grid--1"><figure class="cs-plate cs-plate--diagram"><svg class="dg" viewBox="0 0 1000 440" role="img" aria-label="System diagram: the operator and live Open Waters data feed the Splash C2 core, which plans missions on a deterministic fleet clock and tasks Typhoon and Tempest uncrewed surface vessels."><path class="dg-link " d="M280 108 C330 108 330 198 380 198"/><path class="dg-link dg-back" d="M280 288 C330 288 330 198 380 198"/><path class="dg-link " d="M620 182 C670 182 670 108 720 108"/><path class="dg-link " d="M620 214 C670 214 670 288 720 288"/><path class="dg-link dg-back" d="M500 340 L500 236"/><g class="dg-node" transform="translate(40,70)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Operator</text><text x="18" y="55" class="dg-s">fleet view + helm</text></g><g class="dg-node" transform="translate(40,250)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Open Waters</text><text x="18" y="55" class="dg-s">AIS, seamarks, depth</text></g><g class="dg-node" transform="translate(380,160)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Splash C2 core</text><text x="18" y="55" class="dg-s">missions, patterns, safety</text></g><g class="dg-node" transform="translate(720,70)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Typhoon</text><text x="18" y="55" class="dg-s">uncrewed surface vessel</text></g><g class="dg-node" transform="translate(720,250)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Tempest</text><text x="18" y="55" class="dg-s">uncrewed surface vessel</text></g><g class="dg-node" transform="translate(380,340)"><rect width="240" height="76" rx="6"/><text x="18" y="32" class="dg-t">Fleet clock</text><text x="18" y="55" class="dg-s">deterministic steps</text></g></svg></figure></div></div></section>
+
+  <section class="cs-features"><div class="cs-wrap"><p class="cs-label">Key features</p><ul class="cs-feat"><li data-rise><span class="mono">01</span><h3>Fleet and helm views</h3><p>The whole picture, or one boat&#x27;s bow.</p></li><li data-rise><span class="mono">02</span><h3>Five mission patterns</h3><p>One slot per boat around an objective.</p></li><li data-rise><span class="mono">03</span><h3>Escort and monitor</h3><p>Stations re-planned every tick on a moving contact.</p></li><li data-rise><span class="mono">04</span><h3>Draggable perimeters</h3><p>Move or resize a patrol and its routes follow.</p></li><li data-rise><span class="mono">05</span><h3>Live AIS and seamarks</h3><p>Real traffic and chart context, no API key.</p></li><li data-rise><span class="mono">06</span><h3>Link-loss hold</h3><p>A disconnected boat stops and waits; the rest carry on.</p></li></ul></div></section>
+  
+  <div class="cs-wrap"></div>
+
+  <a class="cs-next" href="../../work/intuitive-pitching/" data-sfx="press">
+    <span class="cs-next__media" aria-hidden="true"><img src="../../assets/img/case/intuitive-pitching/landing.webp" alt="" loading="lazy" decoding="async"></span>
+    <span class="cs-wrap cs-next__body"><span class="cs-label">Next project</span><span class="cs-next__name">Intuitive Pitching</span>
+    <span class="cs-next__line">Read every pitch.</span></span>
+  </a>
+
+  <section class="cs-help"><div class="cs-wrap cs-help__in">
+    <h2 class="cs-help__title">How can we help?</h2>
+    <ul class="cs-help__rows">
+      <li><a href="https://coetsystems.com/start-a-project" data-sfx="press">Start a project <span aria-hidden="true">↗</span></a></li>
+      <li><a href="../../work/" data-sfx="tick">See all work <span aria-hidden="true">↗</span></a></li>
+      <li><a href="../../#team" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
+    </ul></div></section>
+</main>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__row mono">
+    <span>©COET 2026</span>
+    <nav aria-label="Footer"><a href="https://coetsystems.com/start-a-project">Contact</a><a href="https://coetsystems.com/privacy">Privacy</a><a href="https://coetsystems.com/accessibility">Accessibility</a></nav>
+    <nav aria-label="Social"><a href="https://x.com">X ↗</a><a href="https://www.linkedin.com">LinkedIn ↗</a><a href="https://www.instagram.com">Instagram ↗</a></nav>
+  </div>
+  <div class="wrap foot__mark" aria-hidden="true"><svg viewBox="0 0 106.88 23.04" fill="currentColor" role="img" aria-label="COET" focusable="false"><path d="M22.98 23.04L4.45 23.04Q3.23 23.04 2.22 22.43Q1.22 21.82 0.61 20.82Q0 19.81 0 18.59L0 4.45Q0 3.23 0.61 2.22Q1.22 1.22 2.22 0.61Q3.23 0 4.45 0L22.98 0L22.98 4.26L5.34 4.26Q4.83 4.26 4.53 4.54Q4.22 4.83 4.22 5.38L4.22 17.66Q4.22 18.18 4.53 18.48Q4.83 18.78 5.34 18.78L22.98 18.78L22.98 23.04M47.39 23.04L33.25 23.04Q32.03 23.04 31.02 22.43Q30.02 21.82 29.41 20.82Q28.80 19.81 28.80 18.59L28.80 4.45Q28.80 3.23 29.41 2.22Q30.02 1.22 31.02 0.61Q32.03 0 33.25 0L47.39 0Q48.61 0 49.62 0.61Q50.62 1.22 51.23 2.22Q51.84 3.23 51.84 4.45L51.84 18.59Q51.84 19.81 51.23 20.82Q50.62 21.82 49.62 22.43Q48.61 23.04 47.39 23.04M33.41 18.78L47.17 18.78Q47.33 18.78 47.46 18.67Q47.58 18.56 47.58 18.40L47.58 4.64Q47.58 4.48 47.46 4.37Q47.33 4.26 47.17 4.26L33.41 4.26Q33.25 4.26 33.14 4.37Q33.02 4.48 33.02 4.64L33.02 18.40Q33.02 18.56 33.14 18.67Q33.25 18.78 33.41 18.78M79.20 23.04L57.98 23.04L57.98 0L79.20 0L79.20 4.26L62.24 4.26L62.24 9.38L75.87 9.38L75.87 13.66L62.24 13.66L62.24 18.78L79.20 18.78L79.20 23.04M97.50 23.04L93.25 23.04L93.25 4.26L83.84 4.26L83.84 0L106.88 0L106.88 4.26L97.50 4.26"></path></svg></div>
+  <p class="wrap foot__note mono">Redesign preview, not the official site. The live site is <a href="https://coetsystems.com">coetsystems.com</a>.</p>
+</footer>
+
+<script src="../../assets/globe.js" defer></script>
+<script src="../../assets/sound.js" defer></script>
+<script src="../../assets/site.js" defer></script>
+</body>
+</html>

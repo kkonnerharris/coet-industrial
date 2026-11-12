@@ -17,24 +17,39 @@ def frame(img, base, slug, eager=False):
             f'<img src="{src}" alt="" loading="{load}" decoding="async"></div></figure>')
 
 
+DIAGRAMS = {
+    "go2": {
+        "label": "System diagram: the web interface and voice agent send commands to an agent harness, which reasons with a local model "
+                 "served by Ollama and the robot's LiDAR and camera, then sends commands to the Unitree Go2.",
+        "nodes": [(60, 70, "Operator interface", "docs + typed commands"), (60, 230, "Voice agent", "spoken commands"),
+                  (380, 150, "Agent harness", "interprets, decides"), (700, 70, "Local inference", "Ollama server"),
+                  (700, 230, "Unitree Go2", "robot commands"), (380, 330, "LiDAR + camera", "what the robot senses")],
+        "links": [("M300 108 C340 108 340 188 380 188", ""), ("M300 268 C340 268 340 188 380 188", ""),
+                  ("M620 172 C660 172 660 108 700 108", ""), ("M620 204 C660 204 660 268 700 268", ""),
+                  ("M820 306 C820 380 760 368 620 368", "dg-back"), ("M500 330 L500 226", "dg-back")],
+    },
+    "splash": {
+        "label": "System diagram: the operator and live Open Waters data feed the Splash C2 core, which plans missions on a deterministic "
+                 "fleet clock and tasks Typhoon and Tempest uncrewed surface vessels.",
+        "nodes": [(40, 70, "Operator", "fleet view + helm"), (40, 250, "Open Waters", "AIS, seamarks, depth"),
+                  (380, 160, "Splash C2 core", "missions, patterns, safety"), (720, 70, "Typhoon", "uncrewed surface vessel"),
+                  (720, 250, "Tempest", "uncrewed surface vessel"), (380, 340, "Fleet clock", "deterministic steps")],
+        "links": [("M280 108 C330 108 330 198 380 198", ""), ("M280 288 C330 288 330 198 380 198", "dg-back"),
+                  ("M620 182 C670 182 670 108 720 108", ""), ("M620 214 C670 214 670 288 720 288", ""),
+                  ("M500 340 L500 236", "dg-back")],
+    },
+}
+
+
 def diagram(kind):
-    """An explanatory system diagram (not a screenshot), drawn from the project description."""
-    if kind != "go2":
+    """An explanatory system diagram (not a screenshot), drawn from the project's documented architecture."""
+    d = DIAGRAMS.get(kind)
+    if not d:
         return ""
-    nodes = [  # x, y, label, sub
-        (60, 70, "Web interface", "docs + typed commands"), (60, 230, "Voice agent", "spoken commands"),
-        (380, 150, "Agent harness", "interprets, decides"), (700, 70, "Local inference", "Ollama server"),
-        (700, 230, "Unitree Go2", "robot commands"), (380, 330, "LiDAR + camera", "what the robot senses"),
-    ]
     box = lambda x, y, t, s: (f'<g class="dg-node" transform="translate({x},{y})"><rect width="240" height="76" rx="6"/>'
                               f'<text x="18" y="32" class="dg-t">{e(t)}</text><text x="18" y="55" class="dg-s">{e(s)}</text></g>')
-    links = [("M300 108 C340 108 340 188 380 188", ""), ("M300 268 C340 268 340 188 380 188", ""),
-             ("M620 172 C660 172 660 108 700 108", ""), ("M620 204 C660 204 660 268 700 268", ""),
-             ("M820 306 C820 380 760 368 620 368", "dg-back"), ("M500 330 L500 226", "dg-back")]
-    paths = "".join(f'<path class="dg-link {c}" d="{d}"/>' for d, c in links)
-    return (f'<svg class="dg" viewBox="0 0 1000 440" role="img" aria-label="System diagram: the web interface and voice agent send commands to an agent harness, '
-            f'which reasons with a local model served by Ollama and the robot\'s LiDAR and camera, then sends commands to the Unitree Go2.">'
-            f'{paths}{"".join(box(*n) for n in nodes)}</svg>')
+    paths = "".join(f'<path class="dg-link {cl}" d="{p}"/>' for p, cl in d["links"])
+    return f'<svg class="dg" viewBox="0 0 1000 440" role="img" aria-label="{e(d["label"])}">{paths}{"".join(box(*n) for n in d["nodes"])}</svg>'
 
 
 def meta_row(p):
@@ -120,7 +135,7 @@ def help_block(base):
     <ul class="cs-help__rows">
       <li><a href="https://coetsystems.com/start-a-project" data-sfx="press">Start a project <span aria-hidden="true">↗</span></a></li>
       <li><a href="{base}work/" data-sfx="tick">See all work <span aria-hidden="true">↗</span></a></li>
-      <li><a href="{base}about/" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
+      <li><a href="{base}#team" data-sfx="tick">Meet the team <span aria-hidden="true">↗</span></a></li>
     </ul></div></section>"""
 
 
@@ -159,7 +174,7 @@ def home_stage():
                       f'<span class="ws-line">{e(p["teaser"])}</span></div>')
     pills = "".join(f'<li><a class="ws-pill" href="work/{p["slug"]}/" data-ws="{i}" data-sfx="press">{e(p["short"])}</a></li>' for i, p in enumerate(PROJECTS))
     pills += '<li><a class="ws-pill" href="work/" data-ws-all data-sfx="press">All Work</a></li>'
-    return f"""<section class="ws" aria-labelledby="ws-catch" data-ws-root>
+    return f"""<section class="ws" id="work" aria-labelledby="ws-catch" data-ws-root>
     <div class="ws-home is-on" data-ws-home>
       <svg class="sr-only" aria-hidden="true" focusable="false"><filter id="liquid" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="3" data-liquid/><feDisplacementMap in="SourceGraphic" scale="14"/></filter></svg>
       <div class="ws-c" data-c aria-hidden="true"><img src="assets/img/c.webp" alt="" decoding="async" fetchpriority="high"></div>
