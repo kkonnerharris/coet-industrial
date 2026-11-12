@@ -12,9 +12,10 @@
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Martian+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Martian+Mono:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/original-scenes.css">
 <link rel="stylesheet" href="assets/site.css">
+<link rel="stylesheet" href="assets/case.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -103,48 +104,8 @@
     </div>
   </section>
 
-  <!-- Work: Atoms-style cards, picture first, caption below -->
-  <section class="section work" id="work" aria-labelledby="work-title">
-    <header class="wrap head head--row">
-      <div>
-        <h2 class="head__title" id="work-title" data-rise>Work<sup>04</sup></h2>
-        <p class="head__sub" data-rise>Recent work.</p>
-      </div>
-      <a class="link" href="https://coetsystems.com/work" data-sfx="tick">See our work <span aria-hidden="true">→</span></a>
-    </header>
-    <div class="wrap cards">
-      <a class="card" href="https://www.realtalkrealestate.com/" target="_blank" rel="noopener" data-rise data-sfx="tick">
-        <span class="card__media"><img src="assets/img/work/realtalk.webp" alt="The Real Talk Real Estate home page: Your next deal starts here." loading="lazy" decoding="async"></span>
-        <span class="card__body">
-          <span class="card__title">Real Talk Real Estate <span class="tag">Web · Interface · Engineering</span></span>
-          <span class="card__desc">A home base for real estate investors: deal analysis run on a Go service, communities with live chat, and a blog its host writes through Claude.</span>
-          <span class="card__more mono">Visit site ↗</span>
-        </span>
-      </a>
-      <a class="card" href="https://web-or-betterguests-production.up.railway.app/" target="_blank" rel="noopener" data-rise data-sfx="tick">
-        <span class="card__media"><img src="assets/img/work/betterguest.webp" alt="The BetterGuest home page: Find your kind of getaway." loading="lazy" decoding="async"></span>
-        <span class="card__body">
-          <span class="card__title">BetterGuest <span class="tag">Web · Interface · Engineering</span></span>
-          <span class="card__desc">A members-only vacation rental platform: AI search, swipe-to-save discovery, and a cinematic tour of every home made from its own photos.</span>
-          <span class="card__more mono">Visit site ↗</span>
-        </span>
-      </a>
-      <a class="card" href="https://coetsystems.com/work" data-rise data-sfx="tick">
-        <span class="card__media card__media--dark"><img src="assets/img/work/tap-water-database.webp" alt="" loading="lazy" decoding="async"></span>
-        <span class="card__body">
-          <span class="card__title">Tap Water Database <span class="tag">Web · Interface · Landing pages</span></span>
-          <span class="card__more mono">Case study ↗</span>
-        </span>
-      </a>
-      <a class="card" href="https://coetsystems.com/work" data-rise data-sfx="tick">
-        <span class="card__media card__media--dark"><img src="assets/img/work/water-credit-registry.webp" alt="" loading="lazy" decoding="async"></span>
-        <span class="card__body">
-          <span class="card__title">Water Credit Registry <span class="tag">Brand · Web · Engineering</span></span>
-          <span class="card__more mono">Case study ↗</span>
-        </span>
-      </a>
-    </div>
-  </section>
+  <!-- Work: MetaLab-style stage; each pill opens a full case study -->
+  {{work-stage}}
 
   <!-- Client: the one light band -->
   <section class="client" aria-label="Client">

@@ -51,6 +51,36 @@ out = out.replace("{{svc-tabs}}", "\n        ".join(tabs)).replace("{{svc-panels
 out = out.replace("{{team}}", "".join(
     '<li class="person" data-rise><img src="assets/img/team/%s.webp" width="600" height="750" alt="%s" loading="lazy" decoding="async">'
     '<p class="person__name">%s</p><p class="mono person__role">%s</p></li>' % (img, e(n), e(n), e(r)) for img, n, r in TEAM))
+import casegen
+out = out.replace("{{work-stage}}", casegen.home_stage())
 assert "{{" not in out, re.findall(r"\{\{[^}]+\}\}", out)
-with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as f: f.write(out)
-print("index.html", len(out) // 1024, "KB")
+
+
+def write(rel, text):
+    path = os.path.join(HERE, *rel.split("/"))
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8", newline="\n") as f: f.write(text)
+    print(rel, len(text) // 1024, "KB")
+
+
+write("index.html", out)
+
+# Case pages share the home page's head, nav and footer, cut from the same build, with links rebased.
+HEAD, FOOT = out.split('<main id="main">')[0], out.split("</main>", 1)[1]
+
+
+def shell(title, desc, base, body):
+    def rebase(t):
+        for attr in ('href="#', 'src="assets/', 'href="assets/', 'href="favicon', 'href="apple-touch'):
+            t = t.replace(attr, attr[:6] + base + attr[6:] if attr.startswith("href") else attr[:5] + base + attr[5:])
+        return t
+    head = rebase(HEAD).replace("<title>COET · Hardware product studio</title>", "<title>%s</title>" % e(title))
+    head = re.sub(r'<meta name="description" content="[^"]*">', '<meta name="description" content="%s">' % e(desc), head)
+    page = head + body.strip() + rebase(FOOT)
+    page = page.replace('href="%s#top"' % base, 'href="%s"' % base).replace('href="%s#main"' % base, 'href="#main"')
+    return page.replace("<body>", '<body class="is-sub">', 1)
+
+
+for i, p in enumerate(casegen.PROJECTS):
+    write("work/%s/index.html" % p["slug"], casegen.case_page(p, i, shell))
+write("work/index.html", casegen.work_index(shell))

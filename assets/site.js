@@ -154,5 +154,22 @@
     }
   }
 
+  /* ── work stage (MetaLab): pointing at or focusing a project swaps the whole stage; a click opens its case study ── */
+  var ws = document.querySelector('[data-ws-root]');
+  if (ws) {
+    var wsPills = [].slice.call(ws.querySelectorAll('[data-ws]')), wsLayers = [].slice.call(ws.querySelectorAll('[data-ws-layer]')), wsOn = 0;
+    function show(i) {
+      if (i === wsOn) return;
+      wsOn = i;
+      wsLayers.forEach(function (l, k) { l.classList.toggle('is-on', k === i); l.setAttribute('aria-hidden', String(k !== i)); });
+      wsPills.forEach(function (p, k) { p.classList.toggle('is-on', k === i); });
+      S.tick(-.6);
+    }
+    wsPills.forEach(function (p, i) {
+      if (fine) p.addEventListener('pointerenter', function () { show(i); });
+      p.addEventListener('focus', function () { show(i); });
+    });
+  }
+
   onScroll();
 })();
