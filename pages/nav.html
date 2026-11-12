@@ -1,6 +1,11 @@
 <header class="mnav" data-nav>
   <div class="mnav__bar">
-    <button class="mnav__menu" type="button" data-menu-toggle aria-expanded="false" aria-controls="menu"><span data-menu-label>Menu</span><span class="mnav__x" aria-hidden="true">×</span></button>
+    <nav class="mnav__links" aria-label="Main">
+      <a href="{{root}}work/" data-sfx="tick">Work</a>
+      <a href="{{root}}#services" data-sfx="tick">Services</a>
+      <a href="{{root}}#pricing" data-sfx="tick">Pricing</a>
+      <a href="{{root}}#team" data-sfx="tick">Team</a>
+    </nav>
     <a class="mnav__logo" href="{{root}}" aria-label="COET, home" data-sfx="tick">{{logo}}</a>
     <div class="mnav__end">
       <span class="mnav__clock" data-clock aria-label="Local time at the Scottsdale studio">PHX --:--</span>
@@ -13,25 +18,3 @@
     </div>
   </div>
 </header>
-
-<div class="menu" id="menu" role="dialog" aria-modal="true" aria-label="Menu" data-menu hidden>
-  <div class="menu__in">
-    <div class="menu__col">
-      <nav class="menu__links" aria-label="Main">
-        <a href="{{root}}#services" data-sfx="tick" data-menu-close>What We Do</a>
-        <a href="{{root}}#pricing" data-sfx="tick" data-menu-close>Pricing</a>
-        <a href="{{root}}#team" data-sfx="tick" data-menu-close>About Us</a>
-        <a href="{{root}}work/" data-sfx="tick">All Work</a>
-        <a href="{{root}}#contact" data-sfx="press" data-menu-close>Get in Touch</a>
-      </nav>
-      <p class="menu__label">Case Studies</p>
-      <ul class="menu__pills">{{menu-pills}}</ul>
-    </div>
-    <div class="menu__media" aria-hidden="true"><img src="{{root}}assets/img/c.webp" alt="" loading="lazy" decoding="async"></div>
-    <div class="menu__cards">
-      <a class="menu__card" href="{{root}}#contact" data-sfx="press" data-menu-close><span class="menu__card-k">Now</span><span>Accepting 3 more projects this quarter.</span></a>
-      <a class="menu__card" href="{{root}}#team" data-sfx="tick" data-menu-close><span class="menu__card-k">Studios</span><span>Milan, Scottsdale and Southern Illinois.</span></a>
-      <a class="menu__card" href="{{root}}work/betterguest/" data-sfx="tick"><span class="menu__card-k">Latest case study</span><span>BetterGuest: a cinematic tour of every home.</span></a>
-    </div>
-  </div>
-</div>

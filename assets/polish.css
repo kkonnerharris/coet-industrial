@@ -53,3 +53,9 @@ html.has-gsap .is-split[data-rise] { opacity: 1; transform: none; }
 .flag::before { background: var(--signal); }
 /* cards catch a little light on their top edge */
 .plan { box-shadow: inset 0 1px 0 rgb(255 255 255 / .07); }
+
+/* ── 6. No menu page: the bar carries the section links itself ── */
+.mnav__links { justify-self: start; display: flex; align-items: center; gap: clamp(12px, 1.4vw, 20px); }
+.mnav__links a { display: inline-flex; align-items: center; min-height: 44px; color: #f5f5f7; opacity: .78; font: 500 13px/1 var(--apple); letter-spacing: -.005em; transition: opacity .2s; }
+.mnav__links a:hover, .mnav__links a:focus-visible { opacity: 1; }
+@media (max-width: 760px) { .mnav__links a:nth-child(n+3) { display: none; } }   /* phones: Work and Services; the rest is one scroll away */
