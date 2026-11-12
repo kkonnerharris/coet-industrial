@@ -1,5 +1,5 @@
-/* COET — the orb. This is <ThinkingOrb state="searching" size={64} /> from Libraries.dev's thinking-orbs (MIT,
-   © Jakub Antalik): a scan meridian sweeping a dotted globe, straight
+/* COET — the orb. This is <ThinkingOrb state="working" size={64} /> from Libraries.dev's thinking-orbs (MIT,
+   © Jakub Antalik): particles on tilted orbits with dotted trails, straight
    from the package: its own preset, its own frame maths and its own painter, with more and smaller dots set
    through the package's own `dots` and `dotSize` controls. The package's
    engine is framework-free, so no React is needed here. Two things differ from the 64px original, both things the
@@ -18,7 +18,7 @@
   var ENGINE = new URL('vendor/thinking-orbs-0.3.2/engine.es.js', document.currentScript.src).href;
   var KIT = new URL('vendor/thinking-orbs-0.3.2/index-B8WsUNf5.js', document.currentScript.src).href;
   var TINT = { r: 245, g: 158, b: 11 };                // COET amber (#f59e0b)
-  var STATE = 'searching', DESIGN = 64, ORB_R = 26.24;                      // the library's design size, and the orb's radius inside it
+  var STATE = 'working', DESIGN = 64, ORB_R = 23.2;                         // the library's design size, and the orb's radius inside it
 
   Promise.all([import(ENGINE), import(KIT)]).then(function (mods) {
     var lib = mods[0], kit = mods[1];                    // kit.s = scaleCounts, kit.a = scaleRadii
@@ -28,9 +28,9 @@
     canvas.style.opacity = 1;
     var preset = lib.resolvePreset(STATE, DESIGN), frameFn = lib.MODE_FRAMES[preset.mode], speed = preset.speed;
     // more dots, much smaller: the package's own `dots` and `dotSize` controls (the same ones <ThinkingOrb> exposes)
-    var DOTS = 3.8, DOT_SIZE = .2;
+    var DOTS = 1.9, DOT_SIZE = .28;
     var opts = Object.assign({}, kit.a(kit.s(preset.opts, DOTS), DOT_SIZE), { rMin: .05 });
-    var PARTICLE_R = .8 * DOT_SIZE;                                // a label rides one of the larger, nearer dots
+    var PARTICLE_R = .75 * DOT_SIZE;                                // a label rides one of the larger, nearer dots
 
     // ── labelled particles: a very small label rides on an ordinary particle. Add an entry here for each new one. ──
     var LABELS = [
