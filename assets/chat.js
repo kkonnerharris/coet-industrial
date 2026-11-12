@@ -8,7 +8,8 @@
   if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {           // local testing only: ?chat=http://localhost:8787
     var q = /[?&]chat=([^&]+)/.exec(location.search); if (q) API = decodeURIComponent(q[1]);
   }
-  if (!API) return;
+  // No server yet: run a rule-based demo so the widget can be seen and tried (labelled as a demo, not AI).
+  var DEMO = !API;
   API = API.replace(/\/+$/, '');
 
   var gsap = window.gsap, reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, root = document.documentElement;
@@ -29,7 +30,7 @@
   var panel = el('section', 'idea'); panel.hidden = true; panel.setAttribute('role', 'dialog'); panel.setAttribute('aria-label', 'Get ideas: AI assistant');
   if (gsap && !reduce) panel.classList.add('idea--gsap');
   var head = el('header', 'idea__head'), titles = el('div');
-  titles.appendChild(el('h2', 'idea__title', 'Get ideas')); titles.appendChild(el('p', 'idea__tag', 'AI assistant · not a person'));
+  titles.appendChild(el('h2', 'idea__title', 'Get ideas')); titles.appendChild(el('p', 'idea__tag', DEMO ? 'Demo · rule-based answers, not AI' : 'AI assistant · not a person'));
   var close = el('button', 'idea__close', '×'); close.type = 'button'; close.setAttribute('aria-label', 'Close');
   head.appendChild(titles); head.appendChild(close);
   var log = el('div', 'idea__log'); log.setAttribute('role', 'log'); log.setAttribute('aria-live', 'polite'); log.setAttribute('data-lenis-prevent', '');
@@ -37,7 +38,7 @@
   input.rows = 1; input.maxLength = 2000; input.placeholder = 'Describe the problem…'; input.setAttribute('aria-label', 'Describe the problem');
   sendBtn.type = 'submit'; sendBtn.setAttribute('aria-label', 'Send'); sendBtn.disabled = true;
   form.appendChild(input); form.appendChild(sendBtn);
-  var fine = el('p', 'idea__fine'); fine.appendChild(document.createTextNode('Ideas from an AI model, not a quote. It can be wrong. Don\'t share anything confidential. For a real answer, '));
+  var fine = el('p', 'idea__fine'); fine.appendChild(document.createTextNode(DEMO ? 'Demo mode: canned answers matched to keywords, not a quote. For a real answer, ' : 'Ideas from an AI model, not a quote. It can be wrong. Don\'t share anything confidential. For a real answer, '));
   var toForm = el('a', '', 'talk to the team'); toForm.href = (document.getElementById('contact') ? '' : (document.querySelector('.mnav__logo') || {}).href || './') + '#contact';
   fine.appendChild(toForm); fine.appendChild(document.createTextNode('.'));
   var foot = el('div'); foot.appendChild(form); foot.appendChild(fine);
@@ -95,6 +96,30 @@
     fallback: 'The assistant couldn\'t answer just now. Try again in a moment, or use the contact form below.'
   };
 
+  // ── demo answers: keyword rules over COET's own service copy (used only when no server is set) ──
+  var RULES = [
+    { k: /\b(hi|hey|hello|yo)\b/, a: 'Hi! Describe a problem with your product, like a confusing machine screen, a launch without a website, or an app that doesn\'t feel connected to the hardware, and I\'ll tell you what kind of problem it usually is.' },
+    { k: /pric|cost|budget|how much|\bfee|equity|revenue share|\bpay/, a: 'COET works three ways. Take Ownership: COET may negotiate an equity position in a product it helps develop. Revenue Sharing: COET may build in exchange for a negotiated share of future revenue. Company Template: a reusable company template (architecture, backend systems, infrastructure) for $50,000. Ownership and revenue terms are negotiated per product.' },
+    { k: /screen|operator|confus|\bui\b|\bux\b|interface|hmi|display|dashboard|control|button|touch|haptic|sound/, a: 'That\'s usually an interface problem: the machine can do the job, but the screen makes people think too hard. The usual fixes are to watch real operators, cut each screen down to one main action, make every state obvious (idle, running, fault), and give clear feedback with sound and haptics. That\'s COET\'s Interfaces work: "The screens, controls, and sounds people touch every day. We tune every tap, click, and buzz until the machine feels like part of you."' },
+    { k: /\bapps?\b|firmware|embedded|integrat|two products|connect|sync|bluetooth|\bapi\b|backend|software/, a: 'When the app and the hardware feel like two products, it\'s usually an integration gap: separate teams, separate design languages, and state that doesn\'t match between them. The usual fix is one design system across screen and device, and one source of truth for the machine\'s state. That\'s COET\'s Implementation work: "We take the interface off the screen and put it on the machine. Production-ready software, integrated with your hardware and systems."' },
+    { k: /website|web site|\bsite\b|landing|launch|\bseo\b|framer|\bcms\b|homepage/, a: 'A launch without a site is a positioning problem as much as a web one: people need to understand the machine before the demo. The usual fix is a fast, focused site with one clear story, real product visuals and one call to action. That\'s COET\'s Web work: "Your site sells the machine before the demo does. Built from scratch, never from a template."' },
+    { k: /brand|logo|\bdeck|pitch|investor|identity|color|font/, a: 'That sounds like a credibility gap: the product is further along than the brand makes it look. The usual fixes are a tighter identity (logo, type, color) and a pitch deck that tells the machine\'s story in a few slides. That\'s COET\'s Branding work: "Your brand should reflect the credibility of your product, and the company you\'re becoming."' },
+    { k: /render|\bcad\b|\b3d\b|film|video|photo|visual|image|keyshot|blender/, a: 'If you need to show the product before it exists in volume, that\'s a visualization problem. The usual fix is photoreal renders and short launch films made from your CAD files. That\'s COET\'s Rendering work: "Show the machine before it ships. Built from your CAD files, true down to the last bolt."' }
+  ];
+  var DEFAULT = 'I couldn\'t match that to a common problem yet. Tell me who uses the product, where it breaks down for them, and what you\'ve already tried. COET covers branding, web, rendering, interfaces and implementation for hardware products.';
+  function demoAnswer(text) {
+    var t = text.toLowerCase();
+    for (var i = 0; i < RULES.length; i++) if (RULES[i].k.test(t)) return RULES[i].a + (i > 1 ? ' Want a real look at it? Use the contact form below.' : '');
+    return DEFAULT;
+  }
+  function wait(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  async function streamDemo(text, b) {                                  // types the answer out like a model would
+    await wait(reduce ? 0 : 650);
+    var words = text.split(' '), got = '';
+    for (var i = 0; i < words.length; i++) { got += (i ? ' ' : '') + words[i]; b.textContent = got; bottom(); if (!reduce) await wait(22 + Math.random() * 30); }
+    return got;
+  }
+
   async function ask(text) {
     text = String(text || '').trim();
     if (!text || busy) return;
@@ -107,7 +132,8 @@
     var b = bubble('bot', ''), dots = el('span', 'idea__dots'); dots.innerHTML = '<i></i><i></i><i></i>'; b.appendChild(dots);
     var got = '', failed = null;
     ctrl = new AbortController();
-    try {
+    if (DEMO) { try { got = await streamDemo(demoAnswer(text), b); } catch (e0) { failed = 'fallback'; } }
+    else try {
       var res = await fetch(API + '/chat', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ messages: history }), signal: ctrl.signal });
       if (!res.ok || !res.body) { var j = {}; try { j = await res.json(); } catch (e2) {} failed = j.error || 'fallback'; }
       else {
